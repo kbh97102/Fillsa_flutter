@@ -1,16 +1,15 @@
 # fillsa_flutter
 
-A new Flutter project.
+## 구조?
+### 네트워크 통신
+dio + retrofit + json 
 
-## Getting Started
+### 상태관리 + DI
+Riverpod
 
-This project is a starting point for a Flutter application.
+### 아키텍처
+Clean architecture
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 적용해보고 싶은 것
+usecase에 대해서는 BDD
