@@ -20,7 +20,7 @@ class LoginScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 32),
             child: Text(
               "로그인 후, 나만의 필사를 안전하게 저장할 수 있습니다.",
-              style: context.textStyles.body1,
+              style: context.textStyles.body2,
             ),
           ),
         ],

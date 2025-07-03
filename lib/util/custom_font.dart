@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'colors.dart';
+
 class MyTypography extends ThemeExtension<MyTypography> {
   final TextStyle heading1;
   final TextStyle heading2;
@@ -90,43 +92,73 @@ class MyTypography extends ThemeExtension<MyTypography> {
   }
 }
 
-const myTypography = MyTypography(
+var myTypography = MyTypography(
   heading1: TextStyle(
     fontSize: 32,
     height: 48 / 32,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
   heading2: TextStyle(
     fontSize: 28,
     height: 42 / 28,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
   heading3: TextStyle(
     fontSize: 24,
     height: 36 / 24,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
   heading4: TextStyle(
     fontSize: 20,
     height: 30 / 20,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
   subtitle1: TextStyle(
     fontSize: 16,
     height: 24 / 16,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
   subtitle2: TextStyle(
     fontSize: 14,
     height: 21 / 14,
     fontWeight: FontWeight.bold,
+    color: grey700,
   ),
-  body1: TextStyle(fontSize: 20, height: 30 / 20, fontWeight: FontWeight.w400),
-  body2: TextStyle(fontSize: 16, height: 24 / 16, fontWeight: FontWeight.w400),
-  body3: TextStyle(fontSize: 14, height: 21 / 14, fontWeight: FontWeight.w400),
-  body4: TextStyle(fontSize: 12, height: 18 / 12, fontWeight: FontWeight.w400),
-  buttonL: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-  buttonM: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-  buttonS: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-  buttonXs: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+  body1: TextStyle(
+    fontSize: 20,
+    height: 30 / 20,
+    fontWeight: FontWeight.w400,
+    color: grey700,
+  ),
+  body2: TextStyle(
+    fontSize: 16,
+    height: 24 / 16,
+    fontWeight: FontWeight.w400,
+    color: grey700,
+  ),
+  body3: TextStyle(
+    fontSize: 14,
+    height: 21 / 14,
+    fontWeight: FontWeight.w400,
+    color: grey700,
+  ),
+  body4: TextStyle(
+    fontSize: 12,
+    height: 18 / 12,
+    fontWeight: FontWeight.w400,
+    color: grey700,
+  ),
+  buttonL: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: grey700),
+  buttonM: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: grey700),
+  buttonS: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: grey700),
+  buttonXs: TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+    color: grey700,
+  ),
 );
