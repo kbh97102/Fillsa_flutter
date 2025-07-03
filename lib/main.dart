@@ -1,4 +1,5 @@
 import 'package:fillsa_flutter/ui/login_screen.dart';
+import 'package:fillsa_flutter/util/custom_font.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        extensions: <ThemeExtension<dynamic>>[myTypography],
       ),
       home: const LoginScreen(),
     );
