@@ -1,4 +1,5 @@
 import 'package:fillsa_flutter/ui/common/top_bar.dart';
+import 'package:fillsa_flutter/ui/guide/guide_indicator.dart';
 import 'package:fillsa_flutter/util/colors.dart';
 import 'package:fillsa_flutter/util/extensions.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,18 @@ class GuideScreen extends StatelessWidget {
             decoration: TextDecoration.underline,
           ),
         ),
+      ),
+      body: Column(
+        children: [
+          GuideIndicator(),
+          Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Text(
+              "필사, 이렇게 사용하면 편리해요🖋️",
+              style: context.textStyles.heading4.copyWith(color: Colors.black),
+            ),
+          ),
+        ],
       ),
     );
   }
