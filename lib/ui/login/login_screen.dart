@@ -1,5 +1,5 @@
-import 'package:fillsa_flutter/ui/agreement_text.dart';
-import 'package:fillsa_flutter/ui/login_button_section.dart';
+import 'package:fillsa_flutter/ui/login/agreement_text.dart';
+import 'package:fillsa_flutter/ui/login/login_button_section.dart';
 import 'package:fillsa_flutter/util/colors.dart';
 import 'package:fillsa_flutter/util/extensions.dart';
 import 'package:flutter/material.dart';
