@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/ui/login/login_screen.dart';
+import 'package:fillsa_flutter/ui/guide/guide_screen.dart';
 import 'package:fillsa_flutter/util/custom_font.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +18,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         extensions: <ThemeExtension<dynamic>>[myTypography],
       ),
-      home: const LoginScreen(),
+      // home: const LoginScreen(),
+      home: SafeArea(child: const GuideScreen()),
     );
   }
 }
