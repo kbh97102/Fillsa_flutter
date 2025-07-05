@@ -21,3 +21,13 @@ extension HexColor on String {
     return Color(int.parse(buffer.toString(), radix: 16));
   }
 }
+
+extension ColorAlphaExtension on Color {
+  /// 0~100 사이의 퍼센트를 입력받아 알파값을 적용한 Color를 반환합니다.
+  Color withOpacityPercent(int percent) {
+    assert(percent >= 0 && percent <= 100, 'percent must be between 0 and 100');
+
+    final alpha = ((percent / 100) * 255).round();
+    return withAlpha(alpha);
+  }
+}

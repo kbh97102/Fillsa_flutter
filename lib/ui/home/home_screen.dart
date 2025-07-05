@@ -1,4 +1,5 @@
 import 'package:fillsa_flutter/ui/home/calendar_section.dart';
+import 'package:fillsa_flutter/ui/home/image_section.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,7 +12,8 @@ class HomeScreen extends StatelessWidget {
         Row(
           children: [
             Expanded(child: CalendarSection()),
-            Expanded(child: CalendarSection()),
+            SizedBox(width: 20),
+            Expanded(child: ImageSection(isLogin: false)),
           ],
         ),
       ],
