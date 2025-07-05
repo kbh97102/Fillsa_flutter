@@ -1,8 +1,10 @@
-import 'package:fillsa_flutter/ui/guide/guide_screen.dart';
+import 'package:fillsa_flutter/ui/home/home_screen.dart';
 import 'package:fillsa_flutter/util/custom_font.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(const MyApp());
 }
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         extensions: <ThemeExtension<dynamic>>[myTypography],
       ),
       // home: const LoginScreen(),
-      home: SafeArea(child: const GuideScreen()),
+      home: SafeArea(child: const HomeScreen()),
     );
   }
 }

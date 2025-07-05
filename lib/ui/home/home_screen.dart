@@ -1,5 +1,4 @@
-import 'package:fillsa_flutter/ui/common/top_bar.dart';
-import 'package:fillsa_flutter/ui/guide/custom_svg.dart';
+import 'package:fillsa_flutter/ui/home/calendar_section.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,12 +6,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TopBar(
-        startWidget: CustomSvg(svgName: "icn_logo"),
-        endWidget: CustomSvg(svgName: "icn_mypage"),
-      ),
-      body: SafeArea(child: Column()),
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(child: CalendarSection()),
+            Expanded(child: CalendarSection()),
+          ],
+        ),
+      ],
     );
   }
 }
