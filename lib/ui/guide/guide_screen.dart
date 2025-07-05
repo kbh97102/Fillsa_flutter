@@ -1,9 +1,11 @@
 import 'package:fillsa_flutter/ui/common/top_bar.dart';
-import 'package:fillsa_flutter/ui/guide/guide_indicator.dart';
+import 'package:fillsa_flutter/ui/guide/guide_image_section.dart';
 import 'package:fillsa_flutter/util/colors.dart';
 import 'package:fillsa_flutter/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'guide_indicator.dart';
 
 class GuideScreen extends StatelessWidget {
   const GuideScreen({super.key});
@@ -31,6 +33,7 @@ class GuideScreen extends StatelessWidget {
               style: context.textStyles.heading4.copyWith(color: Colors.black),
             ),
           ),
+          Expanded(child: GuideImageSection()),
         ],
       ),
     );
