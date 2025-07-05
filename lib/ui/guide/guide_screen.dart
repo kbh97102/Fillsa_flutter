@@ -5,6 +5,7 @@ import 'package:fillsa_flutter/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'guide_button.dart';
 import 'guide_indicator.dart';
 
 class GuideScreen extends StatelessWidget {
@@ -34,6 +35,11 @@ class GuideScreen extends StatelessWidget {
             ),
           ),
           Expanded(child: GuideImageSection()),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: GuideButton(isLastPage: false),
+          ),
         ],
       ),
     );
