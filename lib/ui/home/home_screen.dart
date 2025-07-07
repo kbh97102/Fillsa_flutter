@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/ui/common/interaction_button_section.dart';
 import 'package:fillsa_flutter/ui/home/calendar_section.dart';
 import 'package:fillsa_flutter/ui/home/custom_switch.dart';
 import 'package:fillsa_flutter/ui/home/image_section.dart';
@@ -15,6 +16,7 @@ class HomeScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
               children: [
@@ -35,6 +37,11 @@ class HomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 22),
               child: QuoteSection(),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(top: 28, bottom: 20),
+              child: InteractionButtonSection(),
             ),
           ],
         ),
