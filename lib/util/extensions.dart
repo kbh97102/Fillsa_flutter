@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/util/typo.dart';
 import 'package:flutter/material.dart';
 
 import 'custom_font.dart';
@@ -30,4 +31,9 @@ extension ColorAlphaExtension on Color {
     final alpha = ((percent / 100) * 255).round();
     return withAlpha(alpha);
   }
+}
+
+extension BuildContextExtension on BuildContext {
+  // Theme.of(context).extension<FillsaTypo>()! 로 커스텀 테마를 가져옵니다.
+  FillsaTypo get fillsaTypo => Theme.of(this).extension<FillsaTypo>()!;
 }
