@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 class CustomCheckbox extends StatelessWidget {
   final String onImage;
   final String offImage;
-  final int size;
+  final double size;
 
   final bool isLiked;
   final void Function(bool) setIsLike;
@@ -25,8 +25,8 @@ class CustomCheckbox extends StatelessWidget {
         setIsLike(isLiked);
       },
       child: SizedBox(
-        width: 16,
-        height: 16,
+        width: size,
+        height: size,
         child: CustomSvg(svgName: isLiked ? onImage : offImage),
       ),
     );

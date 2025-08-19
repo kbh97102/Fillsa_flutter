@@ -1,5 +1,4 @@
 import 'package:fillsa_flutter/routes.dart';
-import 'package:fillsa_flutter/ui/list/like_filter.dart';
 import 'package:fillsa_flutter/util/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +21,7 @@ class DevMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: fillsaTheme, home: SafeArea(child: LikeFilter()));
+    return MaterialApp(theme: fillsaTheme, home: SafeArea(child: Container()));
   }
 }
 
