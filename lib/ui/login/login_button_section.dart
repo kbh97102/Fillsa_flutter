@@ -31,7 +31,7 @@ class LoginButtonSection extends StatelessWidget {
           text: "비회원으로 시작하기",
           svgPath: "assets/images/icn_non_member.svg",
           backgroundColor: white,
-          onPressed: () => {HomeScreenRoute(date: 'test').go(context)},
+          onPressed: () => {HomeRoute().go(context)},
           textColor: grey700,
         ),
       ],
