@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/routes.dart';
 import 'package:fillsa_flutter/ui/login/login_button.dart';
 import 'package:fillsa_flutter/util/colors.dart';
 import 'package:flutter/widgets.dart';
@@ -30,7 +31,7 @@ class LoginButtonSection extends StatelessWidget {
           text: "비회원으로 시작하기",
           svgPath: "assets/images/icn_non_member.svg",
           backgroundColor: white,
-          onPressed: () => {},
+          onPressed: () => {HomeScreenRoute(date: 'test').go(context)},
           textColor: grey700,
         ),
       ],

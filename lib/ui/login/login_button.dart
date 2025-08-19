@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/routes.dart';
 import 'package:fillsa_flutter/util/extensions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,23 +21,26 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(svgPath),
-            SizedBox(width: 8),
-            Text(
-              text,
-              style: context.textStyles.subtitle2.copyWith(color: textColor),
-            ),
-          ],
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(svgPath),
+              SizedBox(width: 8),
+              Text(
+                text,
+                style: context.textStyles.subtitle2.copyWith(color: textColor),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -13,37 +13,42 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: yellow03,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Expanded(child: CalendarSection()),
-                SizedBox(width: 20),
-                Expanded(child: ImageSection(isLogin: false)),
-              ],
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: KoreanEnglishSwitch(),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Row(
+                  children: [
+                    Expanded(child: CalendarSection()),
+                    SizedBox(width: 20),
+                    Expanded(child: ImageSection(isLogin: false)),
+                  ],
+                ),
               ),
-            ),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 22),
-              child: QuoteSection(),
-            ),
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: KoreanEnglishSwitch(),
+                ),
+              ),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 28, bottom: 20),
-              child: InteractionButtonSection(),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.only(top: 22),
+                child: QuoteSection(),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(top: 28, bottom: 20),
+                child: InteractionButtonSection(),
+              ),
+            ],
+          ),
         ),
       ),
     );
