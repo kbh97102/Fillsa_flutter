@@ -6,27 +6,23 @@ class QuoteListItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-          decoration: BoxDecoration(
-            color: const Color(0xFFD7D6FF), // 배경 색상
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
-            ), // 둥근 모서리
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min, // ✅ 텍스트 크기만큼만 차지
-            children: [
-              Text("2025.03.25", style: context.fillsaTypo.buttonXSmallBold),
-              const SizedBox(width: 6),
-              Text("(수)", style: context.fillsaTypo.buttonXSmallNormal),
-            ],
-          ),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFD7D6FF), // 배경 색상
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ), // 둥근 모서리
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min, // ✅ 텍스트 크기만큼만 차지
+        children: [
+          Text("2025.03.25", style: context.fillsaTypo.buttonXSmallBold),
+          const SizedBox(width: 6),
+          Text("(수)", style: context.fillsaTypo.buttonXSmallNormal),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:fillsa_flutter/routes.dart';
-import 'package:fillsa_flutter/ui/list/quote_list_item_header.dart';
+import 'package:fillsa_flutter/ui/list/quote_list_item.dart';
 import 'package:fillsa_flutter/util/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +25,15 @@ class DevMain extends StatelessWidget {
     return MaterialApp(
       theme: fillsaTheme,
       home: SafeArea(
-        child: Container(color: Colors.white, child: QuoteListItemHeader()),
+        child: Container(
+          color: Colors.white,
+          child: Row(
+            children: [
+              Expanded(child: QuoteListItem()),
+              Expanded(child: QuoteListItem()),
+            ],
+          ),
+        ),
       ),
     );
   }
