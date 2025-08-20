@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'colors.dart';
+
 class FillsaTypo extends ThemeExtension<FillsaTypo> {
   final TextStyle heading1;
   final TextStyle heading2;
@@ -58,111 +60,130 @@ class FillsaTypo extends ThemeExtension<FillsaTypo> {
 }
 
 // 2. 앱 전체에서 사용될 실제 텍스트 스타일 객체
-const fillsaTypo = FillsaTypo(
+final fillsaTypo = FillsaTypo(
   heading1: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 32.0,
     height: 1.5,
+    color: grey700,
   ), // 48 / 32
   heading2: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 28.0,
     height: 1.5,
+    color: grey700,
   ), // 42 / 28
   heading3: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 24.0,
     height: 1.5,
+    color: grey700,
   ), // 36 / 24
   heading4: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 20.0,
     height: 1.5,
+    color: grey700,
   ), // 30 / 20
   subtitle1: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 16.0,
     height: 1.5,
+    color: grey700,
   ), // 24 / 16
   subtitle2: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 14.0,
     height: 1.5,
+    color: grey700,
   ), // 21 / 14
   body1: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 20.0,
     height: 1.5,
+    color: grey700,
   ), // 30 / 20
   body2: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 16.0,
     height: 1.5,
+    color: grey700,
   ), // 24 / 16
   body3: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 14.0,
     height: 1.5,
+    color: grey700,
   ), // 21 / 14
   body4: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 12.0,
     height: 1.5,
+    color: grey700,
   ), // 18 / 12
   buttonLargeBold: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 20.0,
+    color: grey700,
   ),
   buttonLargeNormal: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 20.0,
+    color: grey700,
   ),
   buttonMediumBold: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 16.0,
+    color: grey700,
   ),
   buttonMediumNormal: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 16.0,
+    color: grey700,
   ),
   buttonSmallBold: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 14.0,
+    color: grey700,
   ),
   buttonSmallNormal: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 14.0,
+    color: grey700,
   ),
   buttonXSmallBold: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',
     fontSize: 12.0,
+    color: grey700,
   ),
   buttonXSmallNormal: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'Pretendard',
     fontSize: 12.0,
+    color: grey700,
   ),
   quote: TextStyle(
     fontWeight: FontWeight.normal,
     fontFamily: 'GangwonEduAll',
     fontSize: 16.0,
     height: 1.5,
+    color: grey700,
   ), // 24 / 16
 );

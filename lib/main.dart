@@ -1,11 +1,12 @@
 import 'package:fillsa_flutter/routes.dart';
+import 'package:fillsa_flutter/ui/list/quote_list_item_header.dart';
 import 'package:fillsa_flutter/util/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 final fillsaTheme = ThemeData(
-  extensions: const <ThemeExtension<dynamic>>[fillsaTypo],
+  extensions: <ThemeExtension<dynamic>>[fillsaTypo],
 );
 
 void main() async {
@@ -21,7 +22,12 @@ class DevMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: fillsaTheme, home: SafeArea(child: Container()));
+    return MaterialApp(
+      theme: fillsaTheme,
+      home: SafeArea(
+        child: Container(color: Colors.white, child: QuoteListItemHeader()),
+      ),
+    );
   }
 }
 
