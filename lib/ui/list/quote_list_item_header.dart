@@ -16,7 +16,7 @@ class QuoteListItemHeader extends StatelessWidget {
         ), // 둥근 모서리
       ),
       child: Row(
-        mainAxisSize: MainAxisSize.min, // ✅ 텍스트 크기만큼만 차지
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text("2025.03.25", style: context.fillsaTypo.buttonXSmallBold),
           const SizedBox(width: 6),
