@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:presentation/ui/guide/custom_svg.dart';
 import 'package:presentation/util/extensions.dart';
 
 import '../../util/colors.dart';
@@ -19,7 +19,7 @@ class LoginScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 132),
-              child: SvgPicture.asset("assets/images/img_logo.svg"),
+              child: CustomSvg(svgName: "img_logo"),
             ),
 
             Padding(

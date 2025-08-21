@@ -13,6 +13,9 @@ class CustomSvg extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SvgPicture.asset("assets/images/${svgName}.svg", fit: fit);
+    return SvgPicture.asset(
+      "packages/presentation/assets/images/${svgName}.svg",
+      fit: fit,
+    );
   }
 }
