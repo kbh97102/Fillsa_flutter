@@ -2,17 +2,17 @@ import '../model/response/ErrorResponse.dart';
 
 sealed class ApiResult<T> {}
 
-final class Success<T> extends ApiResult<T> {
+final class ApiSuccess<T> extends ApiResult<T> {
   final T data;
-  Success(this.data);
+  ApiSuccess(this.data);
 }
 
-final class Fail<T> extends ApiResult<T> {
+final class ApiFail<T> extends ApiResult<T> {
   final ErrorResponse? error;
-  Fail(this.error);
+  ApiFail(this.error);
 }
 
-final class Error<T> extends ApiResult<T> {
+final class ApiError<T> extends ApiResult<T> {
   final Exception error;
-  Error(this.error);
+  ApiError(this.error);
 }
