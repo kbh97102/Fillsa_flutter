@@ -23,22 +23,22 @@ class ScaffoldWithNavBar extends StatelessWidget {
           BottomNavigationBarItem(
             icon: CustomSvg(svgName: "icn_nav_home"),
             activeIcon: CustomSvg(svgName: "icn_nav_home_active"),
-            label: '홈',
+            label: 'home',
           ),
           BottomNavigationBarItem(
             icon: CustomSvg(svgName: "icn_nav_list"),
             activeIcon: CustomSvg(svgName: "icn_nav_list_active"),
-            label: '리스트',
+            label: 'List',
           ),
           BottomNavigationBarItem(
             icon: CustomSvg(svgName: "icn_nav_calendar"),
             activeIcon: CustomSvg(svgName: "icn_nav_calendar_active"),
-            label: '달력',
+            label: 'Calendar',
           ),
           BottomNavigationBarItem(
             icon: CustomSvg(svgName: "icn_nav_mypage"),
             activeIcon: CustomSvg(svgName: "icn_nav_mypage_active"),
-            label: '마이페이지',
+            label: 'My page',
           ),
         ],
         currentIndex: navigationShell.currentIndex,
