@@ -25,10 +25,7 @@ class DevMain extends StatelessWidget {
     return MaterialApp(
       theme: fillsaTheme,
       home: SafeArea(
-        child: Container(
-          color: Colors.white,
-          child: Row(children: [LoginScreen()]),
-        ),
+        child: Container(color: Colors.white, child: LoginScreen()),
       ),
     );
   }

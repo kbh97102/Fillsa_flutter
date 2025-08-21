@@ -36,9 +36,11 @@ class LoginScreen extends StatelessWidget {
               child: LoginButtonSection(),
             ),
 
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: AgreementText(),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12),
+                child: AgreementText(),
+              ),
             ),
           ],
         ),
