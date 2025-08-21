@@ -17,6 +17,7 @@ dependencies:
   logger: ^2.6.0  # for logging purpose
   json_annotation: ^4.9.0
   get_it: ^8.2.0
+  dio: ^5.9.0
   injectable: ^2.5.1
   injectable_generator: ^2.8.1
 
