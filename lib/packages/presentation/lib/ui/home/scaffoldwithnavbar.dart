@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:presentation/ui/guide/custom_svg.dart';
+import 'package:presentation/util/colors.dart';
+
+import '../../util/typo.dart';
 
 class ScaffoldWithNavBar extends StatelessWidget {
   const ScaffoldWithNavBar({required this.navigationShell, super.key});
@@ -13,10 +17,29 @@ class ScaffoldWithNavBar extends StatelessWidget {
     return Scaffold(
       body: navigationShell, // 여기가 바로 각 탭의 화면이 그려지는 곳입니다.
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: '홈'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: '검색'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: '프로필'),
+        backgroundColor: yellow03,
+        type: BottomNavigationBarType.fixed,
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: CustomSvg(svgName: "icn_nav_home"),
+            activeIcon: CustomSvg(svgName: "icn_nav_home_active"),
+            label: '홈',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomSvg(svgName: "icn_nav_list"),
+            activeIcon: CustomSvg(svgName: "icn_nav_list_active"),
+            label: '리스트',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomSvg(svgName: "icn_nav_calendar"),
+            activeIcon: CustomSvg(svgName: "icn_nav_calendar_active"),
+            label: '달력',
+          ),
+          BottomNavigationBarItem(
+            icon: CustomSvg(svgName: "icn_nav_mypage"),
+            activeIcon: CustomSvg(svgName: "icn_nav_mypage_active"),
+            label: '마이페이지',
+          ),
         ],
         currentIndex: navigationShell.currentIndex,
         onTap: (int index) {
@@ -26,6 +49,8 @@ class ScaffoldWithNavBar extends StatelessWidget {
             initialLocation: index == navigationShell.currentIndex,
           );
         },
+        selectedLabelStyle: fillsaTypoData.body4.copyWith(color: purple01),
+        unselectedLabelStyle: fillsaTypoData.body4,
       ),
     );
   }

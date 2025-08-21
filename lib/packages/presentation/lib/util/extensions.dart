@@ -35,5 +35,6 @@ extension ColorAlphaExtension on Color {
 
 extension BuildContextExtension on BuildContext {
   // Theme.of(context).extension<FillsaTypo>()! 로 커스텀 테마를 가져옵니다.
-  FillsaTypo get fillsaTypo => Theme.of(this).extension<FillsaTypo>()!;
+  FillsaTypo get fillsaTypo =>
+      Theme.of(this).extension<FillsaTypo>() ?? fillsaTypoData;
 }

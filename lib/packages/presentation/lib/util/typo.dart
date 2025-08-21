@@ -60,7 +60,7 @@ class FillsaTypo extends ThemeExtension<FillsaTypo> {
 }
 
 // 2. 앱 전체에서 사용될 실제 텍스트 스타일 객체
-final fillsaTypo = FillsaTypo(
+final fillsaTypoData = FillsaTypo(
   heading1: TextStyle(
     fontWeight: FontWeight.bold,
     fontFamily: 'Pretendard',

@@ -6,15 +6,15 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 final fillsaTheme = ThemeData(
-  extensions: <ThemeExtension<dynamic>>[fillsaTypo],
+  extensions: <ThemeExtension<dynamic>>[fillsaTypoData],
 );
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting("ko_KR", null);
 
-  // runApp(const MyApp());
-  runApp(DevMain());
+  runApp(const MyApp());
+  // runApp(DevMain());
 }
 
 class DevMain extends StatelessWidget {
@@ -33,7 +33,7 @@ class DevMain extends StatelessWidget {
 
 final _router = GoRouter(
   routes: $appRoutes,
-  initialLocation: LoginRoute().location,
+  initialLocation: HomeRoute().location,
 );
 
 class MyApp extends StatelessWidget {
@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: fillsaTheme,
       routerConfig: _router,
       title: "Fillsa",
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],
