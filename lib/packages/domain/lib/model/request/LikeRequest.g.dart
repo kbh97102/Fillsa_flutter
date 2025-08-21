@@ -1,0 +1,13 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'LikeRequest.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+LikeRequest _$LikeRequestFromJson(Map<String, dynamic> json) =>
+    LikeRequest(likeYn: json['likeYn'] as String);
+
+Map<String, dynamic> _$LikeRequestToJson(LikeRequest instance) =>
+    <String, dynamic>{'likeYn': instance.likeYn};
