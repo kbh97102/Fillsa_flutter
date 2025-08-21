@@ -9,10 +9,9 @@ part of 'PageResponseMemberQuotesResponse.dart';
 PageResponseMemberQuotesResponse _$PageResponseMemberQuotesResponseFromJson(
   Map<String, dynamic> json,
 ) => PageResponseMemberQuotesResponse(
-  content:
-      (json['content'] as List<dynamic>)
-          .map((e) => MemberQuotesResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  content: (json['content'] as List<dynamic>)
+      .map((e) => MemberQuotesResponse.fromJson(e as Map<String, dynamic>))
+      .toList(),
   totalElements: (json['totalElements'] as num).toInt(),
   totalPages: (json['totalPages'] as num).toInt(),
   currentPage: (json['currentPage'] as num).toInt(),

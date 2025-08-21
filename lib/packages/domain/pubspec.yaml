@@ -10,6 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  get_it: ^8.2.0
+  injectable: ^2.5.1
+  injectable_generator: ^2.8.1
+
 
 dev_dependencies:
   flutter_test:

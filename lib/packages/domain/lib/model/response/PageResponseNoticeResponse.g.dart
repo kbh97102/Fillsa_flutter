@@ -9,10 +9,9 @@ part of 'PageResponseNoticeResponse.dart';
 PageResponseNoticeResponse _$PageResponseNoticeResponseFromJson(
   Map<String, dynamic> json,
 ) => PageResponseNoticeResponse(
-  content:
-      (json['content'] as List<dynamic>)
-          .map((e) => NoticeResponse.fromJson(e as Map<String, dynamic>))
-          .toList(),
+  content: (json['content'] as List<dynamic>)
+      .map((e) => NoticeResponse.fromJson(e as Map<String, dynamic>))
+      .toList(),
   totalElements: (json['totalElements'] as num).toInt(),
   totalPages: (json['totalPages'] as num).toInt(),
   currentPage: (json['currentPage'] as num).toInt(),
