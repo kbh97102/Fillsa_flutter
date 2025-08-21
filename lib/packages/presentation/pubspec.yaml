@@ -1,21 +1,18 @@
-name: fillsa_flutter
-description: "A new Flutter project."
-publish_to: 'none'
-
-version: 1.0.0+1
+name: presentation
+description: "A new Flutter package project."
+version: 0.0.1
+homepage:
+publish_to: none
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.9.0
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
   domain:
-    path: ./lib/packages/domain
-  data:
-    path: ./lib/packages/data
-  presentation:
-    path: ./lib/packages/presentation
+    path: ../domain
 
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
@@ -31,7 +28,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   flutter_lints: ^6.0.0
   json_serializable: ^6.9.5
   riverpod_generator: ^3.0.0-dev.17
@@ -42,7 +38,18 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-
-
-
+  assets:
+    - assets/images/
+  fonts:
+    - family: pretendard
+      fonts:
+        - asset: assets/fonts/pretendard_700.otf
+          weight: 700
+        - asset: assets/fonts/pretendard_400.otf
+          weight: 400
+    - family: gangwoneduall
+      fonts:
+        - asset: assets/fonts/gangwoneduall_otf_bold.otf
+          weight: 700
+        - asset: assets/fonts/gangwoneduall_otf_light.otf
+          weight: 400

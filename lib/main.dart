@@ -1,6 +1,6 @@
-import 'package:fillsa_flutter/routes.dart';
-import 'package:fillsa_flutter/ui/list/quote_list_item.dart';
-import 'package:fillsa_flutter/util/typo.dart';
+import 'package:fillsa_flutter/packages/presentation/lib/ui/login/login_screen.dart';
+import 'package:fillsa_flutter/packages/presentation/lib/util/routes.dart';
+import 'package:fillsa_flutter/packages/presentation/lib/util/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -27,12 +27,7 @@ class DevMain extends StatelessWidget {
       home: SafeArea(
         child: Container(
           color: Colors.white,
-          child: Row(
-            children: [
-              Expanded(child: QuoteListItem()),
-              Expanded(child: QuoteListItem()),
-            ],
-          ),
+          child: Row(children: [LoginScreen()]),
         ),
       ),
     );
