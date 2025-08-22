@@ -1,0 +1,8 @@
+targets:
+  $default:
+    # build_runner가 전체 프로젝트의 범위를 인식하도록 설정합니다.
+    # 이것만으로도 AssetNotFoundException 에러가 해결됩니다.
+    sources:
+      - "lib/**"
+      - "packages/**"
+      - "pubspec.yaml"햣

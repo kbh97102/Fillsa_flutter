@@ -9,9 +9,10 @@ import 'package:domain/model/response/ErrorResponse.dart';
 import 'package:domain/model/response/SimpleIntResponse.dart';
 import 'package:domain/repository/HomeRepository.dart';
 import 'package:domain/util/ApiResult.dart';
-import 'package:injectable/injectable.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-@injectable
+part 'HomeRepositoryImpl.g.dart';
+
 class HomeRepositoryImpl extends HomeRepository {
   final FillsaApi _api;
   HomeRepositoryImpl(this._api);
@@ -68,4 +69,11 @@ class HomeRepositoryImpl extends HomeRepository {
     // TODO: implement postUploadImage
     throw UnimplementedError();
   }
+}
+
+@riverpod
+HomeRepository homeRepository(Ref ref) {
+  final api = ref.watch(fillsaApiProvider);
+
+  return HomeRepositoryImpl(api);
 }
