@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'LikeRequest.dart';
+part of 'like_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

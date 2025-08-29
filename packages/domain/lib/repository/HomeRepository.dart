@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import '../model/request/LikeRequest.dart';
+import '../model/request/like_request.dart';
 import '../model/response/DailyQuotaNoToken.dart';
 import '../model/response/DailyQuoteDto.dart';
 import '../model/response/SimpleIntResponse.dart';

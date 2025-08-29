@@ -1,58 +1,39 @@
 import 'dart:io';
 
 import 'package:data/network/fillsa_api.dart';
-import 'package:dio/dio.dart';
-import 'package:domain/model/request/LikeRequest.dart';
+import 'package:data/network/fillsa_no_token_api.dart';
+import 'package:domain/model/request/like_request.dart';
 import 'package:domain/model/response/DailyQuotaNoToken.dart';
 import 'package:domain/model/response/DailyQuoteDto.dart';
-import 'package:domain/model/response/ErrorResponse.dart';
 import 'package:domain/model/response/SimpleIntResponse.dart';
 import 'package:domain/repository/HomeRepository.dart';
 import 'package:domain/util/ApiResult.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+import 'base_repository.dart';
+
 part 'HomeRepositoryImpl.g.dart';
 
-class HomeRepositoryImpl extends HomeRepository {
+class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   final FillsaApi _api;
-  HomeRepositoryImpl(this._api);
+  final FillsaNoTokenApi _noTokenApi;
+  HomeRepositoryImpl(this._api, this._noTokenApi);
 
   @override
   Future<ApiResult<int>> deleteUploadImage(int dailyQuoteSeq) async {
-    return ApiSuccess(1);
+    return safeApiCall(() => _api.deleteUploadImage(dailyQuoteSeq));
   }
 
   @override
   Future<ApiResult<DailyQuoteDto>> getDailyQuote(String quoteDate) {
-    // TODO: implement getDailyQuote
-    throw UnimplementedError();
+    return safeApiCall(() => _api.getDailyQuote(quoteDate));
   }
 
   @override
   Future<ApiResult<DailyQuotaNoToken>> getDailyQuoteNoToken(
     String quoteDate,
   ) async {
-    try {
-      var test = await _api.getDailyQuoteNonMember(quoteDate);
-
-      final statusCode = test.response.statusCode;
-
-      if (statusCode != null && statusCode <= 299 && statusCode >= 200) {
-        return ApiSuccess(test.data);
-      } else {
-        // TODO: ErrorResponse 처리부 공통화하기
-        return ApiFail(
-          ErrorResponse(
-            timestamp: "",
-            errorCode: 0,
-            httpStatus: 0,
-            message: "",
-          ),
-        );
-      }
-    } on DioException catch (e) {
-      return ApiError(e);
-    }
+    return safeApiCall(() => _noTokenApi.getDailyQuoteNonMember(quoteDate));
   }
 
   @override
@@ -60,14 +41,12 @@ class HomeRepositoryImpl extends HomeRepository {
     LikeRequest likeRequest,
     int dailyQuoteSeq,
   ) {
-    // TODO: implement postLike
-    throw UnimplementedError();
+    return safeApiCall(() => _api.postLike(dailyQuoteSeq, likeRequest));
   }
 
   @override
   Future<ApiResult<int>> postUploadImage(File imageFile, int dailyQuoteSeq) {
-    // TODO: implement postUploadImage
-    throw UnimplementedError();
+    return safeApiCall(() => _api.postUploadImage(dailyQuoteSeq, imageFile));
   }
 }
 

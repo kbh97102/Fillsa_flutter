@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'LikeRequest.g.dart';
+part 'like_request.g.dart';
 
 @JsonSerializable()
 class LikeRequest {
