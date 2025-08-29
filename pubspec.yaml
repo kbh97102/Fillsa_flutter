@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
   domain:
-    path: ./lib/packages/domain
+    path: packages/domain
   data:
-    path: ./lib/packages/data
+    path: packages/data
   presentation:
-    path: ./lib/packages/presentation
+    path: packages/presentation
 
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
@@ -39,10 +39,15 @@ dev_dependencies:
   custom_lint: ^0.8.0
   riverpod_lint: ^3.0.0-dev.17
   build_verify: ^3.1.1
+  melos: ^7.1.0
 
 flutter:
   uses-material-design: true
 
+workspace:
+  - packages/domain
+  - packages/data
+  - packages/presentation
 
 
 

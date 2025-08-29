@@ -1,4 +1,5 @@
-import 'package:domain/usecase/GetDailyQuoteNonMemberUseCase.dart';
+import 'package:domain/usecase/get_daily_quote_non_member_usecase.dart';
+import 'package:fillsa_flutter/packages/data/lib/repository/HomeRepositoryImpl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'di_test.g.dart';
