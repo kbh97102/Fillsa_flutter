@@ -18,9 +18,11 @@ class _FillsaApi implements FillsaApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember() async {
+  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember(
+    String quoteDate,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'quoteDate': quoteDate};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<HttpResponse<DailyQuotaNoToken>>(

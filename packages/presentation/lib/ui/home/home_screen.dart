@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:presentation/ui/home/quote_section.dart';
+import 'package:presentation/viewmodels/home_viewmodel.dart';
 
 import '../../util/colors.dart';
 import '../common/interaction_button_section.dart';
@@ -7,11 +9,13 @@ import 'calendar_section.dart';
 import 'custom_switch.dart';
 import 'image_section.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final _viewModel = ref.watch(homeViewModelProvider);
+
     return Container(
       color: yellow03,
       child: SafeArea(

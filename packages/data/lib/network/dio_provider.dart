@@ -5,15 +5,14 @@ part 'dio_provider.g.dart';
 
 @riverpod
 Dio dio(Ref ref) {
-  // 1단계에서 만든 baseUrlProvider를 watch하여 URL 값을 가져옵니다.
-  final baseUrl = "";
+  final baseUrl = "https://www.fillsa.store";
 
   final options = BaseOptions(
     baseUrl: baseUrl,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 3),
     // 여기에 필요한 헤더 등을 추가할 수 있습니다.
-    // headers: { 'Authorization': 'Bearer ...' }
+    headers: {'X-App-Version': '1.0.16'},
   );
 
   final dio = Dio(options);

@@ -13,7 +13,9 @@ abstract class FillsaApi {
   factory FillsaApi(Dio dio) = _FillsaApi;
 
   @GET("/api/v1/quotes/daily") // 요청할 API
-  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember();
+  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember(
+    @Query("quoteDate") String quoteDate,
+  );
 }
 
 @riverpod

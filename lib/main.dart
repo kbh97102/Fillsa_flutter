@@ -1,9 +1,12 @@
-import 'package:fillsa_flutter/packages/presentation/lib/ui/login/login_screen.dart';
-import 'package:fillsa_flutter/packages/presentation/lib/util/routes.dart';
-import 'package:fillsa_flutter/packages/presentation/lib/util/typo.dart';
+import 'package:fillsa_flutter/di_test.dart' as root_provider;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:presentation/ui/login/login_screen.dart';
+import 'package:presentation/util/providers.dart' as presentation_provider;
+import 'package:presentation/util/routes.dart';
+import 'package:presentation/util/typo.dart';
 
 final fillsaTheme = ThemeData(
   extensions: <ThemeExtension<dynamic>>[fillsaTypoData],
@@ -13,7 +16,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting("ko_KR", null);
 
-  runApp(const MyApp());
+  runApp(
+    ProviderScope(
+      overrides: [
+        presentation_provider.getDailyNonMemberUseCaseProvider.overrideWith(
+          (ref) => ref.watch(root_provider.getDailyNonMemberUseCaseProvider),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
   // runApp(DevMain());
 }
 

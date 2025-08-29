@@ -33,7 +33,7 @@ class HomeRepositoryImpl extends HomeRepository {
     String quoteDate,
   ) async {
     try {
-      var test = await _api.getDailyQuoteNonMember();
+      var test = await _api.getDailyQuoteNonMember(quoteDate);
 
       final statusCode = test.response.statusCode;
 

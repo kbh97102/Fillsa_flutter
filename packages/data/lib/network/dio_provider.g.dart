@@ -44,7 +44,7 @@ final class DioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$dioHash() => r'6ac869298d12f2d6aecf1c308d6ce043d9a4362d';
+String _$dioHash() => r'd92fafbeeb0b6e4af264a2bf19807375362aa7ec';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
