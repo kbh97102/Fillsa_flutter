@@ -1,3 +1,4 @@
+import 'package:domain/model/response/DailyQuoteDto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'HomeState.freezed.dart';
@@ -7,7 +8,7 @@ abstract class HomeState with _$HomeState {
   // 생성자를 const로 만들어 불변성을 보장합니다.
   const factory HomeState({
     @Default(false) bool isLoading,
-    String? data,
+    required DailyQuoteDto data,
     String? error,
   }) = _HomeState;
 }

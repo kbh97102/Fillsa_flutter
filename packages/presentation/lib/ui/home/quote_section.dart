@@ -7,7 +7,9 @@ import '../../util/colors.dart' as Colors;
 import '../guide/custom_svg.dart';
 
 class QuoteSection extends StatelessWidget {
-  const QuoteSection({super.key});
+  final String quote;
+  final String author;
+  const QuoteSection({super.key, required this.quote, required this.author});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,10 @@ class QuoteSection extends StatelessWidget {
         child: CustomMultiChildLayout(
           delegate: _TestDelegate(),
           children: [
-            LayoutId(id: "body", child: QuoteBody()),
+            LayoutId(
+              id: "body",
+              child: QuoteBody(quote: quote, author: author),
+            ),
             LayoutId(
               id: "start",
               child: CustomSvg(svgName: "icn_arrow_filled"),

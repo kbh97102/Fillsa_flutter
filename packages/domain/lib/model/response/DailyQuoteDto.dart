@@ -13,7 +13,7 @@ class DailyQuoteDto {
   final String? engAuthor;
   final String? authorUrl;
 
-  DailyQuoteDto({
+  const DailyQuoteDto({
     required this.likeYn,
     this.imagePath,
     required this.dailyQuoteSeq,
@@ -23,6 +23,17 @@ class DailyQuoteDto {
     this.engAuthor,
     this.authorUrl,
   });
+
+  static const DailyQuoteDto empty = DailyQuoteDto(
+    likeYn: '',
+    dailyQuoteSeq: 0,
+    imagePath: null,
+    korQuote: null,
+    engQuote: null,
+    korAuthor: null,
+    engAuthor: null,
+    authorUrl: null,
+  );
 
   factory DailyQuoteDto.fromJson(Map<String, dynamic> json) =>
       _$DailyQuoteDtoFromJson(json);

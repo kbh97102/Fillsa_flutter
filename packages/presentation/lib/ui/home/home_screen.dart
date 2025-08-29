@@ -45,7 +45,10 @@ class HomeScreen extends ConsumerWidget {
 
               Padding(
                 padding: const EdgeInsets.only(top: 22),
-                child: QuoteSection(),
+                child: QuoteSection(
+                  quote: _viewModel.data.korQuote ?? "",
+                  author: _viewModel.data.korAuthor ?? "",
+                ),
               ),
 
               Padding(
