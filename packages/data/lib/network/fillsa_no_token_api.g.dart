@@ -174,10 +174,10 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
 // RiverpodGenerator
 // **************************************************************************
 
-@ProviderFor(fillsaApi)
-const fillsaApiProvider = FillsaApiProvider._();
+@ProviderFor(fillsaNoTokenApi)
+const fillsaNoTokenApiProvider = FillsaNoTokenApiProvider._();
 
-final class FillsaApiProvider
+final class FillsaNoTokenApiProvider
     extends
         $FunctionalProvider<
           FillsaNoTokenApi,
@@ -185,19 +185,19 @@ final class FillsaApiProvider
           FillsaNoTokenApi
         >
     with $Provider<FillsaNoTokenApi> {
-  const FillsaApiProvider._()
+  const FillsaNoTokenApiProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'fillsaApiProvider',
+        name: r'fillsaNoTokenApiProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$fillsaApiHash();
+  String debugGetCreateSourceHash() => _$fillsaNoTokenApiHash();
 
   @$internal
   @override
@@ -206,7 +206,7 @@ final class FillsaApiProvider
 
   @override
   FillsaNoTokenApi create(Ref ref) {
-    return fillsaApi(ref);
+    return fillsaNoTokenApi(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -218,7 +218,7 @@ final class FillsaApiProvider
   }
 }
 
-String _$fillsaApiHash() => r'c110da203a900abe7a0414365ac50e542687400f';
+String _$fillsaNoTokenApiHash() => r'982620828f1a78c681ffec3648af995a33ed4bb6';
 
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

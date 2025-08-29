@@ -53,6 +53,7 @@ class HomeRepositoryImpl with BaseRepository implements HomeRepository {
 @riverpod
 HomeRepository homeRepository(Ref ref) {
   final api = ref.watch(fillsaApiProvider);
+  final noTokenApi = ref.watch(fillsaNoTokenApiProvider);
 
-  return HomeRepositoryImpl(api);
+  return HomeRepositoryImpl(api, noTokenApi);
 }

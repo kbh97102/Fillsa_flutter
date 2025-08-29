@@ -38,7 +38,7 @@ abstract class FillsaNoTokenApi {
 }
 
 @riverpod
-FillsaNoTokenApi fillsaApi(Ref ref) {
+FillsaNoTokenApi fillsaNoTokenApi(Ref ref) {
   final dio = ref.watch(dioProvider);
   return FillsaNoTokenApi(dio);
 }
