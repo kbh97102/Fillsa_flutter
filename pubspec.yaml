@@ -10,12 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-#  domain:
-#    path: domain
-#  data:
-#    path: packages/data
-#  presentation:
-#    path: packages/presentation
 
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
@@ -47,3 +41,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
