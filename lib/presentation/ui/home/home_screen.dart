@@ -1,9 +1,9 @@
+import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../util/colors.dart';
-import '../../viewmodels/home_viewmodel.dart';
 import '../common/interaction_button_section.dart';
 import 'calendar_section.dart';
 import 'custom_switch.dart';
@@ -46,8 +46,8 @@ class HomeScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 22),
                 child: QuoteSection(
-                  quote: _viewModel.data.korQuote ?? "",
-                  author: _viewModel.data.korAuthor ?? "",
+                  quote: _viewModel.state.data.korQuote ?? "",
+                  author: _viewModel.state.data.korAuthor ?? "",
                 ),
               ),
 

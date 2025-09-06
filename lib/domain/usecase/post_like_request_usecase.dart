@@ -1,10 +1,12 @@
 import 'package:fillsa_flutter/domain/usecase/usecase.dart';
+import 'package:injectable/injectable.dart';
 
 import '../model/request/post_like_params.dart';
 import '../model/response/SimpleIntResponse.dart';
 import '../repository/HomeRepository.dart';
 import '../util/ApiResult.dart';
 
+@lazySingleton
 class PostLikeUseCase extends UseCase<SimpleIntResponse, PostLikeParams> {
   final HomeRepository _repository;
 

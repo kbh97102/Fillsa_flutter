@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../../domain/model/request/like_request.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
@@ -12,8 +12,7 @@ import '../network/fillsa_api.dart';
 import '../network/fillsa_no_token_api.dart';
 import 'base_repository.dart';
 
-part 'HomeRepositoryImpl.g.dart';
-
+@LazySingleton(as: HomeRepository)
 class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   final FillsaApi _api;
   final FillsaNoTokenApi _noTokenApi;
@@ -48,12 +47,4 @@ class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   Future<ApiResult<int>> postUploadImage(File imageFile, int dailyQuoteSeq) {
     return safeApiCall(() => _api.postUploadImage(dailyQuoteSeq, imageFile));
   }
-}
-
-@riverpod
-HomeRepository homeRepository(Ref ref) {
-  final api = ref.watch(fillsaApiProvider);
-  final noTokenApi = ref.watch(fillsaNoTokenApiProvider);
-
-  return HomeRepositoryImpl(api, noTokenApi);
 }

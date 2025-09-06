@@ -1,9 +1,11 @@
 import 'package:fillsa_flutter/domain/usecase/usecase.dart';
+import 'package:injectable/injectable.dart';
 
 import '../model/response/DailyQuoteDto.dart';
 import '../repository/HomeRepository.dart';
 import '../util/ApiResult.dart';
 
+@lazySingleton
 class GetDailyQuoteUseCase extends UseCase<DailyQuoteDto, String> {
   final HomeRepository _repository;
 
