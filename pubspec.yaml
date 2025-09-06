@@ -10,12 +10,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  domain:
-    path: packages/domain
-  data:
-    path: packages/data
-  presentation:
-    path: packages/presentation
+#  domain:
+#    path: domain
+#  data:
+#    path: packages/data
+#  presentation:
+#    path: packages/presentation
 
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
@@ -28,6 +28,9 @@ dependencies:
   smooth_page_indicator: ^1.2.1
   json_serializable: ^6.9.5
   get_it: ^8.2.0
+  logger: ^2.3.0
+  retrofit: ^4.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -43,16 +46,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-workspace:
-  - packages/domain
-  - packages/data
-  - packages/presentation
-
-melos:
-  # 스크립트들을 정의하는 곳
-  scripts:
-    # 'generate' 라는 이름의 단축키(스크립트)를 만듭니다.
-    build:
-      # 'melos generate' 라고 입력했을 때 실제로 실행될 명령어
-      run: melos exec -c 1 --depends-on build_runner -- dart run build_runner build
