@@ -1,10 +1,12 @@
-import 'package:domain/model/response/SimpleIntResponse.dart';
-import 'package:domain/repository/HomeRepository.dart';
-import 'package:domain/usecase/usecase.dart';
-import 'package:domain/util/ApiResult.dart';
+import 'package:injectable/injectable.dart';
 
 import '../model/request/post_like_params.dart';
+import '../model/response/SimpleIntResponse.dart';
+import '../repository/HomeRepository.dart';
+import '../util/ApiResult.dart';
+import 'usecase.dart';
 
+@lazySingleton
 class PostLikeUseCase extends UseCase<SimpleIntResponse, PostLikeParams> {
   final HomeRepository _repository;
 

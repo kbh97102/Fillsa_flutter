@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../guide/custom_svg.dart';
+import '../../ui/guide/custom_svg.dart';
 
 class CustomCheckbox extends StatelessWidget {
   final String onImage;

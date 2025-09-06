@@ -1,8 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'like_request.dart';
 import 'memo_request.dart';
 import 'typing_quote_request.dart';
+import 'like_request.dart';
 
 part 'daily_sync_data.g.dart';
 

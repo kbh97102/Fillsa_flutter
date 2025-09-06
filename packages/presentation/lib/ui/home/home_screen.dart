@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:presentation/ui/home/home_provider.dart';
 import 'package:presentation/ui/home/quote_section.dart';
-import 'package:presentation/viewmodels/home_viewmodel.dart';
 
+import '../../ui/common/interaction_button_section.dart';
+import '../../ui/home/calendar_section.dart';
+import '../../ui/home/custom_switch.dart';
+import '../../ui/home/image_section.dart';
 import '../../util/colors.dart';
-import '../common/interaction_button_section.dart';
-import 'calendar_section.dart';
-import 'custom_switch.dart';
-import 'image_section.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -46,8 +46,8 @@ class HomeScreen extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 22),
                 child: QuoteSection(
-                  quote: _viewModel.data.korQuote ?? "",
-                  author: _viewModel.data.korAuthor ?? "",
+                  quote: _viewModel.state.data.korQuote ?? "",
+                  author: _viewModel.state.data.korAuthor ?? "",
                 ),
               ),
 

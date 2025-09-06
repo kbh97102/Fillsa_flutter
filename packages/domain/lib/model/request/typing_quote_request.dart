@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'typing_quote_request.g.dart';
+part '../../../../../../packages/domain/lib/model/request/typing_quote_request.g.dart';
 
 @JsonSerializable()
 class TypingQuoteRequest {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presentation/util/extensions.dart';
 
-import '../guide/custom_svg.dart';
+import '../../ui/guide/custom_svg.dart';
 
 class QuoteListItemState extends StatelessWidget {
   const QuoteListItemState({super.key});

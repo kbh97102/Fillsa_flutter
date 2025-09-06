@@ -1,0 +1,7 @@
+name: fillsa_flutter
+
+packages:
+  - packages/data
+  - packages/presentation
+  - packages/domain
+

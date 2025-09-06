@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:presentation/util/extensions.dart';
 
+import '../../ui/guide/custom_svg.dart';
 import '../../util/colors.dart';
-import '../guide/custom_svg.dart';
 
 class ImageSection extends StatelessWidget {
   final bool isLogin;

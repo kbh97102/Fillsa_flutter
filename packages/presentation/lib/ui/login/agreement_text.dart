@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:presentation/util/colors.dart';
 import 'package:presentation/util/extensions.dart';
+
+import '../../util/colors.dart';
 
 class AgreementText extends StatelessWidget {
   @override

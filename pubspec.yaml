@@ -11,6 +11,13 @@ dependencies:
   flutter:
     sdk: flutter
 
+  domain:
+    path: ./packages/domain
+  data:
+    path: ./packages/data
+  presentation:
+    path: ./packages/presentation
+
   cupertino_icons: ^1.0.8
   dio: ^5.8.0+1
   flutter_riverpod: ^3.0.0-dev.17
@@ -38,8 +45,23 @@ dev_dependencies:
   build_verify: ^3.1.1
   injectable_generator: ^2.6.1
   retrofit_generator: ^10.0.0
+  dev: ^1.0.0
+  melos: ^7.1.0
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
+
+workspace:
+  - packages/domain
+  - packages/data
+  - packages/presentation
+
+melos:
+  # 스크립트들을 정의하는 곳
+  scripts:
+    # 'generate' 라는 이름의 단축키(스크립트)를 만듭니다.
+    build:
+      # 'melos generate' 라고 입력했을 때 실제로 실행될 명령어
+      run: melos exec -c 1 --depends-on build_runner -- dart run build_runner build

@@ -1,12 +1,9 @@
 import 'dart:io';
 
-import 'package:data/network/dio_provider.dart';
-import 'package:data/util/api_end_point.dart';
 import 'package:dio/dio.dart';
 import 'package:domain/model/request/like_request.dart';
 import 'package:domain/model/request/memo_request.dart';
 import 'package:domain/model/request/typing_quote_request.dart';
-import 'package:domain/model/response/DailyQuotaNoToken.dart';
 import 'package:domain/model/response/DailyQuoteDto.dart';
 import 'package:domain/model/response/MemberMonthlyQuoteResponse.dart';
 import 'package:domain/model/response/MemberTypingQuoteResponse.dart';
@@ -15,13 +12,14 @@ import 'package:domain/model/response/SimpleIntResponse.dart';
 import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../util/api_end_point.dart';
 
 part 'fillsa_api.g.dart';
 
 @RestApi()
 abstract class FillsaApi {
-  factory FillsaApi(Dio dio) = _FillsaApi;
+  factory FillsaApi(Dio dio, {String baseUrl}) = _FillsaApi;
 
   @GET(ApiEndPoints.getDailyQuote)
   Future<HttpResponse<DailyQuoteDto>> getDailyQuote(
@@ -82,10 +80,4 @@ abstract class FillsaApi {
   Future<HttpResponse<MemberTypingQuoteResponse>> getTyping(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
   );
-}
-
-@riverpod
-FillsaApi fillsaApi(Ref ref) {
-  final dio = ref.watch(dioProvider);
-  return FillsaApi(dio);
 }

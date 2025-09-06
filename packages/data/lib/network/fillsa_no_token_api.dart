@@ -5,16 +5,13 @@ import 'package:domain/model/response/LoginResponse.dart';
 import 'package:domain/model/response/MonthlyQuoteResponse.dart';
 import 'package:domain/model/response/PageResponseNoticeResponse.dart';
 import 'package:retrofit/retrofit.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../util/api_end_point.dart';
-import 'dio_provider.dart';
+import '../../../../../lib/packages/data/lib/src/util/api_end_point.dart';
 
 part 'fillsa_no_token_api.g.dart';
 
 @RestApi()
 abstract class FillsaNoTokenApi {
-  // 4. Retrofit boilerplate: Dio 인스턴스를 받는 factory 생성자
   factory FillsaNoTokenApi(Dio dio, {String baseUrl}) = _FillsaNoTokenApi;
 
   @GET(ApiEndPoints.getDailyQuoteNonMember)
@@ -35,10 +32,4 @@ abstract class FillsaNoTokenApi {
   Future<HttpResponse<List<MonthlyQuoteResponse>>> getMonthlyQuotesNonMember(
     @Query("yearMonth") String yearMonth,
   );
-}
-
-@riverpod
-FillsaNoTokenApi fillsaNoTokenApi(Ref ref) {
-  final dio = ref.watch(dioProvider);
-  return FillsaNoTokenApi(dio);
 }

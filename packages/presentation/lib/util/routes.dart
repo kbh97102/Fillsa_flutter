@@ -9,7 +9,7 @@ import '../ui/login/login_screen.dart';
 part 'routes.g.dart';
 
 @TypedGoRoute<LoginRoute>(path: "/login")
-class LoginRoute extends GoRouteData with _$LoginRoute {
+class LoginRoute extends GoRouteData with $LoginRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) => LoginScreen();
 }
@@ -46,7 +46,7 @@ class ShellRoute extends StatefulShellRouteData {
   }
 }
 
-class HomeRoute extends GoRouteData with _$HomeRoute {
+class HomeRoute extends GoRouteData with $HomeRoute {
   const HomeRoute();
 
   @override
@@ -55,7 +55,7 @@ class HomeRoute extends GoRouteData with _$HomeRoute {
   }
 }
 
-class HomeDateRoute extends GoRouteData with _$HomeDateRoute {
+class HomeDateRoute extends GoRouteData with $HomeDateRoute {
   const HomeDateRoute({required this.date});
   final String date;
 
@@ -66,7 +66,7 @@ class HomeDateRoute extends GoRouteData with _$HomeDateRoute {
 }
 
 @TypedGoRoute<CalendarRoute>(path: "/calendar")
-class CalendarRoute extends GoRouteData with _$CalendarRoute {
+class CalendarRoute extends GoRouteData with $CalendarRoute {
   @override
   Widget build(BuildContext context, GoRouterState state) => CalendarScreen();
 }

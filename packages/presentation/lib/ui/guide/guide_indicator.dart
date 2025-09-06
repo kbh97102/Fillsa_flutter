@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import 'guide_indicator_item.dart';
+import '../../ui/guide/guide_indicator_item.dart';
 
 class GuideIndicator extends StatelessWidget {
   const GuideIndicator({super.key});

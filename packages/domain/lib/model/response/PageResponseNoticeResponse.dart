@@ -1,8 +1,9 @@
 // PageResponseNoticeResponse.dart
 import 'package:json_annotation/json_annotation.dart';
-import 'NoticeResponse.dart'; // Assume NoticeResponse is in this file or imported from another.
 
-part 'PageResponseNoticeResponse.g.dart';
+import '../../model/response/NoticeResponse.dart'; // Assume NoticeResponse is in this file or imported from another.
+
+part '../../model/response/PageResponseNoticeResponse.g.dart';
 
 @JsonSerializable()
 class PageResponseNoticeResponse {
@@ -18,6 +19,7 @@ class PageResponseNoticeResponse {
     required this.currentPage,
   });
 
-  factory PageResponseNoticeResponse.fromJson(Map<String, dynamic> json) => _$PageResponseNoticeResponseFromJson(json);
+  factory PageResponseNoticeResponse.fromJson(Map<String, dynamic> json) =>
+      _$PageResponseNoticeResponseFromJson(json);
   Map<String, dynamic> toJson() => _$PageResponseNoticeResponseToJson(this);
 }

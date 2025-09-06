@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'NoticeResponse.dart';
+part of '../../model/response/NoticeResponse.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

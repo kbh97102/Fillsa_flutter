@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'MemberQuotesData.g.dart';
+part '../../model/response/MemberQuotesData.g.dart';
 
 @JsonSerializable()
 class MemberQuotesData {
@@ -20,6 +20,7 @@ class MemberQuotesData {
     required this.likeYnString,
   });
 
-  factory MemberQuotesData.fromJson(Map<String, dynamic> json) => _$MemberQuotesDataFromJson(json);
+  factory MemberQuotesData.fromJson(Map<String, dynamic> json) =>
+      _$MemberQuotesDataFromJson(json);
   Map<String, dynamic> toJson() => _$MemberQuotesDataToJson(this);
 }

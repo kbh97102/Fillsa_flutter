@@ -9,9 +9,9 @@ part of 'routes.dart';
 List<RouteBase> get $appRoutes => [$loginRoute, $shellRoute, $calendarRoute];
 
 RouteBase get $loginRoute =>
-    GoRouteData.$route(path: '/login', factory: _$LoginRoute._fromState);
+    GoRouteData.$route(path: '/login', factory: $LoginRoute._fromState);
 
-mixin _$LoginRoute on GoRouteData {
+mixin $LoginRoute on GoRouteData {
   static LoginRoute _fromState(GoRouterState state) => LoginRoute();
 
   @override
@@ -38,11 +38,11 @@ RouteBase get $shellRoute => StatefulShellRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: '/home',
-          factory: _$HomeRoute._fromState,
+          factory: $HomeRoute._fromState,
           routes: [
             GoRouteData.$route(
               path: ':date',
-              factory: _$HomeDateRoute._fromState,
+              factory: $HomeDateRoute._fromState,
             ),
           ],
         ),
@@ -52,7 +52,7 @@ RouteBase get $shellRoute => StatefulShellRouteData.$route(
       routes: [
         GoRouteData.$route(
           path: '/calendar',
-          factory: _$CalendarRoute._fromState,
+          factory: $CalendarRoute._fromState,
         ),
       ],
     ),
@@ -63,7 +63,7 @@ extension $ShellRouteExtension on ShellRoute {
   static ShellRoute _fromState(GoRouterState state) => const ShellRoute();
 }
 
-mixin _$HomeRoute on GoRouteData {
+mixin $HomeRoute on GoRouteData {
   static HomeRoute _fromState(GoRouterState state) => const HomeRoute();
 
   @override
@@ -83,7 +83,7 @@ mixin _$HomeRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$HomeDateRoute on GoRouteData {
+mixin $HomeDateRoute on GoRouteData {
   static HomeDateRoute _fromState(GoRouterState state) =>
       HomeDateRoute(date: state.pathParameters['date']!);
 
@@ -107,7 +107,7 @@ mixin _$HomeDateRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-mixin _$CalendarRoute on GoRouteData {
+mixin $CalendarRoute on GoRouteData {
   static CalendarRoute _fromState(GoRouterState state) => CalendarRoute();
 
   @override
@@ -128,4 +128,4 @@ mixin _$CalendarRoute on GoRouteData {
 }
 
 RouteBase get $calendarRoute =>
-    GoRouteData.$route(path: '/calendar', factory: _$CalendarRoute._fromState);
+    GoRouteData.$route(path: '/calendar', factory: $CalendarRoute._fromState);

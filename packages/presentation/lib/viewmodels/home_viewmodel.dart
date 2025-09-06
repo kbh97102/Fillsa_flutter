@@ -2,27 +2,21 @@ import 'package:domain/model/response/DailyQuotaNoToken.dart';
 import 'package:domain/model/response/DailyQuoteDto.dart';
 import 'package:domain/usecase/get_daily_quote_non_member_usecase.dart';
 import 'package:domain/util/ApiResult.dart';
-import 'package:presentation/util/providers.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:flutter/foundation.dart';
+import 'package:injectable/injectable.dart';
 
 import '../state/HomeState.dart';
-import '../util/logger.dart';
 
-part 'home_viewmodel.g.dart';
+@injectable
+class HomeViewModel extends ChangeNotifier {
+  final GetDailyNonMemberUseCase _getDailyNonMemberUseCase;
 
-@riverpod
-class HomeViewModel extends _$HomeViewModel {
-  late final GetDailyNonMemberUseCase _getDailyNonMemberUseCase = ref.read(
-    getDailyNonMemberUseCaseProvider,
-  );
+  HomeState _state = const HomeState(data: DailyQuoteDto.empty);
 
-  HomeViewModel();
+  HomeState get state => _state;
 
-  @override
-  HomeState build() {
-    logger.d(">>>> test start");
+  HomeViewModel(this._getDailyNonMemberUseCase) {
     getData();
-    return const HomeState(data: DailyQuoteDto.empty);
   }
 
   void getData() async {
@@ -41,7 +35,7 @@ class HomeViewModel extends _$HomeViewModel {
         authorUrl: noTokenDto.authorUrl,
       );
 
-      state = state.copyWith(data: uiQuote);
+      _state = state.copyWith(data: uiQuote);
     }
   }
 }

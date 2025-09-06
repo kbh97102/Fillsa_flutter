@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'daily_sync_data.dart';
+part of '../../../../../../packages/domain/lib/model/request/daily_sync_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'MemberTypingQuoteResponse.dart';
+part of '../../model/response/MemberTypingQuoteResponse.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

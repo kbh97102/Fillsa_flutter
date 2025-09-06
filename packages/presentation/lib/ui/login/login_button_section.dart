@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 
+import '../../ui/login/login_button.dart';
 import '../../util/colors.dart';
 import '../../util/routes.dart';
-import 'login_button.dart';
 
 class LoginButtonSection extends StatelessWidget {
   const LoginButtonSection({super.key});

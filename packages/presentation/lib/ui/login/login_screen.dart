@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:presentation/ui/guide/custom_svg.dart';
 import 'package:presentation/util/extensions.dart';
 
+import '../../ui/guide/custom_svg.dart';
+import '../../ui/login/agreement_text.dart';
+import '../../ui/login/login_button_section.dart';
 import '../../util/colors.dart';
-import 'agreement_text.dart';
-import 'login_button_section.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});

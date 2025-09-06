@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom_calendar.dart';
+import '../../ui/calendar/custom_calendar.dart';
 
 class CalendarScreen extends StatelessWidget {
   const CalendarScreen({super.key});

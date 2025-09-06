@@ -1,9 +1,11 @@
-import 'package:domain/repository/HomeRepository.dart';
-import 'package:domain/usecase/usecase.dart';
-import 'package:domain/util/ApiResult.dart';
+import 'package:injectable/injectable.dart';
 
 import '../model/response/DailyQuotaNoToken.dart';
+import '../repository/HomeRepository.dart';
+import '../util/ApiResult.dart';
+import 'usecase.dart';
 
+@lazySingleton
 class GetDailyNonMemberUseCase extends UseCase<DailyQuotaNoToken, String> {
   final HomeRepository _repository;
 

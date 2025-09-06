@@ -29,7 +29,7 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/quotes/daily',
+            null,
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/auth/login',
+            null,
             queryParameters: queryParameters,
             data: _data,
           )
@@ -89,7 +89,7 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/notices',
+            null,
             queryParameters: queryParameters,
             data: _data,
           )
@@ -119,7 +119,7 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/api/v1/quotes/monthly',
+            null,
             queryParameters: queryParameters,
             data: _data,
           )
@@ -169,56 +169,3 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
     return Uri.parse(dioBaseUrl).resolveUri(url).toString();
   }
 }
-
-// **************************************************************************
-// RiverpodGenerator
-// **************************************************************************
-
-@ProviderFor(fillsaNoTokenApi)
-const fillsaNoTokenApiProvider = FillsaNoTokenApiProvider._();
-
-final class FillsaNoTokenApiProvider
-    extends
-        $FunctionalProvider<
-          FillsaNoTokenApi,
-          FillsaNoTokenApi,
-          FillsaNoTokenApi
-        >
-    with $Provider<FillsaNoTokenApi> {
-  const FillsaNoTokenApiProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'fillsaNoTokenApiProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$fillsaNoTokenApiHash();
-
-  @$internal
-  @override
-  $ProviderElement<FillsaNoTokenApi> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  FillsaNoTokenApi create(Ref ref) {
-    return fillsaNoTokenApi(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(FillsaNoTokenApi value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<FillsaNoTokenApi>(value),
-    );
-  }
-}
-
-String _$fillsaNoTokenApiHash() => r'982620828f1a78c681ffec3648af995a33ed4bb6';
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

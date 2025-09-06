@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'custom_svg.dart';
+import '../../ui/guide/custom_svg.dart';
 
 class GuideImageSection extends StatelessWidget {
   GuideImageSection({super.key});

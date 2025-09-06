@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'DailyQuotaNoToken.dart';
+part of '../../model/response/DailyQuotaNoToken.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

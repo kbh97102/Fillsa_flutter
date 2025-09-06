@@ -1,4 +1,4 @@
-import 'package:domain/model/request/like_request.dart';
+import 'like_request.dart';
 
 class PostLikeParams {
   final int dailyQuoteSeq;

@@ -1,10 +1,10 @@
-import 'package:fillsa_flutter/presentation/ui/login/login_screen.dart';
-import 'package:fillsa_flutter/presentation/util/routes.dart';
-import 'package:fillsa_flutter/presentation/util/typo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:presentation/ui/login/login_screen.dart';
+import 'package:presentation/util/routes.dart';
+import 'package:presentation/util/typo.dart';
 
 import 'di_config.dart';
 

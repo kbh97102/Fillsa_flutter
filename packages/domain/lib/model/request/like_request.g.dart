@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'like_request.dart';
+part of '../../../../../../packages/domain/lib/model/request/like_request.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

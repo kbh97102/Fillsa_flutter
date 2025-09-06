@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'MonthlySummaryData.dart';
+part of '../../model/response/MonthlySummaryData.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

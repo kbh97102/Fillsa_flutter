@@ -1,9 +1,11 @@
-import 'package:domain/repository/HomeRepository.dart';
-import 'package:domain/usecase/usecase.dart';
-import 'package:domain/util/ApiResult.dart';
+import 'package:injectable/injectable.dart';
 
 import '../model/request/post_upload_image_params.dart';
+import '../repository/HomeRepository.dart';
+import '../util/ApiResult.dart';
+import 'usecase.dart';
 
+@lazySingleton
 class PostUploadImageUseCase extends UseCase<int, PostUploadImageParams> {
   final HomeRepository _repository;
 

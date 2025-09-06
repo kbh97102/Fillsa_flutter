@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../guide/custom_svg.dart';
+import '../../ui/guide/custom_svg.dart';
 
 class InteractionButtonSection extends StatelessWidget {
   const InteractionButtonSection({super.key});
