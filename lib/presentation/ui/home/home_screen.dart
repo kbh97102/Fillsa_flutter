@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/ui/common/image_change_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,15 @@ class HomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   children: [
-                    Expanded(child: CalendarSection()),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => showDialog(
+                          context: context,
+                          builder: (context) => ImageChangeDialog(),
+                        ),
+                        child: CalendarSection(),
+                      ),
+                    ),
                     SizedBox(width: 20),
                     Expanded(child: ImageSection(isLogin: false)),
                   ],
