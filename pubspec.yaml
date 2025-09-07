@@ -42,4 +42,16 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - path: assets/images/
+  fonts:
+    - family: pretendard
+      fonts:
+        - asset: assets/fonts/pretendard_400.otf
+          weight: 400
+        - asset: assets/fonts/pretendard_700.otf
+          weight: 700
+
+    - family: gangwoneduall
+      fonts:
+        - asset: gangwoneduall_otf_light.otf
+          weight: 400
