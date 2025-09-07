@@ -16,6 +16,7 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _viewModel = ref.watch(homeViewModelProvider);
+    final _state = _viewModel.state;
 
     return Container(
       color: yellow03,
@@ -38,11 +39,17 @@ class HomeScreen extends ConsumerWidget {
                           showDialog(
                             context: context,
                             builder: (context) => ImageChangeDialog(
-                              quote: "명언명언명언명언명언명언명언명언명언명언명언명언",
-                              author: "저자저자저자저자저자저자저자저자",
-                              imageChangeOnClick: () {},
-                              okOnClick: () {},
-                              deleteOnClick: () {},
+                              quote: _state.data.korQuote ?? "",
+                              author: _state.data.korAuthor ?? "",
+                              imageChangeOnClick: () {
+                                // TODO: 갤러리 접근
+                              },
+                              okOnClick: () {
+                                Navigator.pop(context);
+                              },
+                              deleteOnClick: () {
+                                // TODO: 사진 제거 이벤트
+                              },
                             ),
                           );
                         },

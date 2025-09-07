@@ -7,6 +7,7 @@ class CustomButton extends StatelessWidget {
   final Color textColor;
   final String buttonText;
   final double buttonRadius;
+  final Function onClick;
 
   const CustomButton({
     super.key,
@@ -14,6 +15,7 @@ class CustomButton extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.textColor = grey700,
     this.buttonRadius = 8,
+    required this.onClick,
   });
 
   @override
@@ -28,7 +30,7 @@ class CustomButton extends StatelessWidget {
         ),
       ),
 
-      onPressed: () {},
+      onPressed: () => onClick(),
       child: Text(buttonText, style: context.fillsaTypo.buttonMediumBold),
     );
   }

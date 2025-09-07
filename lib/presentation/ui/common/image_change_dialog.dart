@@ -36,27 +36,30 @@ class ImageChangeDialog extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   // 삭제하기
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CustomSvg(svgName: "icn_close", width: 20, height: 20),
+                  GestureDetector(
+                    onTap: () => deleteOnClick(),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomSvg(svgName: "icn_close", width: 20, height: 20),
 
-                      SizedBox(width: 8),
+                        SizedBox(width: 8),
 
-                      Text(
-                        "삭제하기",
-                        style: context.fillsaTypo.body2.copyWith(
-                          decoration: TextDecoration.underline,
+                        Text(
+                          "삭제하기",
+                          style: context.fillsaTypo.body2.copyWith(
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
 
                   SizedBox(height: 90),
 
-                  // 타이틀
+                  // 명언
                   Text(
-                    "상황을 가장 잘 활용하는 사람이 가장 좋은 상황을 맞는다.",
+                    quote,
                     style: context.fillsaTypo.quote,
                     textAlign: TextAlign.center,
                   ),
@@ -65,7 +68,7 @@ class ImageChangeDialog extends StatelessWidget {
 
                   // 저자
                   Text(
-                    "존 우든",
+                    author,
                     style: context.fillsaTypo.quote.copyWith(
                       decoration: TextDecoration.underline,
                     ),
@@ -76,9 +79,17 @@ class ImageChangeDialog extends StatelessWidget {
                   // 버튼
                   Row(
                     children: [
-                      CustomButton(buttonText: "이미지 변경"),
+                      CustomButton(
+                        buttonText: "이미지 변경",
+                        onClick: imageChangeOnClick,
+                      ),
                       SizedBox(width: 10),
-                      Expanded(child: CustomButton(buttonText: "확인")),
+                      Expanded(
+                        child: CustomButton(
+                          buttonText: "확인",
+                          onClick: () => okOnClick(),
+                        ),
+                      ),
                     ],
                   ),
                 ],
