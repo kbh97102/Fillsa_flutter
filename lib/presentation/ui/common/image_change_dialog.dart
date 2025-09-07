@@ -4,6 +4,21 @@ import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
 class ImageChangeDialog extends StatelessWidget {
+  final String quote;
+  final String author;
+  final Function imageChangeOnClick;
+  final Function okOnClick;
+  final Function deleteOnClick;
+
+  const ImageChangeDialog({
+    super.key,
+    required this.quote,
+    required this.author,
+    required this.imageChangeOnClick,
+    required this.okOnClick,
+    required this.deleteOnClick,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Dialog(

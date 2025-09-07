@@ -29,17 +29,26 @@ class HomeScreen extends ConsumerWidget {
                 padding: const EdgeInsets.only(top: 20),
                 child: Row(
                   children: [
+                    Expanded(child: CalendarSection()),
+                    SizedBox(width: 20),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () => showDialog(
-                          context: context,
-                          builder: (context) => ImageChangeDialog(),
-                        ),
-                        child: CalendarSection(),
+                        onTap: () {
+                          // TODO: Login 여부 추가
+                          showDialog(
+                            context: context,
+                            builder: (context) => ImageChangeDialog(
+                              quote: "명언명언명언명언명언명언명언명언명언명언명언명언",
+                              author: "저자저자저자저자저자저자저자저자",
+                              imageChangeOnClick: () {},
+                              okOnClick: () {},
+                              deleteOnClick: () {},
+                            ),
+                          );
+                        },
+                        child: ImageSection(isLogin: false),
                       ),
                     ),
-                    SizedBox(width: 20),
-                    Expanded(child: ImageSection(isLogin: false)),
                   ],
                 ),
               ),
