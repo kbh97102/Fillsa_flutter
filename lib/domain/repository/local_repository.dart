@@ -6,26 +6,26 @@ abstract class LocalRepository {
   Future<void> setAccessToken(String token);
 
   // suspend fun -> Future<String>
-  Future<String> getAccessToken();
+  Future<String?> getAccessToken();
 
   Future<void> setRefreshToken(String token);
 
-  Future<String> getRefreshToken();
+  Future<String?> getRefreshToken();
 
   Future<void> setImageUri(String uri);
 
   Future<void> setShareDescriptionVisible(bool boolean);
 
-  Future<bool> getShareDescriptionVisible();
+  Future<bool?> getShareDescriptionVisible();
 
-  // Flow<String> -> Stream<String>
-  Stream<String> getImageUri();
+  // Flow<String> -> Future<String>
+  Future<String?> getImageUri();
 
-  // Flow<Boolean> -> Stream<Boolean>
-  Stream<bool> getLoginStatus();
+  // Flow<Boolean> -> Future<Boolean>
+  Future<bool?> getLoginStatus();
 
-  // Flow<Boolean> -> Stream<Boolean>
-  Stream<bool> isFirstOpen();
+  // Flow<Boolean> -> Future<Boolean>
+  Future<bool?> isFirstOpen();
 
   Future<void> setFirstOpen(bool value);
 
@@ -33,11 +33,11 @@ abstract class LocalRepository {
 
   Future<void> setName(String value);
 
-  Stream<bool> getAlarm();
+  Future<bool?> getAlarm();
 
-  Stream<String> getName();
+  Future<String?> getName();
 
-  Stream<bool> isAlarmPermissionRequestedBefore();
+  Future<bool?> isAlarmPermissionRequestedBefore();
 
   Future<void> setAlarmPermissionRequestedBefore(bool requested);
 
@@ -64,12 +64,9 @@ abstract class LocalRepository {
 
   Future<int> updateLocalQuoteLike({required YN likeYN, required int seq});
 
-  // T? (nullable) -> T? (nullable)
   Future<LocalQuoteInfo?> getQuoteLocal(int seq);
 
-  Future<void> emitTokenExpired(String errorCode);
-
-  Stream<String> getTokenExpired();
+  Future<String?> getTokenExpired();
 
   Future<LocalQuoteInfo?> findLocalQuoteById(int seq);
 

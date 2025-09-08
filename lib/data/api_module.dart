@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'network/fillsa_api.dart';
 import 'network/fillsa_no_token_api.dart';
@@ -31,4 +32,7 @@ abstract class ApiModule {
 
     return dio;
   }
+
+  @lazySingleton
+  SharedPreferencesAsync providePref() => SharedPreferencesAsync();
 }
