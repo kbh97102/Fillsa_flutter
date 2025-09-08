@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/ui/common/common_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/common/image_change_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
@@ -49,6 +50,13 @@ class HomeScreen extends ConsumerWidget {
                               },
                               deleteOnClick: () {
                                 // TODO: 사진 제거 이벤트
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => CommonDialog(
+                                    title: "이미지를 삭제하시겠습니까?",
+                                    body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
+                                  ),
+                                );
                               },
                             ),
                           );

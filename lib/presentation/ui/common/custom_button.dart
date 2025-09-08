@@ -31,7 +31,13 @@ class CustomButton extends StatelessWidget {
       ),
 
       onPressed: () => onClick(),
-      child: Text(buttonText, style: context.fillsaTypo.buttonMediumBold),
+      child: Padding(
+        padding: EdgeInsetsGeometry.symmetric(vertical: 15),
+        child: Text(
+          buttonText,
+          style: context.fillsaTypo.buttonMediumBold.copyWith(color: textColor),
+        ),
+      ),
     );
   }
 }
