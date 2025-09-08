@@ -20,8 +20,6 @@ class HomeScreen extends ConsumerWidget {
 
     return _viewModel.when(
       data: (state) {
-        final notifier = ref.read(homeViewModelProvider.notifier);
-
         return Container(
           color: yellow03,
           child: SafeArea(
@@ -74,10 +72,12 @@ class HomeScreen extends ConsumerWidget {
                       quote: state.data.korQuote ?? "",
                       author: state.data.korAuthor ?? "",
                       beforeOnClick: () {
-                        notifier.beforeOnClick();
+                        ref
+                            .read(homeViewModelProvider.notifier)
+                            .beforeOnClick();
                       },
                       afterOnClick: () {
-                        notifier.afterOnClick();
+                        ref.read(homeViewModelProvider.notifier).afterOnClick();
                       },
                     ),
                   ),
