@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$HomeState {
 
- bool get isLoading; DailyQuoteDto get data; String? get error; bool get isLogged;
+ bool get isLoading; DailyQuoteDto get data; String? get error; bool get isLogged; DailyQuoteDto? get currentQuote;
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $HomeStateCopyWith<HomeState> get copyWith => _$HomeStateCopyWithImpl<HomeState>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.data, data) || other.data == data)&&(identical(other.error, error) || other.error == error)&&(identical(other.isLogged, isLogged) || other.isLogged == isLogged));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is HomeState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.data, data) || other.data == data)&&(identical(other.error, error) || other.error == error)&&(identical(other.isLogged, isLogged) || other.isLogged == isLogged)&&(identical(other.currentQuote, currentQuote) || other.currentQuote == currentQuote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,data,error,isLogged);
+int get hashCode => Object.hash(runtimeType,isLoading,data,error,isLogged,currentQuote);
 
 @override
 String toString() {
-  return 'HomeState(isLoading: $isLoading, data: $data, error: $error, isLogged: $isLogged)';
+  return 'HomeState(isLoading: $isLoading, data: $data, error: $error, isLogged: $isLogged, currentQuote: $currentQuote)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $HomeStateCopyWith<$Res>  {
   factory $HomeStateCopyWith(HomeState value, $Res Function(HomeState) _then) = _$HomeStateCopyWithImpl;
 @useResult
 $Res call({
- bool isLoading, DailyQuoteDto data, String? error, bool isLogged
+ bool isLoading, DailyQuoteDto data, String? error, bool isLogged, DailyQuoteDto? currentQuote
 });
 
 
@@ -62,13 +62,14 @@ class _$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? data = null,Object? error = freezed,Object? isLogged = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? data = null,Object? error = freezed,Object? isLogged = null,Object? currentQuote = freezed,}) {
   return _then(_self.copyWith(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as DailyQuoteDto,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,isLogged: null == isLogged ? _self.isLogged : isLogged // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,currentQuote: freezed == currentQuote ? _self.currentQuote : currentQuote // ignore: cast_nullable_to_non_nullable
+as DailyQuoteDto?,
   ));
 }
 
@@ -153,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged,  DailyQuoteDto? currentQuote)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
+return $default(_that.isLoading,_that.data,_that.error,_that.isLogged,_that.currentQuote);case _:
   return orElse();
 
 }
@@ -174,10 +175,10 @@ return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged,  DailyQuoteDto? currentQuote)  $default,) {final _that = this;
 switch (_that) {
 case _HomeState():
-return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
+return $default(_that.isLoading,_that.data,_that.error,_that.isLogged,_that.currentQuote);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -194,10 +195,10 @@ return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  DailyQuoteDto data,  String? error,  bool isLogged,  DailyQuoteDto? currentQuote)?  $default,) {final _that = this;
 switch (_that) {
 case _HomeState() when $default != null:
-return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
+return $default(_that.isLoading,_that.data,_that.error,_that.isLogged,_that.currentQuote);case _:
   return null;
 
 }
@@ -209,13 +210,14 @@ return $default(_that.isLoading,_that.data,_that.error,_that.isLogged);case _:
 
 
 class _HomeState implements HomeState {
-  const _HomeState({this.isLoading = false, required this.data, this.error, this.isLogged = false});
+  const _HomeState({this.isLoading = false, required this.data, this.error, this.isLogged = false, this.currentQuote});
   
 
 @override@JsonKey() final  bool isLoading;
 @override final  DailyQuoteDto data;
 @override final  String? error;
 @override@JsonKey() final  bool isLogged;
+@override final  DailyQuoteDto? currentQuote;
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
@@ -227,16 +229,16 @@ _$HomeStateCopyWith<_HomeState> get copyWith => __$HomeStateCopyWithImpl<_HomeSt
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.data, data) || other.data == data)&&(identical(other.error, error) || other.error == error)&&(identical(other.isLogged, isLogged) || other.isLogged == isLogged));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _HomeState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.data, data) || other.data == data)&&(identical(other.error, error) || other.error == error)&&(identical(other.isLogged, isLogged) || other.isLogged == isLogged)&&(identical(other.currentQuote, currentQuote) || other.currentQuote == currentQuote));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,isLoading,data,error,isLogged);
+int get hashCode => Object.hash(runtimeType,isLoading,data,error,isLogged,currentQuote);
 
 @override
 String toString() {
-  return 'HomeState(isLoading: $isLoading, data: $data, error: $error, isLogged: $isLogged)';
+  return 'HomeState(isLoading: $isLoading, data: $data, error: $error, isLogged: $isLogged, currentQuote: $currentQuote)';
 }
 
 
@@ -247,7 +249,7 @@ abstract mixin class _$HomeStateCopyWith<$Res> implements $HomeStateCopyWith<$Re
   factory _$HomeStateCopyWith(_HomeState value, $Res Function(_HomeState) _then) = __$HomeStateCopyWithImpl;
 @override @useResult
 $Res call({
- bool isLoading, DailyQuoteDto data, String? error, bool isLogged
+ bool isLoading, DailyQuoteDto data, String? error, bool isLogged, DailyQuoteDto? currentQuote
 });
 
 
@@ -264,13 +266,14 @@ class __$HomeStateCopyWithImpl<$Res>
 
 /// Create a copy of HomeState
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? data = null,Object? error = freezed,Object? isLogged = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? data = null,Object? error = freezed,Object? isLogged = null,Object? currentQuote = freezed,}) {
   return _then(_HomeState(
 isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
 as bool,data: null == data ? _self.data : data // ignore: cast_nullable_to_non_nullable
 as DailyQuoteDto,error: freezed == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String?,isLogged: null == isLogged ? _self.isLogged : isLogged // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,currentQuote: freezed == currentQuote ? _self.currentQuote : currentQuote // ignore: cast_nullable_to_non_nullable
+as DailyQuoteDto?,
   ));
 }
 

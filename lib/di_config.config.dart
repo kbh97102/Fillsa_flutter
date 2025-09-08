@@ -20,6 +20,7 @@ import 'data/network/fillsa_api.dart' as _i183;
 import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
+import 'domain/model/response/DailyQuoteDto.dart' as _i460;
 import 'domain/repository/home_repository.dart' as _i405;
 import 'domain/repository/local_repository.dart' as _i279;
 import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
@@ -79,6 +80,18 @@ _i174.GetIt init(
   gh.lazySingleton<_i383.GetLoginStatusUseCase>(
     () => _i383.GetLoginStatusUseCase(
       localRepository: gh<_i279.LocalRepository>(),
+    ),
+  );
+  gh.factory<_i460.DailyQuoteDto>(
+    () => _i460.DailyQuoteDto(
+      likeYn: gh<String>(),
+      imagePath: gh<String>(),
+      dailyQuoteSeq: gh<int>(),
+      korQuote: gh<String>(),
+      engQuote: gh<String>(),
+      korAuthor: gh<String>(),
+      engAuthor: gh<String>(),
+      authorUrl: gh<String>(),
     ),
   );
   gh.lazySingleton<_i783.PostLikeUseCase>(
@@ -151,6 +164,10 @@ _i174.GetIt init(
     () => _i199.HomeViewModel(
       gh<_i580.GetDailyNonMemberUseCase>(),
       gh<_i383.GetLoginStatusUseCase>(),
+      gh<_i783.PostLikeUseCase>(),
+      gh<_i531.FindLocalQuoteByIdUseCase>(),
+      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
+      gh<_i359.AddLocalQuoteUseCase>(),
     ),
   );
   return getIt;

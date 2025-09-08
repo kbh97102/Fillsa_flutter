@@ -1,26 +1,27 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+class LocalQuoteInfo {
+  final int dailyQuoteSeq;
+  final String korQuote;
+  final String engQuote;
+  final String korAuthor;
+  final String engAuthor;
+  final String korTyping;
+  final String engTyping;
+  final String likeYn;
+  final String memo;
+  final String date;
+  final String dayOfWeek;
 
-part 'local_quote_info.freezed.dart';
-part 'local_quote_info.g.dart';
-
-@freezed
-abstract class LocalQuoteInfo with _$LocalQuoteInfo {
-  const factory LocalQuoteInfo({
-    required int dailyQuoteSeq,
-    required String korQuote,
-    required String engQuote,
-    required String korAuthor,
-    required String engAuthor,
-    required String korTyping,
-    required String engTyping,
-    required String likeYn,
-    required String memo,
-    required String date,
-    required String dayOfWeek,
-  }) = _LocalQuoteInfo;
-
-  const LocalQuoteInfo._();
-
-  factory LocalQuoteInfo.fromJson(Map<String, dynamic> json) =>
-      _$LocalQuoteInfoFromJson(json);
+  LocalQuoteInfo({
+    required this.dailyQuoteSeq,
+    required this.korQuote,
+    required this.engQuote,
+    required this.korAuthor,
+    required this.engAuthor,
+    required this.korTyping,
+    required this.engTyping,
+    required this.likeYn,
+    required this.memo,
+    required this.date,
+    required this.dayOfWeek,
+  });
 }

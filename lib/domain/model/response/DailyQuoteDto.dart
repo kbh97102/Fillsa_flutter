@@ -1,7 +1,9 @@
+import 'package:injectable/injectable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'DailyQuoteDto.g.dart';
 
+@injectable
 @JsonSerializable()
 class DailyQuoteDto {
   final String likeYn;
