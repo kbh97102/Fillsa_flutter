@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fillsa_flutter/data/local/local_database.dart';
 import 'package:fillsa_flutter/data/util/PrefKey.dart';
 import 'package:fillsa_flutter/data/util/extension.dart';
@@ -11,6 +13,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocalRepositoryImpl extends LocalRepository {
   final SharedPreferencesAsync prefs;
   final LocalDatabase localQuoteInfoDao;
+  final _loginStatusController = StreamController<bool>.broadcast();
+  late final _loginStatusStream = _loginStatusController.stream;
 
   LocalRepositoryImpl({required this.prefs, required this.localQuoteInfoDao});
 
@@ -21,7 +25,8 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> clear() async {
-    localQuoteInfoDao.clear();
+    await localQuoteInfoDao.clear();
+    await _updateLoginStatus();
   }
 
   @override
@@ -71,13 +76,20 @@ class LocalRepositoryImpl extends LocalRepository {
     throw UnimplementedError();
   }
 
-  @override
-  Future<bool> getLoginStatus() async {
+  Future<void> _updateLoginStatus() async {
     final accessToken = await prefs.getString(PrefKey.accessToken);
     final refreshToken = await prefs.getString(PrefKey.refreshToken);
 
-    return ((accessToken != null && accessToken.isNotEmpty) &&
+    final isLogged =
+        ((accessToken != null && accessToken.isNotEmpty) &&
         (refreshToken != null && refreshToken.isNotEmpty));
+
+    _loginStatusController.add(isLogged);
+  }
+
+  @override
+  Stream<bool> getLoginStatus() {
+    return _loginStatusStream;
   }
 
   @override
@@ -116,7 +128,8 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> setAccessToken(String token) async {
-    prefs.setString(PrefKey.accessToken, token);
+    await prefs.setString(PrefKey.accessToken, token);
+    await _updateLoginStatus();
   }
 
   @override
@@ -146,7 +159,8 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> setRefreshToken(String token) async {
-    prefs.setString(PrefKey.refreshToken, token);
+    await prefs.setString(PrefKey.refreshToken, token);
+    await _updateLoginStatus();
   }
 
   @override

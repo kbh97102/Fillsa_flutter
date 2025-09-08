@@ -11,5 +11,6 @@ abstract class HomeState with _$HomeState {
     @Default(false) bool isLoading,
     required DailyQuoteDto data,
     String? error,
+    @Default(false) bool isLogged,
   }) = _HomeState;
 }

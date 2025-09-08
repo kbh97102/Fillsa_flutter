@@ -22,11 +22,29 @@ import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'domain/repository/home_repository.dart' as _i405;
 import 'domain/repository/local_repository.dart' as _i279;
+import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
+import 'domain/usecase/clear_all_data_usecase.dart' as _i601;
+import 'domain/usecase/delete_quote_by_seq_usecase.dart' as _i457;
+import 'domain/usecase/find_local_quote_by_id_usecase.dart' as _i531;
+import 'domain/usecase/get_access_token_usecase.dart' as _i193;
 import 'domain/usecase/get_daily_quote_non_member_usecase.dart' as _i580;
 import 'domain/usecase/get_daily_quote_usecase.dart' as _i12;
+import 'domain/usecase/get_image_uri_usecase.dart' as _i300;
+import 'domain/usecase/get_local_quotes_paging_usecase.dart' as _i292;
+import 'domain/usecase/get_local_quotes_usecase.dart' as _i1037;
 import 'domain/usecase/get_login_status_usecase.dart' as _i383;
+import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
+import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
+import 'domain/usecase/is_first_open_usecase.dart' as _i133;
 import 'domain/usecase/post_like_request_usecase.dart' as _i783;
 import 'domain/usecase/post_upload_image_usecase.dart' as _i426;
+import 'domain/usecase/set_access_token_usecase.dart' as _i173;
+import 'domain/usecase/set_first_open_usecase.dart' as _i504;
+import 'domain/usecase/set_image_uri_usecase.dart' as _i1000;
+import 'domain/usecase/set_refresh_token_usecase.dart' as _i904;
+import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
+import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
+import 'domain/usecase/update_quote_usecase.dart' as _i658;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
 
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -74,6 +92,60 @@ _i174.GetIt init(
   );
   gh.lazySingleton<_i426.PostUploadImageUseCase>(
     () => _i426.PostUploadImageUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i751.GetTokenExpiredUseCase>(
+    () => _i751.GetTokenExpiredUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i601.ClearAllDataUseCase>(
+    () => _i601.ClearAllDataUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i177.UpdateLocalQuoteLikeUseCase>(
+    () => _i177.UpdateLocalQuoteLikeUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i1000.SetImageUriUseCase>(
+    () => _i1000.SetImageUriUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i504.SetFirstOpenUseCase>(
+    () => _i504.SetFirstOpenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i300.GetImageUriUseCase>(
+    () => _i300.GetImageUriUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i193.GetAccessTokenUseCase>(
+    () => _i193.GetAccessTokenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i51.GetRefreshTokenUseCase>(
+    () => _i51.GetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i457.DeleteQuoteBySeqUseCase>(
+    () => _i457.DeleteQuoteBySeqUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i658.UpdateQuoteUseCase>(
+    () => _i658.UpdateQuoteUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i173.SetAccessTokenUseCase>(
+    () => _i173.SetAccessTokenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i359.AddLocalQuoteUseCase>(
+    () => _i359.AddLocalQuoteUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i729.FindLocalQuoteByIdUseCase>(
+    () => _i729.FindLocalQuoteByIdUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i1037.GetLocalQuotesUseCase>(
+    () => _i1037.GetLocalQuotesUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i292.GetLocalQuotesPagingUseCase>(
+    () => _i292.GetLocalQuotesPagingUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i133.IsFirstOpenUseCase>(
+    () => _i133.IsFirstOpenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i531.FindLocalQuoteByIdUseCase>(
+    () => _i531.FindLocalQuoteByIdUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i904.SetRefreshTokenUseCase>(
+    () => _i904.SetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
   );
   gh.factory<_i199.HomeViewModel>(
     () => _i199.HomeViewModel(

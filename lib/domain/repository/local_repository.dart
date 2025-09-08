@@ -2,10 +2,8 @@ import '../model/local_quote_info.dart';
 import '../model/yn.dart';
 
 abstract class LocalRepository {
-  // suspend fun -> Future<void>
   Future<void> setAccessToken(String token);
 
-  // suspend fun -> Future<String>
   Future<String?> getAccessToken();
 
   Future<void> setRefreshToken(String token);
@@ -18,13 +16,10 @@ abstract class LocalRepository {
 
   Future<bool?> getShareDescriptionVisible();
 
-  // Flow<String> -> Future<String>
   Future<String?> getImageUri();
 
-  // Flow<Boolean> -> Future<Boolean>
-  Future<bool?> getLoginStatus();
+  Stream<bool?> getLoginStatus();
 
-  // Flow<Boolean> -> Future<Boolean>
   Future<bool?> isFirstOpen();
 
   Future<void> setFirstOpen(bool value);
