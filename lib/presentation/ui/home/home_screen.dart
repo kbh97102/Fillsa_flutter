@@ -39,23 +39,10 @@ class HomeScreen extends ConsumerWidget {
                           // TODO: Login 여부 추가
                           showDialog(
                             context: context,
-                            builder: (context) => ImageChangeDialog(
+                            builder: (context) => getImageDialog(
+                              context: context,
                               quote: _state.data.korQuote ?? "",
                               author: _state.data.korAuthor ?? "",
-                              imageChangeOnClick: () {
-                                // TODO: 갤러리 접근
-                              },
-                              okOnClick: () {
-                                Navigator.pop(context);
-                              },
-                              deleteOnClick: () {
-                                // TODO: 사진 제거 이벤트
-                                showDialog(
-                                  context: context,
-                                  builder: (context) =>
-                                      getDeleteDialog(context),
-                                );
-                              },
                             ),
                           );
                         },
@@ -106,6 +93,30 @@ class HomeScreen extends ConsumerWidget {
       okTextColor: purple01,
       okButtonBorderColor: purple01,
       okButtonOnClick: () => {Navigator.pop(context)},
+    );
+  }
+
+  Widget getImageDialog({
+    required BuildContext context,
+    required String quote,
+    required String author,
+  }) {
+    return ImageChangeDialog(
+      quote: quote,
+      author: author,
+      imageChangeOnClick: () {
+        // TODO: 갤러리 접근
+      },
+      okOnClick: () {
+        Navigator.pop(context);
+      },
+      deleteOnClick: () {
+        // TODO: 사진 제거 이벤트
+        showDialog(
+          context: context,
+          builder: (context) => getDeleteDialog(context),
+        );
+      },
     );
   }
 }
