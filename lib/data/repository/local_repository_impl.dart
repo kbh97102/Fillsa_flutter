@@ -1,4 +1,6 @@
+import 'package:fillsa_flutter/data/local/local_quote_info_dao.dart';
 import 'package:fillsa_flutter/data/util/PrefKey.dart';
+import 'package:fillsa_flutter/data/util/extension.dart';
 import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
 import 'package:fillsa_flutter/domain/model/yn.dart';
 import 'package:fillsa_flutter/domain/repository/local_repository.dart';
@@ -8,37 +10,34 @@ import 'package:shared_preferences/shared_preferences.dart';
 @LazySingleton(as: LocalRepository)
 class LocalRepositoryImpl extends LocalRepository {
   final SharedPreferencesAsync prefs;
+  final LocalQuoteInfoDao localQuoteInfoDao;
 
-  LocalRepositoryImpl({required this.prefs});
+  LocalRepositoryImpl({required this.prefs, required this.localQuoteInfoDao});
 
   @override
   Future<void> addLocalQuote(LocalQuoteInfo quote) async {
-    // TODO: implement addLocalQuote
-    throw UnimplementedError();
+    localQuoteInfoDao.insertQuote(quote.toEntity());
   }
 
   @override
-  Future<void> clear() {
-    // TODO: implement clear
-    throw UnimplementedError();
+  Future<void> clear() async {
+    localQuoteInfoDao.clear();
   }
 
   @override
-  Future<void> deleteQuoteByObject(LocalQuoteInfo quote) {
-    // TODO: implement deleteQuoteByObject
-    throw UnimplementedError();
+  Future<void> deleteQuoteByObject(LocalQuoteInfo quote) async {
+    localQuoteInfoDao.deleteQuote(quote.toEntity());
   }
 
   @override
-  Future<void> deleteQuoteBySeq(int seq) {
-    // TODO: implement deleteQuoteBySeq
-    throw UnimplementedError();
+  Future<void> deleteQuoteBySeq(int seq) async {
+    localQuoteInfoDao.deleteQuoteById(seq);
   }
 
   @override
-  Future<LocalQuoteInfo?> findLocalQuoteById(int seq) {
-    // TODO: implement findLocalQuoteById
-    throw UnimplementedError();
+  Future<LocalQuoteInfo?> findLocalQuoteById(int seq) async {
+    final entity = await localQuoteInfoDao.findQuoteById(seq);
+    return entity?.toModel();
   }
 
   @override
@@ -57,9 +56,9 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<List<LocalQuoteInfo>> getLocalQuotes() {
-    // TODO: implement getLocalQuotes
-    throw UnimplementedError();
+  Future<List<LocalQuoteInfo>> getLocalQuotes() async {
+    final list = await localQuoteInfoDao.getAllQuotes();
+    return list.map((entity) => entity.toModel()).toList();
   }
 
   @override
@@ -75,9 +74,12 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<bool> getLoginStatus() {
-    // TODO: implement getLoginStatus
-    throw UnimplementedError();
+  Future<bool> getLoginStatus() async {
+    final accessToken = await prefs.getString(PrefKey.accessToken);
+    final refreshToken = await prefs.getString(PrefKey.refreshToken);
+
+    return ((accessToken != null && accessToken.isNotEmpty) &&
+        (refreshToken != null && refreshToken.isNotEmpty));
   }
 
   @override
@@ -86,10 +88,8 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<LocalQuoteInfo?> getQuoteLocal(int seq) {
-    // TODO: implement getQuoteLocal
-    throw UnimplementedError();
-  }
+  Future<LocalQuoteInfo?> getQuoteLocal(int seq) =>
+      localQuoteInfoDao.getQuote(seq).then((entity) => entity?.toModel());
 
   @override
   Future<String?> getRefreshToken() {
@@ -102,9 +102,8 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<String> getTokenExpired() {
-    // TODO: implement getTokenExpired
-    throw UnimplementedError();
+  Future<String?> getTokenExpired() {
+    return prefs.getString(PrefKey.tokenExpired);
   }
 
   @override
@@ -133,9 +132,8 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<void> setFirstOpen(bool value) {
-    // TODO: implement setFirstOpen
-    throw UnimplementedError();
+  Future<void> setFirstOpen(bool value) async {
+    prefs.setBool(PrefKey.firstOpenKey, value);
   }
 
   @override
@@ -159,20 +157,32 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<int> updateLocalQuoteLike({required YN likeYN, required int seq}) {
-    // TODO: implement updateLocalQuoteLike
-    throw UnimplementedError();
+  Future<int?> updateLocalQuoteLike({
+    required YN likeYN,
+    required int seq,
+  }) async {
+    if (likeYN == YN.n) {
+      final entity = await localQuoteInfoDao.findQuoteById(seq);
+      if (entity != null &&
+          entity.korTyping.isEmpty &&
+          entity.engTyping.isEmpty) {
+        return 0;
+      }
+    }
+
+    return localQuoteInfoDao.updateLike(likeYN.name, seq);
   }
 
   @override
-  Future<void> updateLocalQuoteMemo({required String memo, required int seq}) {
-    // TODO: implement updateLocalQuoteMemo
-    throw UnimplementedError();
+  Future<void> updateLocalQuoteMemo({
+    required String memo,
+    required int seq,
+  }) async {
+    localQuoteInfoDao.updateMemo(memo, seq);
   }
 
   @override
-  Future<void> updateQuote(LocalQuoteInfo quote) {
-    // TODO: implement updateQuote
-    throw UnimplementedError();
+  Future<void> updateQuote(LocalQuoteInfo quote) async {
+    localQuoteInfoDao.updateQuote(quote.toEntity());
   }
 }

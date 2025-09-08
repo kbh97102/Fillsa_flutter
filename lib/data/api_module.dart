@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:fillsa_flutter/data/local/local_database.dart';
+import 'package:fillsa_flutter/data/local/local_quote_info_dao.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../di_config.dart';
 import 'network/fillsa_api.dart';
 import 'network/fillsa_no_token_api.dart';
 
@@ -35,4 +38,14 @@ abstract class ApiModule {
 
   @lazySingleton
   SharedPreferencesAsync providePref() => SharedPreferencesAsync();
+
+  @preResolve // Future가 완료된 후 결과값을 주입하도록 합니다.
+  @singleton
+  Future<LocalDatabase> get db =>
+      $FloorAppDatabase.databaseBuilder('app_database.db').build();
+
+  // 2. 위에서 생성된 AppDatabase 인스턴스를 받아 TodoDao를 주입합니다.
+  // injectable은 getIt에 등록된 AppDatabase를 자동으로 찾아 이 메소드의 파라미터로 넘겨줍니다.
+  @lazySingleton
+  LocalQuoteInfoDao get todoDao => getIt<LocalDatabase>().infoDao;
 }

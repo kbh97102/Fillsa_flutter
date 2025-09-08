@@ -62,7 +62,7 @@ abstract class LocalRepository {
 
   Future<void> updateLocalQuoteMemo({required String memo, required int seq});
 
-  Future<int> updateLocalQuoteLike({required YN likeYN, required int seq});
+  Future<int?> updateLocalQuoteLike({required YN likeYN, required int seq});
 
   Future<LocalQuoteInfo?> getQuoteLocal(int seq);
 

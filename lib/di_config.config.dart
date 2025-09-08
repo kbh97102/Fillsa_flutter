@@ -12,12 +12,17 @@
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shared_preferences/shared_preferences.dart' as _i460;
 
 import 'data/api_module.dart' as _i753;
+import 'data/local/local_database.dart' as _i17;
+import 'data/local/local_quote_info_dao.dart' as _i309;
 import 'data/network/fillsa_api.dart' as _i183;
 import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
+import 'data/repository/local_repository_impl.dart' as _i239;
 import 'domain/repository/home_repository.dart' as _i405;
+import 'domain/repository/local_repository.dart' as _i279;
 import 'domain/usecase/get_daily_quote_non_member_usecase.dart' as _i580;
 import 'domain/usecase/get_daily_quote_usecase.dart' as _i12;
 import 'domain/usecase/post_like_request_usecase.dart' as _i783;
@@ -25,14 +30,23 @@ import 'domain/usecase/post_upload_image_usecase.dart' as _i426;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
 
 // initializes the registration of main-scope dependencies inside of GetIt
-_i174.GetIt init(
+Future<_i174.GetIt> init(
   _i174.GetIt getIt, {
   String? environment,
   _i526.EnvironmentFilter? environmentFilter,
-}) {
+}) async {
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final apiModule = _$ApiModule();
+  await gh.singletonAsync<_i17.LocalDatabase>(
+    () => apiModule.db,
+    preResolve: true,
+  );
+  gh.lazySingleton<_i309.LocalQuoteInfoDao>(() => apiModule.todoDao);
   gh.lazySingleton<_i361.Dio>(() => apiModule.dio());
+  gh.lazySingleton<_i460.SharedPreferencesAsync>(() => apiModule.providePref());
+  gh.lazySingleton<_i279.LocalRepository>(
+    () => _i239.LocalRepositoryImpl(prefs: gh<_i460.SharedPreferencesAsync>()),
+  );
   gh.lazySingleton<_i183.FillsaApi>(
     () => apiModule.provideFillsaApi(gh<_i361.Dio>()),
   );
