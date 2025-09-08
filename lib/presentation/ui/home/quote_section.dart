@@ -4,6 +4,7 @@ import 'package:fillsa_flutter/presentation/ui/home/quote_body.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../util/colors.dart' as Colors;
+import '../../util/logger.dart';
 import '../guide/custom_svg.dart';
 
 class QuoteSection extends StatelessWidget {
@@ -48,7 +49,10 @@ class QuoteSection extends StatelessWidget {
               id: "start",
               child: GestureDetector(
                 child: CustomSvg(svgName: "icn_arrow_filled"),
-                onTap: beforeOnClick,
+                onTap: () {
+                  logger.e("Click Before");
+                  beforeOnClick();
+                },
               ),
             ),
             LayoutId(

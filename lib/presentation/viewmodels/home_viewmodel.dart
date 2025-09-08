@@ -14,14 +14,16 @@ import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
+import 'package:riverpod/riverpod.dart';
 
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
 import '../../domain/util/ApiResult.dart';
+import '../util/logger.dart';
 
 @injectable
-class HomeViewModel extends ChangeNotifier {
+class HomeViewModel extends AsyncNotifier<HomeState> {
   final GetDailyNonMemberUseCase _getDailyNonMemberUseCase;
   final GetLoginStatusUseCase _getLoginStatusUseCase;
   final PostLikeUseCase _postLikeUseCase;
@@ -31,9 +33,14 @@ class HomeViewModel extends ChangeNotifier {
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
-  HomeState _state = HomeState.initial();
+  @override
+  FutureOr<HomeState> build() {
+    ref.onDispose(() {
+      _loginStatusSubscription.cancel();
+    });
 
-  HomeState get state => _state;
+    return HomeState.initial();
+  }
 
   HomeViewModel(
     this._getDailyNonMemberUseCase,
@@ -45,8 +52,9 @@ class HomeViewModel extends ChangeNotifier {
   ) {
     getData();
     _loginStatusSubscription = _getLoginStatusUseCase().listen((status) {
-      _state = state.copyWith(isLogged: status == true);
-      notifyListeners();
+      state = AsyncValue.data(
+        state.requireValue.copyWith(isLogged: status == true),
+      );
     });
   }
 
@@ -66,16 +74,16 @@ class HomeViewModel extends ChangeNotifier {
         authorUrl: noTokenDto.authorUrl,
       );
 
-      _state = state.copyWith(data: uiQuote);
+      state = AsyncValue.data(state.requireValue.copyWith(data: uiQuote));
     }
   }
 
   void postLike() async {
-    final isLogged = state.isLogged;
+    final isLogged = state.requireValue.isLogged;
 
     if (isLogged) {
-      final quote = state.data;
-      final String like = (state.data.likeYn == YN.y.name)
+      final quote = state.requireValue.data;
+      final String like = (state.requireValue.data.likeYn == YN.y.name)
           ? YN.y.name
           : YN.n.name;
 
@@ -91,29 +99,37 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   void beforeOnClick() {
-    final targetDate = state.targetDate;
+    final targetDate = state.requireValue.targetDate;
+
+    logger.e("method 1 $targetDate");
 
     if (targetDate != null) {
       final target = DateUtils.addDaysToDate(targetDate, -1);
+      logger.e("method2 $target");
       if (!target.isBefore(DateCondition.startDay)) {
-        _state = state.copyWith(targetDate: target);
+        state = AsyncValue.data(
+          state.requireValue.copyWith(targetDate: target),
+        );
+        logger.e("method3 state change $state");
       }
     }
   }
 
   void afterOnClick() {
-    final targetDate = state.targetDate;
+    final targetDate = state.requireValue.targetDate;
 
     if (targetDate != null) {
       final target = DateUtils.addDaysToDate(targetDate, 1);
       if (!target.isAfter(DateTime.now())) {
-        _state = state.copyWith(targetDate: target);
+        state = AsyncValue.data(
+          state.requireValue.copyWith(targetDate: target),
+        );
       }
     }
   }
 
   void _postLocalLike() async {
-    final quote = state.data;
+    final quote = state.requireValue.data;
     final localQuote = await _findLocalQuoteByIdUseCase.call(
       quote.dailyQuoteSeq,
     );
@@ -141,11 +157,5 @@ class HomeViewModel extends ChangeNotifier {
         ),
       );
     }
-  }
-
-  @override
-  void dispose() {
-    _loginStatusSubscription.cancel();
-    super.dispose();
   }
 }

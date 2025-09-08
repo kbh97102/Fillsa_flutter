@@ -17,68 +17,85 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final _viewModel = ref.watch(homeViewModelProvider);
-    final _state = _viewModel.state;
 
-    return Container(
-      color: yellow03,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  children: [
-                    Expanded(child: CalendarSection()),
-                    SizedBox(width: 20),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          // TODO: Login 여부 추가
-                          showDialog(
-                            context: context,
-                            builder: (context) => getImageDialog(
-                              context: context,
-                              quote: _state.data.korQuote ?? "",
-                              author: _state.data.korAuthor ?? "",
-                            ),
-                          );
-                        },
-                        child: ImageSection(isLogin: false),
-                      ),
+    return _viewModel.when(
+      data: (state) {
+        final notifier = ref.read(homeViewModelProvider.notifier);
+
+        return Container(
+          color: yellow03,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CalendarSection(
+                            date: state.targetDate ?? DateTime.now(),
+                          ),
+                        ),
+                        SizedBox(width: 20),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              // TODO: Login 여부 추가
+                              showDialog(
+                                context: context,
+                                builder: (context) => getImageDialog(
+                                  context: context,
+                                  quote: state.data.korQuote ?? "",
+                                  author: state.data.korAuthor ?? "",
+                                ),
+                              );
+                            },
+                            child: ImageSection(isLogin: false),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
+                  ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: KoreanEnglishSwitch(),
-                ),
-              ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: KoreanEnglishSwitch(),
+                    ),
+                  ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 22),
-                child: QuoteSection(
-                  quote: _viewModel.state.data.korQuote ?? "",
-                  author: _viewModel.state.data.korAuthor ?? "",
-                  beforeOnClick: () {},
-                  afterOnClick: () {},
-                ),
-              ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 22),
+                    child: QuoteSection(
+                      quote: state.data.korQuote ?? "",
+                      author: state.data.korAuthor ?? "",
+                      beforeOnClick: () {
+                        notifier.beforeOnClick();
+                      },
+                      afterOnClick: () {
+                        notifier.afterOnClick();
+                      },
+                    ),
+                  ),
 
-              Padding(
-                padding: const EdgeInsets.only(top: 28, bottom: 20),
-                child: InteractionButtonSection(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 28, bottom: 20),
+                    child: InteractionButtonSection(),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
+      error: (err, stack) {
+        return Container();
+      },
+      loading: () => Container(),
     );
   }
 

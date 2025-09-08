@@ -1,14 +1,31 @@
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 import '../../util/colors.dart';
 
-class CalendarSection extends StatelessWidget {
-  const CalendarSection({super.key});
+class CalendarSection extends StatefulWidget {
+  final DateTime date;
+
+  CalendarSection({super.key, required this.date});
+
+  @override
+  State<CalendarSection> createState() => _CalendarSectionState();
+}
+
+class _CalendarSectionState extends State<CalendarSection> {
+  final DateFormat _dayFormat = DateFormat("yyyy.MM");
+
+  final DateFormat _dayOfWeekFormat = DateFormat('EEEE', 'ko_KR');
+
+  final DateFormat _dayOfMonth = DateFormat("dd");
 
   @override
   Widget build(BuildContext context) {
     final titleStyle = context.textStyles.buttonXs;
+    final day = _dayFormat.format(widget.date);
+    final dayOfWeek = _dayOfWeekFormat.format(widget.date);
+    final dayOfMonth = _dayOfMonth.format(widget.date);
 
     return AspectRatio(
       aspectRatio: 155 / 120.0,
@@ -27,8 +44,8 @@ class CalendarSection extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("2025.01", style: titleStyle),
-                  Text("수요일", style: titleStyle),
+                  Text(day, style: titleStyle),
+                  Text(dayOfWeek, style: titleStyle),
                 ],
               ),
             ),
@@ -47,7 +64,7 @@ class CalendarSection extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "11",
+                    dayOfMonth,
                     style: context.textStyles.buttonXs.copyWith(fontSize: 40),
                   ),
                 ],
