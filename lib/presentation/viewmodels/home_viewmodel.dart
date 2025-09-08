@@ -72,52 +72,46 @@ class HomeViewModel extends ChangeNotifier {
     final isLogged = state.isLogged;
 
     if (isLogged) {
-      final quote = state.currentQuote;
+      final quote = state.data;
+      final String like = (state.currentQuote?.likeYn == YN.y.name)
+          ? YN.y.name
+          : YN.n.name;
 
-      if (quote != null) {
-        final String like = (state.currentQuote?.likeYn == YN.y.name)
-            ? YN.y.name
-            : YN.n.name;
-
-        _postLikeUseCase.call(
-          PostLikeParams(
-            dailyQuoteSeq: quote.dailyQuoteSeq,
-            likeRequest: LikeRequest(likeYn: like),
-          ),
-        );
-      }
+      _postLikeUseCase.call(
+        PostLikeParams(
+          dailyQuoteSeq: quote.dailyQuoteSeq,
+          likeRequest: LikeRequest(likeYn: like),
+        ),
+      );
     } else {}
   }
 
   void _postLocalLike() async {
-    final quote = state.currentQuote;
-
-    if (quote != null) {
-      final localQuote = await _findLocalQuoteByIdUseCase.call(
-        quote.dailyQuoteSeq,
+    final quote = state.data;
+    final localQuote = await _findLocalQuoteByIdUseCase.call(
+      quote.dailyQuoteSeq,
+    );
+    if (localQuote != null) {
+      _updateLocalQuoteLikeUseCase.call((
+        likeYN: (localQuote.likeYn == YN.y.name ? YN.y : YN.n),
+        seq: localQuote.dailyQuoteSeq,
+      ));
+    } else {
+      _addLocalQuoteUseCase.call(
+        LocalQuoteInfo(
+          dailyQuoteSeq: quote.dailyQuoteSeq,
+          korQuote: quote.korQuote ?? "",
+          engQuote: quote.engQuote ?? "",
+          korAuthor: quote.korAuthor ?? "",
+          engAuthor: quote.engAuthor ?? "",
+          korTyping: "",
+          engTyping: "",
+          likeYn: YN.y.name,
+          memo: "",
+          date: "",
+          dayOfWeek: "",
+        ),
       );
-      if (localQuote != null) {
-        _updateLocalQuoteLikeUseCase.call((
-          likeYN: (localQuote.likeYn == YN.y.name ? YN.y : YN.n),
-          seq: localQuote.dailyQuoteSeq,
-        ));
-      } else {
-        _addLocalQuoteUseCase.call(
-          LocalQuoteInfo(
-            dailyQuoteSeq: quote.dailyQuoteSeq,
-            korQuote: quote.korQuote ?? "",
-            engQuote: quote.engQuote ?? "",
-            korAuthor: quote.korAuthor ?? "",
-            engAuthor: quote.engAuthor ?? "",
-            korTyping: "",
-            engTyping: "",
-            likeYn: YN.y.name,
-            memo: "",
-            date: "",
-            dayOfWeek: "",
-          ),
-        );
-      }
     }
   }
 
