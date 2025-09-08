@@ -6,7 +6,7 @@ import '../../domain/model/request/like_request.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/model/response/DailyQuoteDto.dart';
 import '../../domain/model/response/SimpleIntResponse.dart';
-import '../../domain/repository/HomeRepository.dart';
+import '../../domain/repository/home_repository.dart';
 import '../../domain/util/ApiResult.dart';
 import '../network/fillsa_api.dart';
 import '../network/fillsa_no_token_api.dart';

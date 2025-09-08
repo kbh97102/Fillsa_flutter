@@ -1,0 +1,1 @@
+enum YN { y, n }

@@ -2,7 +2,7 @@ import 'package:fillsa_flutter/domain/usecase/usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import '../model/response/DailyQuotaNoToken.dart';
-import '../repository/HomeRepository.dart';
+import '../repository/home_repository.dart';
 import '../util/ApiResult.dart';
 
 @lazySingleton

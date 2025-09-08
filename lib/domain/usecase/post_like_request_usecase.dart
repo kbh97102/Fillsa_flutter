@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import '../model/request/post_like_params.dart';
 import '../model/response/SimpleIntResponse.dart';
-import '../repository/HomeRepository.dart';
+import '../repository/home_repository.dart';
 import '../util/ApiResult.dart';
 
 @lazySingleton
