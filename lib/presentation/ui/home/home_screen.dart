@@ -52,10 +52,8 @@ class HomeScreen extends ConsumerWidget {
                                 // TODO: 사진 제거 이벤트
                                 showDialog(
                                   context: context,
-                                  builder: (context) => CommonDialog(
-                                    title: "이미지를 삭제하시겠습니까?",
-                                    body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
-                                  ),
+                                  builder: (context) =>
+                                      getDeleteDialog(context),
                                 );
                               },
                             ),
@@ -92,6 +90,22 @@ class HomeScreen extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget getDeleteDialog(BuildContext context) {
+    return CommonDialog(
+      title: "이미지를 삭제하시겠습니까?",
+      body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
+      cancelButtonText: "삭제하기",
+      cancelButtonColor: purple01,
+      cancelButtonBorderColor: purple01,
+      cancelTextColor: Colors.white,
+      okButtonText: "취소",
+      okButtonColor: Colors.white,
+      okTextColor: purple01,
+      okButtonBorderColor: purple01,
+      okButtonOnClick: () => {Navigator.pop(context)},
     );
   }
 }
