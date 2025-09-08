@@ -8,11 +8,13 @@ class CustomButton extends StatelessWidget {
   final String buttonText;
   final double buttonRadius;
   final Function onClick;
+  final Color borderColor;
 
   const CustomButton({
     super.key,
     required this.buttonText,
     this.backgroundColor = Colors.white,
+    this.borderColor = Colors.white,
     this.textColor = grey700,
     this.buttonRadius = 8,
     required this.onClick,
@@ -27,6 +29,7 @@ class CustomButton extends StatelessWidget {
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(buttonRadius),
+          side: BorderSide(color: borderColor, width: 1.0),
         ),
       ),
 

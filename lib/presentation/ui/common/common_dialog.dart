@@ -14,6 +14,8 @@ class CommonDialog extends StatelessWidget {
   final Color cancelButtonColor;
   final Color okTextColor;
   final Color cancelTextColor;
+  final Color okButtonBorderColor;
+  final Color cancelButtonBorderColor;
 
   static void _defaultCallback() {}
 
@@ -29,6 +31,8 @@ class CommonDialog extends StatelessWidget {
     this.cancelButtonColor = white,
     this.okTextColor = white,
     this.cancelTextColor = purple01,
+    this.okButtonBorderColor = purple01,
+    this.cancelButtonBorderColor = white,
   });
 
   @override
@@ -58,6 +62,7 @@ class CommonDialog extends StatelessWidget {
                     onClick: cancelButtonOnClick,
                     backgroundColor: cancelButtonColor,
                     textColor: cancelTextColor,
+                    borderColor: okButtonBorderColor,
                   ),
                 ),
 
@@ -69,6 +74,7 @@ class CommonDialog extends StatelessWidget {
                     onClick: okButtonOnClick,
                     backgroundColor: okButtonColor,
                     textColor: okTextColor,
+                    borderColor: cancelButtonBorderColor,
                   ),
                 ),
               ],
