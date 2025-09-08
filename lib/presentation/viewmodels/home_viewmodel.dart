@@ -12,6 +12,7 @@ import 'package:fillsa_flutter/domain/usecase/update_local_quote_like_usecase.da
 import 'package:fillsa_flutter/presentation/state/HomeState.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
@@ -83,8 +84,14 @@ class HomeViewModel extends ChangeNotifier {
           likeRequest: LikeRequest(likeYn: like),
         ),
       );
-    } else {}
+    } else {
+      _postLocalLike();
+    }
   }
+
+  void beforeOnClick() {}
+
+  void afterOnClick() {}
 
   void _postLocalLike() async {
     final quote = state.data;
@@ -97,6 +104,8 @@ class HomeViewModel extends ChangeNotifier {
         seq: localQuote.dailyQuoteSeq,
       ));
     } else {
+      // TODO: 선택된 명언의 날짜로 변경
+      final now = DateTime.now();
       _addLocalQuoteUseCase.call(
         LocalQuoteInfo(
           dailyQuoteSeq: quote.dailyQuoteSeq,
@@ -108,8 +117,8 @@ class HomeViewModel extends ChangeNotifier {
           engTyping: "",
           likeYn: YN.y.name,
           memo: "",
-          date: "",
-          dayOfWeek: "",
+          date: now,
+          dayOfWeek: DateFormat('E', 'ko_KR').format(now),
         ),
       );
     }

@@ -66,6 +66,8 @@ class HomeScreen extends ConsumerWidget {
                 child: QuoteSection(
                   quote: _viewModel.state.data.korQuote ?? "",
                   author: _viewModel.state.data.korAuthor ?? "",
+                  beforeOnClick: () {},
+                  afterOnClick: () {},
                 ),
               ),
 

@@ -9,7 +9,16 @@ import '../guide/custom_svg.dart';
 class QuoteSection extends StatelessWidget {
   final String quote;
   final String author;
-  const QuoteSection({super.key, required this.quote, required this.author});
+  final VoidCallback beforeOnClick;
+  final VoidCallback afterOnClick;
+
+  const QuoteSection({
+    super.key,
+    required this.quote,
+    required this.author,
+    required this.beforeOnClick,
+    required this.afterOnClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +46,19 @@ class QuoteSection extends StatelessWidget {
             ),
             LayoutId(
               id: "start",
-              child: CustomSvg(svgName: "icn_arrow_filled"),
+              child: GestureDetector(
+                child: CustomSvg(svgName: "icn_arrow_filled"),
+                onTap: beforeOnClick,
+              ),
             ),
             LayoutId(
               id: "end",
               child: Transform.rotate(
                 angle: math.pi,
-                child: CustomSvg(svgName: "icn_arrow_filled"),
+                child: GestureDetector(
+                  child: CustomSvg(svgName: "icn_arrow_filled"),
+                  onTap: afterOnClick,
+                ),
               ),
             ),
           ],

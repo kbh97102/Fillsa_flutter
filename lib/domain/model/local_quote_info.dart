@@ -8,7 +8,7 @@ class LocalQuoteInfo {
   final String engTyping;
   final String likeYn;
   final String memo;
-  final String date;
+  final DateTime date;
   final String dayOfWeek;
 
   LocalQuoteInfo({
