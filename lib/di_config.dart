@@ -11,4 +11,6 @@ final getIt = GetIt.instance;
   preferRelativeImports: true, // 상대 경로 사용 여부
   asExtension: false, // getIt 확장 함수 생성 여부
 )
-void configureDependencies() => init(getIt);
+void configureDependencies() {
+  init(getIt);
+}

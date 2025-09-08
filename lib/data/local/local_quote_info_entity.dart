@@ -1,33 +1,21 @@
-import 'package:floor/floor.dart';
+import 'package:drift/drift.dart';
 
-@Entity(tableName: 'quoteInfo')
-class LocalQuoteInfoEntity {
-  @PrimaryKey()
-  @ColumnInfo(name: 'id')
-  final int dailyQuoteSeq;
+class LocalQuoteInfoEntity extends Table {
+  IntColumn get dailyQuoteSeq => integer().named('id')();
+  TextColumn get korQuote => text()();
+  TextColumn get engQuote => text()();
+  TextColumn get korAuthor => text()();
+  TextColumn get engAuthor => text()();
+  TextColumn get korTyping => text()();
+  TextColumn get engTyping => text()();
+  TextColumn get likeYn => text()();
+  TextColumn get memo => text()();
+  TextColumn get date => text()();
+  TextColumn get dayOfWeek => text()();
 
-  final String korQuote;
-  final String engQuote;
-  final String korAuthor;
-  final String engAuthor;
-  final String korTyping;
-  final String engTyping;
-  final String likeYn;
-  final String memo;
-  final String date;
-  final String dayOfWeek;
+  @override
+  String get tableName => 'quoteInfo';
 
-  LocalQuoteInfoEntity({
-    required this.dailyQuoteSeq,
-    required this.korQuote,
-    required this.engQuote,
-    required this.korAuthor,
-    required this.engAuthor,
-    required this.korTyping,
-    required this.engTyping,
-    required this.likeYn,
-    required this.memo,
-    required this.date,
-    required this.dayOfWeek,
-  });
+  @override
+  Set<Column> get primaryKey => {dailyQuoteSeq};
 }

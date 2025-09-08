@@ -218,8 +218,8 @@ return $default(_that.dailyQuoteSeq,_that.korQuote,_that.engQuote,_that.korAutho
 /// @nodoc
 @JsonSerializable()
 
-class _LocalQuoteInfo implements LocalQuoteInfo {
-  const _LocalQuoteInfo({required this.dailyQuoteSeq, required this.korQuote, required this.engQuote, required this.korAuthor, required this.engAuthor, required this.korTyping, required this.engTyping, required this.likeYn, required this.memo, required this.date, required this.dayOfWeek});
+class _LocalQuoteInfo extends LocalQuoteInfo {
+  const _LocalQuoteInfo({required this.dailyQuoteSeq, required this.korQuote, required this.engQuote, required this.korAuthor, required this.engAuthor, required this.korTyping, required this.engTyping, required this.likeYn, required this.memo, required this.date, required this.dayOfWeek}): super._();
   factory _LocalQuoteInfo.fromJson(Map<String, dynamic> json) => _$LocalQuoteInfoFromJson(json);
 
 @override final  int dailyQuoteSeq;

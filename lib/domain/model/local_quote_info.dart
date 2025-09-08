@@ -4,7 +4,7 @@ part 'local_quote_info.freezed.dart';
 part 'local_quote_info.g.dart';
 
 @freezed
-class LocalQuoteInfo with _$LocalQuoteInfo {
+abstract class LocalQuoteInfo with _$LocalQuoteInfo {
   const factory LocalQuoteInfo({
     required int dailyQuoteSeq,
     required String korQuote,
@@ -19,7 +19,8 @@ class LocalQuoteInfo with _$LocalQuoteInfo {
     required String dayOfWeek,
   }) = _LocalQuoteInfo;
 
-  // JSON 직렬화를 위한 factory constructor
+  const LocalQuoteInfo._();
+
   factory LocalQuoteInfo.fromJson(Map<String, dynamic> json) =>
       _$LocalQuoteInfoFromJson(json);
 }

@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/data/local/local_quote_info_dao.dart';
+import 'package:fillsa_flutter/data/local/local_database.dart';
 import 'package:fillsa_flutter/data/util/PrefKey.dart';
 import 'package:fillsa_flutter/data/util/extension.dart';
 import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 @LazySingleton(as: LocalRepository)
 class LocalRepositoryImpl extends LocalRepository {
   final SharedPreferencesAsync prefs;
-  final LocalQuoteInfoDao localQuoteInfoDao;
+  final LocalDatabase localQuoteInfoDao;
 
   LocalRepositoryImpl({required this.prefs, required this.localQuoteInfoDao});
 
@@ -26,7 +26,7 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> deleteQuoteByObject(LocalQuoteInfo quote) async {
-    localQuoteInfoDao.deleteQuote(quote.toEntity());
+    localQuoteInfoDao.deleteQuote(quote);
   }
 
   @override
@@ -35,10 +35,8 @@ class LocalRepositoryImpl extends LocalRepository {
   }
 
   @override
-  Future<LocalQuoteInfo?> findLocalQuoteById(int seq) async {
-    final entity = await localQuoteInfoDao.findQuoteById(seq);
-    return entity?.toModel();
-  }
+  Future<LocalQuoteInfo?> findLocalQuoteById(int seq) =>
+      localQuoteInfoDao.findQuoteById(seq).then((entity) => entity?.toModel());
 
   @override
   Future<String?> getAccessToken() {
@@ -183,6 +181,6 @@ class LocalRepositoryImpl extends LocalRepository {
 
   @override
   Future<void> updateQuote(LocalQuoteInfo quote) async {
-    localQuoteInfoDao.updateQuote(quote.toEntity());
+    localQuoteInfoDao.updateQuote(quote);
   }
 }

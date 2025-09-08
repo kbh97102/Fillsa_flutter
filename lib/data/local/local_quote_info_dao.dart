@@ -1,55 +1,92 @@
-import 'package:floor/floor.dart';
+import 'package:drift/drift.dart';
+import 'package:fillsa_flutter/data/util/extension.dart';
+import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
 
+import 'local_database.dart';
 import 'local_quote_info_entity.dart';
 
-@dao
-abstract class LocalQuoteInfoDao {
-  @Query('SELECT * FROM quoteInfo ORDER BY date DESC')
-  Future<List<LocalQuoteInfoEntity>> getAllQuotes();
+part 'local_quote_info_dao.g.dart';
 
-  @Query('SELECT * FROM quoteInfo WHERE id = :seq')
-  Future<LocalQuoteInfoEntity?> findQuoteById(int seq);
+@DriftAccessor(tables: [LocalQuoteInfoEntity])
+class QuoteInfoDao extends DatabaseAccessor<LocalDatabase>
+    with _$QuoteInfoDaoMixin {
+  QuoteInfoDao(LocalDatabase db) : super(db);
 
-  @Insert(onConflict: OnConflictStrategy.replace)
-  Future<void> insertQuote(LocalQuoteInfoEntity quote);
+  // 모든 반환 타입을 Model(LocalQuoteInfoEntity)로 변환
+  Future<List<LocalQuoteInfoEntityData>> getAllQuotes() =>
+      (select(localQuoteInfoEntity)..orderBy([
+            (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+          ]))
+          .get();
 
-  @delete
-  Future<void> deleteQuote(LocalQuoteInfoEntity quote);
+  Future<LocalQuoteInfoEntityData?> findQuoteById(int seq) => (select(
+    localQuoteInfoEntity,
+  )..where((t) => t.dailyQuoteSeq.equals(seq))).getSingleOrNull();
 
-  @Query('DELETE FROM quoteInfo WHERE id = :seq')
-  Future<void> deleteQuoteById(int seq);
+  Future<void> insertQuote(LocalQuoteInfoEntityCompanion quote) async {
+    await into(localQuoteInfoEntity).insert(quote, mode: InsertMode.replace);
+  }
 
-  @update
-  Future<void> updateQuote(LocalQuoteInfoEntity quote);
+  Future<void> deleteQuote(LocalQuoteInfo quote) async {
+    await delete(localQuoteInfoEntity).delete(quote.toEntity());
+  }
 
-  @Query(
-    'SELECT * FROM quoteInfo WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC LIMIT 10 OFFSET :offset',
-  )
-  Future<List<LocalQuoteInfoEntity>> getPagingList(
+  Future<void> deleteQuoteById(int seq) async {
+    await (delete(
+      localQuoteInfoEntity,
+    )..where((t) => t.dailyQuoteSeq.equals(seq))).go();
+  }
+
+  Future<void> updateQuote(LocalQuoteInfo quote) async {
+    await update(localQuoteInfoEntity).replace(quote.toEntity());
+  }
+
+  Future<List<LocalQuoteInfoEntityData>> getPagingList(
     int offset,
     String startDate,
     String endDate,
-  );
+  ) =>
+      (select(localQuoteInfoEntity)
+            ..where((t) => t.date.isBetweenValues(startDate, endDate))
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+            ])
+            ..limit(10, offset: offset))
+          .get();
 
-  @Query(
-    'SELECT * FROM quoteInfo WHERE (likeYn = :likeYn AND date BETWEEN :startDate AND :endDate) ORDER BY date DESC LIMIT 10 OFFSET :offset',
-  )
-  Future<List<LocalQuoteInfoEntity>> getPagingListWithLike(
+  Future<List<LocalQuoteInfoEntityData>> getPagingListWithLike(
     int offset,
     String likeYn,
     String startDate,
     String endDate,
-  );
+  ) =>
+      (select(localQuoteInfoEntity)
+            ..where(
+              (t) =>
+                  t.likeYn.equals(likeYn) &
+                  t.date.isBetweenValues(startDate, endDate),
+            )
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.date, mode: OrderingMode.desc),
+            ])
+            ..limit(10, offset: offset))
+          .get();
 
-  @Query('UPDATE quoteInfo SET memo = :memo WHERE id = :seq')
-  Future<void> updateMemo(String memo, int seq);
+  Future<void> updateMemo(String memo, int seq) async {
+    await (update(localQuoteInfoEntity)
+          ..where((t) => t.dailyQuoteSeq.equals(seq)))
+        .write(LocalQuoteInfoEntityCompanion(memo: Value(memo)));
+  }
 
-  @Query('UPDATE quoteinfo SET likeYn = :likeYn WHERE id = :seq')
-  Future<int?> updateLike(String likeYn, int seq);
+  Future<int> updateLike(String likeYn, int seq) async {
+    return (update(localQuoteInfoEntity)
+          ..where((t) => t.dailyQuoteSeq.equals(seq)))
+        .write(LocalQuoteInfoEntityCompanion(likeYn: Value(likeYn)));
+  }
 
-  @Query('SELECT * FROM quoteInfo WHERE id = :seq')
-  Future<LocalQuoteInfoEntity?> getQuote(int seq);
+  Future<LocalQuoteInfoEntityData?> getQuote(int seq) => findQuoteById(seq);
 
-  @Query('DELETE FROM quoteInfo')
-  Future<void> clear();
+  Future<void> clear() async {
+    await delete(localQuoteInfoEntity).go();
+  }
 }
