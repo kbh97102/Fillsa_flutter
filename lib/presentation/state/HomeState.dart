@@ -12,5 +12,9 @@ abstract class HomeState with _$HomeState {
     required DailyQuoteDto data,
     String? error,
     @Default(false) bool isLogged,
+    required DateTime? targetDate,
   }) = _HomeState;
+
+  factory HomeState.initial() =>
+      HomeState(data: DailyQuoteDto.empty, targetDate: DateTime.now());
 }

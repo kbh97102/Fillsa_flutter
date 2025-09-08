@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
+import 'package:intl/intl.dart';
 
 import '../local/local_database.dart';
 
@@ -15,7 +16,7 @@ extension LocalQuoteInfoMapper on LocalQuoteInfo {
       engTyping: Value(engTyping),
       likeYn: Value(likeYn),
       memo: Value(memo),
-      date: Value(date),
+      date: Value(DateFormat('yyyy-MM-dd').format(date)),
       dayOfWeek: Value(dayOfWeek),
     );
   }
@@ -33,7 +34,7 @@ extension LocalQuoteInfoEntityMapper on LocalQuoteInfoEntityData {
       engTyping: engTyping,
       likeYn: likeYn,
       memo: memo,
-      date: date,
+      date: DateFormat('yyyy-MM-dd').parse(date),
       dayOfWeek: dayOfWeek,
     );
   }

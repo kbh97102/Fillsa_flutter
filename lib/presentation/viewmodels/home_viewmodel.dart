@@ -10,7 +10,8 @@ import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/post_like_request_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/update_local_quote_like_usecase.dart';
 import 'package:fillsa_flutter/presentation/state/HomeState.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
+import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
 
@@ -30,7 +31,7 @@ class HomeViewModel extends ChangeNotifier {
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
-  HomeState _state = const HomeState(data: DailyQuoteDto.empty);
+  HomeState _state = HomeState.initial();
 
   HomeState get state => _state;
 
@@ -74,7 +75,7 @@ class HomeViewModel extends ChangeNotifier {
 
     if (isLogged) {
       final quote = state.data;
-      final String like = (state.currentQuote?.likeYn == YN.y.name)
+      final String like = (state.data.likeYn == YN.y.name)
           ? YN.y.name
           : YN.n.name;
 
@@ -89,9 +90,27 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  void beforeOnClick() {}
+  void beforeOnClick() {
+    final targetDate = state.targetDate;
 
-  void afterOnClick() {}
+    if (targetDate != null) {
+      final target = DateUtils.addDaysToDate(targetDate, -1);
+      if (!target.isBefore(DateCondition.startDay)) {
+        _state = state.copyWith(targetDate: target);
+      }
+    }
+  }
+
+  void afterOnClick() {
+    final targetDate = state.targetDate;
+
+    if (targetDate != null) {
+      final target = DateUtils.addDaysToDate(targetDate, 1);
+      if (!target.isAfter(DateTime.now())) {
+        _state = state.copyWith(targetDate: target);
+      }
+    }
+  }
 
   void _postLocalLike() async {
     final quote = state.data;
