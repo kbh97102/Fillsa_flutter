@@ -18,12 +18,12 @@ class _FillsaApi implements FillsaApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<HttpResponse<DailyQuoteDto>> getDailyQuote(String quoteDate) async {
+  Future<DailyQuoteDto> getDailyQuote(String quoteDate) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'quoteDate': quoteDate};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<DailyQuoteDto>>(
+    final _options = _setStreamType<DailyQuoteDto>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -41,12 +41,11 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<SimpleIntResponse>> postLike(
+  Future<SimpleIntResponse> postLike(
     int dailyQuoteSeq,
     LikeRequest body,
   ) async {
@@ -55,7 +54,7 @@ class _FillsaApi implements FillsaApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<HttpResponse<SimpleIntResponse>>(
+    final _options = _setStreamType<SimpleIntResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -73,15 +72,11 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<int>> postUploadImage(
-    int dailyQuoteSeq,
-    File image,
-  ) async {
+  Future<int> postUploadImage(int dailyQuoteSeq, File image) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -95,7 +90,7 @@ class _FillsaApi implements FillsaApi {
         ),
       ),
     );
-    final _options = _setStreamType<HttpResponse<int>>(
+    final _options = _setStreamType<int>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -113,17 +108,16 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<int>> deleteUploadImage(int dailyQuoteSeq) async {
+  Future<int> deleteUploadImage(int dailyQuoteSeq) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<int>>(
+    final _options = _setStreamType<int>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -141,12 +135,11 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<PageResponseMemberQuotesResponse>> getQuoteList({
+  Future<PageResponseMemberQuotesResponse> getQuoteList({
     required int size,
     required int page,
     required String likeYn,
@@ -163,19 +156,16 @@ class _FillsaApi implements FillsaApi {
     };
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options =
-        _setStreamType<HttpResponse<PageResponseMemberQuotesResponse>>(
-          Options(method: 'GET', headers: _headers, extra: _extra)
-              .compose(
-                _dio.options,
-                '/api/v2/member-quotes',
-                queryParameters: queryParameters,
-                data: _data,
-              )
-              .copyWith(
-                baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl),
-              ),
-        );
+    final _options = _setStreamType<PageResponseMemberQuotesResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/api/v2/member-quotes',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
     late PageResponseMemberQuotesResponse _value;
     try {
@@ -184,12 +174,11 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<SimpleIntResponse>> postSaveMemo(
+  Future<SimpleIntResponse> postSaveMemo(
     String memberQuoteSeq,
     MemoRequest body,
   ) async {
@@ -198,7 +187,7 @@ class _FillsaApi implements FillsaApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<HttpResponse<SimpleIntResponse>>(
+    final _options = _setStreamType<SimpleIntResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -216,19 +205,16 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<MemberMonthlyQuoteResponse>> getQuotesMonthly(
-    String yearMonth,
-  ) async {
+  Future<MemberMonthlyQuoteResponse> getQuotesMonthly(String yearMonth) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'yearMonth': yearMonth};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<MemberMonthlyQuoteResponse>>(
+    final _options = _setStreamType<MemberMonthlyQuoteResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -246,17 +232,16 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<SimpleIntResponse>> deleteResign() async {
+  Future<SimpleIntResponse> deleteResign() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<SimpleIntResponse>>(
+    final _options = _setStreamType<SimpleIntResponse>(
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -274,12 +259,11 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<SimpleIntResponse>> postTyping(
+  Future<SimpleIntResponse> postTyping(
     int dailyQuoteSeq,
     TypingQuoteRequest body,
   ) async {
@@ -288,7 +272,7 @@ class _FillsaApi implements FillsaApi {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<HttpResponse<SimpleIntResponse>>(
+    final _options = _setStreamType<SimpleIntResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -306,19 +290,16 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   @override
-  Future<HttpResponse<MemberTypingQuoteResponse>> getTyping(
-    int dailyQuoteSeq,
-  ) async {
+  Future<MemberTypingQuoteResponse> getTyping(int dailyQuoteSeq) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<HttpResponse<MemberTypingQuoteResponse>>(
+    final _options = _setStreamType<MemberTypingQuoteResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -336,8 +317,7 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    final httpResponse = HttpResponse(_value, _result);
-    return httpResponse;
+    return _value;
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

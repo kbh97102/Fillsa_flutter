@@ -1,10 +1,9 @@
-import 'package:fillsa_flutter/domain/usecase/usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/base_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import '../model/request/post_like_params.dart';
 import '../model/response/SimpleIntResponse.dart';
 import '../repository/home_repository.dart';
-import '../util/ApiResult.dart';
 
 @lazySingleton
 class PostLikeUseCase extends UseCase<SimpleIntResponse, PostLikeParams> {
@@ -13,7 +12,7 @@ class PostLikeUseCase extends UseCase<SimpleIntResponse, PostLikeParams> {
   PostLikeUseCase(this._repository);
 
   @override
-  Future<ApiResult<SimpleIntResponse>> call(PostLikeParams params) {
-    return _repository.postLike(params.likeRequest, params.dailyQuoteSeq);
+  Future<SimpleIntResponse> call(PostLikeParams param) {
+    return _repository.postLike(param.likeRequest, param.dailyQuoteSeq);
   }
 }

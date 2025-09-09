@@ -19,8 +19,6 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
-import '../../domain/util/ApiResult.dart';
-import '../util/logger.dart';
 
 @injectable
 class HomeViewModel extends AsyncNotifier<HomeState> {
@@ -33,10 +31,28 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
+  final DateFormat _dateRequestFormat = DateFormat("yyyy-MM-dd");
+
   @override
   FutureOr<HomeState> build() {
     ref.onDispose(() {
       _loginStatusSubscription.cancel();
+    });
+
+    getData().then((data) {
+      state = AsyncValue.data(HomeState.initial().copyWith(data: data));
+    });
+
+    _loginStatusSubscription = _getLoginStatusUseCase().listen((status) {
+      if (state.hasValue) {
+        state = AsyncValue.data(
+          state.requireValue.copyWith(isLogged: status == true),
+        );
+      } else {
+        state = AsyncValue.data(
+          HomeState.initial().copyWith(isLogged: status == true),
+        );
+      }
     });
 
     return HomeState.initial();
@@ -49,33 +65,32 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     this._findLocalQuoteByIdUseCase,
     this._updateLocalQuoteLikeUseCase,
     this._addLocalQuoteUseCase,
-  ) {
-    getData();
-    _loginStatusSubscription = _getLoginStatusUseCase().listen((status) {
-      state = AsyncValue.data(
-        state.requireValue.copyWith(isLogged: status == true),
-      );
-    });
-  }
+  ) {}
 
-  void getData() async {
-    final data = await _getDailyNonMemberUseCase.call("2025-08-29");
+  // TODO: 아무리 생각해도 state와 연동을 하려면 APiResult는 쓸모없는 것 같다.
+  Future<DailyQuoteDto> getData() async {
+    final targetDate = state.hasValue
+        ? state.requireValue.targetDate
+        : DateTime.now();
 
-    if (data is ApiSuccess) {
-      final DailyQuotaNoToken noTokenDto = (data as ApiSuccess).data;
-      final uiQuote = DailyQuoteDto(
-        likeYn: 'N',
-        imagePath: "",
-        dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
-        korQuote: noTokenDto.korQuote,
-        engQuote: noTokenDto.engQuote,
-        korAuthor: noTokenDto.korAuthor,
-        engAuthor: noTokenDto.engAuthor,
-        authorUrl: noTokenDto.authorUrl,
-      );
+    final requestDate = targetDate != null
+        ? _dateRequestFormat.format(targetDate)
+        : _dateRequestFormat.format(DateTime.now());
 
-      state = AsyncValue.data(state.requireValue.copyWith(data: uiQuote));
-    }
+    final data = await _getDailyNonMemberUseCase.call(requestDate);
+
+    final DailyQuotaNoToken noTokenDto = data;
+    final uiQuote = DailyQuoteDto(
+      likeYn: 'N',
+      imagePath: "",
+      dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
+      korQuote: noTokenDto.korQuote,
+      engQuote: noTokenDto.engQuote,
+      korAuthor: noTokenDto.korAuthor,
+      engAuthor: noTokenDto.engAuthor,
+      authorUrl: noTokenDto.authorUrl,
+    );
+    return uiQuote;
   }
 
   void postLike() async {
@@ -98,24 +113,25 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     }
   }
 
-  void beforeOnClick() {
+  Future<void> beforeOnClick() async {
     final targetDate = state.requireValue.targetDate;
-
-    logger.e("method 1 $targetDate");
 
     if (targetDate != null) {
       final target = DateUtils.addDaysToDate(targetDate, -1);
-      logger.e("method2 $target");
       if (!target.isBefore(DateCondition.startDay)) {
         state = AsyncValue.data(
           state.requireValue.copyWith(targetDate: target),
         );
-        logger.e("method3 state change $state");
+        state = await AsyncValue.guard(() async {
+          final data = await getData();
+
+          return state.requireValue.copyWith(data: data);
+        });
       }
     }
   }
 
-  void afterOnClick() {
+  void afterOnClick() async {
     final targetDate = state.requireValue.targetDate;
 
     if (targetDate != null) {
@@ -124,6 +140,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
         state = AsyncValue.data(
           state.requireValue.copyWith(targetDate: target),
         );
+        state = await AsyncValue.guard(() async {
+          final data = await getData();
+
+          return state.requireValue.copyWith(data: data);
+        });
       }
     }
   }

@@ -3,13 +3,13 @@ import 'package:fillsa_flutter/domain/usecase/base_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
-class SetAccessTokenUseCase extends BaseUseCase<void, String> {
+class SetAccessTokenUseCase extends UseCase<void, String> {
   final LocalRepository _localRepository;
 
   SetAccessTokenUseCase(this._localRepository);
 
   @override
-  Future<void> call([String? param]) {
-    return _localRepository.setAccessToken(param ?? "");
+  Future<void> call(String param) {
+    return _localRepository.setAccessToken(param);
   }
 }

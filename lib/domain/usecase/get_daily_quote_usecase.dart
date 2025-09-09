@@ -1,9 +1,8 @@
-import 'package:fillsa_flutter/domain/usecase/usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/base_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import '../model/response/DailyQuoteDto.dart';
 import '../repository/home_repository.dart';
-import '../util/ApiResult.dart';
 
 @lazySingleton
 class GetDailyQuoteUseCase extends UseCase<DailyQuoteDto, String> {
@@ -12,7 +11,7 @@ class GetDailyQuoteUseCase extends UseCase<DailyQuoteDto, String> {
   GetDailyQuoteUseCase(this._repository);
 
   @override
-  Future<ApiResult<DailyQuoteDto>> call(String quoteDate) {
-    return _repository.getDailyQuote(quoteDate);
+  Future<DailyQuoteDto> call([String? quoteDate]) {
+    return _repository.getDailyQuote(quoteDate ?? "");
   }
 }

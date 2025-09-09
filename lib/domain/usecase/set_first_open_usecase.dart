@@ -4,13 +4,13 @@ import '../repository/local_repository.dart';
 import '../usecase/base_usecase.dart';
 
 @lazySingleton
-class SetFirstOpenUseCase extends BaseUseCase<void, bool> {
+class SetFirstOpenUseCase extends UseCase<void, bool> {
   final LocalRepository _localRepository;
 
   SetFirstOpenUseCase(this._localRepository);
 
   @override
-  Future<void> call([bool? param]) {
-    return _localRepository.setFirstOpen(param ?? false);
+  Future<void> call(bool param) {
+    return _localRepository.setFirstOpen(param);
   }
 }

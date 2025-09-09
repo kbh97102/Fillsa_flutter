@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
@@ -22,33 +21,25 @@ abstract class FillsaApi {
   factory FillsaApi(Dio dio, {String baseUrl}) = _FillsaApi;
 
   @GET(ApiEndPoints.getDailyQuote)
-  Future<HttpResponse<DailyQuoteDto>> getDailyQuote(
-    @Query("quoteDate") String quoteDate,
-  );
+  Future<DailyQuoteDto> getDailyQuote(@Query("quoteDate") String quoteDate);
 
   @POST(ApiEndPoints.postLike)
-  Future<HttpResponse<SimpleIntResponse>> postLike(
+  Future<SimpleIntResponse> postLike(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
     @Body() LikeRequest body,
   );
 
-  // @Multipart()
   @POST(ApiEndPoints.postUploadImage)
-  Future<HttpResponse<int>> postUploadImage(
+  Future<int> postUploadImage(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
-    // Kotlin의 MultipartBody.Part는 Dart retrofit에서 보통 File로 처리됩니다.
     @Part() File image,
   );
 
   @DELETE(ApiEndPoints.deleteUploadImage)
-  Future<HttpResponse<int>> deleteUploadImage(
-    @Path("dailyQuoteSeq") int dailyQuoteSeq,
-  );
+  Future<int> deleteUploadImage(@Path("dailyQuoteSeq") int dailyQuoteSeq);
 
   @GET(ApiEndPoints.getQuoteList)
-  Future<HttpResponse<PageResponseMemberQuotesResponse>> getQuoteList(
-  // 파라미터가 많을 경우, Dart의 명명된 파라미터(named parameters)를 사용하면 가독성이 좋습니다.
-  {
+  Future<PageResponseMemberQuotesResponse> getQuoteList({
     @Query("size") required int size,
     @Query("page") required int page,
     @Query("likeYn") required String likeYn,
@@ -57,27 +48,27 @@ abstract class FillsaApi {
   });
 
   @POST(ApiEndPoints.postSaveMemo)
-  Future<HttpResponse<SimpleIntResponse>> postSaveMemo(
+  Future<SimpleIntResponse> postSaveMemo(
     @Path("memberQuoteSeq") String memberQuoteSeq,
     @Body() MemoRequest body,
   );
 
   @GET(ApiEndPoints.getMemberMonthlyQuotes)
-  Future<HttpResponse<MemberMonthlyQuoteResponse>> getQuotesMonthly(
+  Future<MemberMonthlyQuoteResponse> getQuotesMonthly(
     @Query("yearMonth") String yearMonth,
   );
 
   @DELETE(ApiEndPoints.deleteResign)
-  Future<HttpResponse<SimpleIntResponse>> deleteResign();
+  Future<SimpleIntResponse> deleteResign();
 
   @POST(ApiEndPoints.postTyping)
-  Future<HttpResponse<SimpleIntResponse>> postTyping(
+  Future<SimpleIntResponse> postTyping(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
     @Body() TypingQuoteRequest body,
   );
 
   @GET(ApiEndPoints.getTyping)
-  Future<HttpResponse<MemberTypingQuoteResponse>> getTyping(
+  Future<MemberTypingQuoteResponse> getTyping(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
   );
 }

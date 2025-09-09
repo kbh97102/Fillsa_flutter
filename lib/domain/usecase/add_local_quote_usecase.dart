@@ -5,7 +5,7 @@ import '../repository/local_repository.dart';
 import '../usecase/base_usecase.dart';
 
 @lazySingleton
-class AddLocalQuoteUseCase extends BaseUseCase<void, LocalQuoteInfo> {
+class AddLocalQuoteUseCase extends UseCase<void, LocalQuoteInfo> {
   final LocalRepository _localRepository;
 
   AddLocalQuoteUseCase(this._localRepository);

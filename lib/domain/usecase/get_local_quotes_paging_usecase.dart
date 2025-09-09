@@ -15,7 +15,7 @@ typedef GetPagingParams = ({
 
 @lazySingleton
 class GetLocalQuotesPagingUseCase
-    extends BaseUseCase<List<LocalQuoteInfo>, GetPagingParams> {
+    extends UseCase<List<LocalQuoteInfo>, GetPagingParams> {
   final LocalRepository _localRepository;
 
   GetLocalQuotesPagingUseCase(this._localRepository);

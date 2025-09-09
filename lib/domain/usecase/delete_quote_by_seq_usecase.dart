@@ -4,7 +4,7 @@ import '../repository/local_repository.dart';
 import '../usecase/base_usecase.dart';
 
 @lazySingleton
-class DeleteQuoteBySeqUseCase extends BaseUseCase<void, int> {
+class DeleteQuoteBySeqUseCase extends UseCase<void, int> {
   final LocalRepository _localRepository;
 
   DeleteQuoteBySeqUseCase(this._localRepository);

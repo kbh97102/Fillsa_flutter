@@ -1,9 +1,8 @@
-import 'package:fillsa_flutter/domain/usecase/usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import '../model/request/post_upload_image_params.dart';
 import '../repository/home_repository.dart';
-import '../util/ApiResult.dart';
+import 'base_usecase.dart';
 
 @lazySingleton
 class PostUploadImageUseCase extends UseCase<int, PostUploadImageParams> {
@@ -12,7 +11,7 @@ class PostUploadImageUseCase extends UseCase<int, PostUploadImageParams> {
   PostUploadImageUseCase(this._repository);
 
   @override
-  Future<ApiResult<int>> call(PostUploadImageParams params) {
-    return _repository.postUploadImage(params.imageFile, params.dailyQuoteSeq);
+  Future<int> call(PostUploadImageParams param) {
+    return _repository.postUploadImage(param.imageFile, param.dailyQuoteSeq);
   }
 }

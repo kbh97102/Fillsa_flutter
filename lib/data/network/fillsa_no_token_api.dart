@@ -15,7 +15,7 @@ abstract class FillsaNoTokenApi {
   factory FillsaNoTokenApi(Dio dio, {String baseUrl}) = _FillsaNoTokenApi;
 
   @GET(ApiEndPoints.getDailyQuoteNonMember)
-  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember(
+  Future<DailyQuotaNoToken> getDailyQuoteNonMember(
     @Query("quoteDate") String quoteDate,
   );
 

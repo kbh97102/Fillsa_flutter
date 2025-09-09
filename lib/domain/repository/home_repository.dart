@@ -4,19 +4,18 @@ import '../model/request/like_request.dart';
 import '../model/response/DailyQuotaNoToken.dart';
 import '../model/response/DailyQuoteDto.dart';
 import '../model/response/SimpleIntResponse.dart';
-import '../util/ApiResult.dart';
 
 abstract class HomeRepository {
-  Future<ApiResult<DailyQuotaNoToken>> getDailyQuoteNoToken(String quoteDate);
+  Future<DailyQuotaNoToken> getDailyQuoteNoToken(String quoteDate);
 
-  Future<ApiResult<DailyQuoteDto>> getDailyQuote(String quoteDate);
+  Future<DailyQuoteDto> getDailyQuote(String quoteDate);
 
-  Future<ApiResult<SimpleIntResponse>> postLike(
+  Future<SimpleIntResponse> postLike(
     LikeRequest likeRequest,
     int dailyQuoteSeq,
   );
 
-  Future<ApiResult<int>> postUploadImage(File imageFile, int dailyQuoteSeq);
+  Future<int> postUploadImage(File imageFile, int dailyQuoteSeq);
 
-  Future<ApiResult<int>> deleteUploadImage(int dailyQuoteSeq);
+  Future<int> deleteUploadImage(int dailyQuoteSeq);
 }

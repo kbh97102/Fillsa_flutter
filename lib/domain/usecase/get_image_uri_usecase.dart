@@ -4,13 +4,13 @@ import '../repository/local_repository.dart';
 import '../usecase/base_usecase.dart';
 
 @lazySingleton
-class GetImageUriUseCase extends BaseUseCase<String?, void> {
+class GetImageUriUseCase extends NoParamUseCase<String?> {
   final LocalRepository _localRepository;
 
   GetImageUriUseCase(this._localRepository);
 
   @override
-  Future<String?> call([void param]) {
+  Future<String?> call() {
     return _localRepository.getImageUri();
   }
 }
