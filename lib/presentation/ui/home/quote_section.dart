@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:fillsa_flutter/presentation/ui/common/my_deferred_pointer.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_body.dart';
 import 'package:flutter/widgets.dart';
 
@@ -36,37 +37,46 @@ class QuoteSection extends StatelessWidget {
         ],
         borderRadius: BorderRadius.circular(12),
       ),
-      child: AspectRatio(
-        aspectRatio: 320 / 250.0,
-        child: CustomMultiChildLayout(
-          delegate: _TestDelegate(),
-          children: [
-            LayoutId(
-              id: "body",
-              child: QuoteBody(quote: quote, author: author),
-            ),
-            LayoutId(
-              id: "start",
-              child: GestureDetector(
-                child: CustomSvg(svgName: "icn_arrow_filled"),
-                onTap: () {
-                  logger.e("Click Before");
-                  beforeOnClick();
-                },
-              ),
-            ),
-            LayoutId(
-              id: "end",
-              child: Transform.rotate(
-                angle: math.pi,
-                child: GestureDetector(
-                  child: CustomSvg(svgName: "icn_arrow_filled"),
-                  onTap: afterOnClick,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          AspectRatio(
+            aspectRatio: 320 / 250.0,
+            child: CustomMultiChildLayout(
+              delegate: _TestDelegate(),
+              children: [
+                LayoutId(
+                  id: "body",
+                  child: QuoteBody(quote: quote, author: author),
                 ),
-              ),
+                LayoutId(
+                  id: "start",
+                  child: MyDeferPointer(
+                    child: GestureDetector(
+                      child: CustomSvg(svgName: "icn_arrow_filled"),
+                      onTap: () {
+                        logger.e("Click Before");
+                        beforeOnClick();
+                      },
+                    ),
+                  ),
+                ),
+                LayoutId(
+                  id: "end",
+                  child: MyDeferPointer(
+                    child: Transform.rotate(
+                      angle: math.pi,
+                      child: GestureDetector(
+                        child: CustomSvg(svgName: "icn_arrow_filled"),
+                        onTap: afterOnClick,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
