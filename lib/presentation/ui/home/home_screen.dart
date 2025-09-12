@@ -2,6 +2,7 @@ import 'package:fillsa_flutter/presentation/ui/common/common_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/common/image_change_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
+import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -182,8 +183,17 @@ class HomeScreen extends ConsumerWidget {
     } else {
       showDialog(
         context: context,
-        builder: (context) =>
-            CommonDialog(title: "로그인 후 사용하실 수 있습니다.", okButtonText: "로그인 하기"),
+        builder: (context) => CommonDialog(
+          title: "로그인 후 사용하실 수 있습니다.",
+          okButtonText: "로그인 하기",
+          okButtonOnClick: () {
+            Navigator.pop(context);
+            LoginRoute()..push(context);
+          },
+          cancelButtonOnClick: () {
+            Navigator.pop(context);
+          },
+        ),
       );
     }
   }
