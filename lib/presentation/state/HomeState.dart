@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/util/LocaleOption.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../domain/model/response/DailyQuoteDto.dart';
@@ -13,6 +14,7 @@ abstract class HomeState with _$HomeState {
     String? error,
     @Default(false) bool isLogged,
     required DateTime? targetDate,
+    @Default(LocaleOption.KR) LocaleOption currentLocale,
   }) = _HomeState;
 
   factory HomeState.initial() =>

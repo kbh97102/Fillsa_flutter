@@ -5,6 +5,7 @@ import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../util/LocaleOption.dart';
 import '../../util/colors.dart';
 import '../common/interaction_button_section.dart';
 import '../common/my_deferred_pointer.dart';
@@ -21,6 +22,16 @@ class HomeScreen extends ConsumerWidget {
 
     return _viewModel.when(
       data: (state) {
+        final String _selectedQuote = switch (state.currentLocale) {
+          LocaleOption.KR => state.data.korQuote ?? "",
+          LocaleOption.EN => state.data.engQuote ?? "",
+        };
+
+        final String _selectedAuthor = switch (state.currentLocale) {
+          LocaleOption.KR => state.data.korAuthor ?? "",
+          LocaleOption.EN => state.data.engAuthor ?? "",
+        };
+
         return Container(
           color: yellow03,
           child: SafeArea(
@@ -64,15 +75,22 @@ class HomeScreen extends ConsumerWidget {
                       padding: const EdgeInsets.only(top: 20),
                       child: Align(
                         alignment: Alignment.centerRight,
-                        child: KoreanEnglishSwitch(),
+                        child: KoreanEnglishSwitch(
+                          selected: state.currentLocale,
+                          onClick: (selected) {
+                            ref
+                                .read(homeViewModelProvider.notifier)
+                                .updateLocale(selected);
+                          },
+                        ),
                       ),
                     ),
 
                     Padding(
                       padding: const EdgeInsets.only(top: 22),
                       child: QuoteSection(
-                        quote: state.data.korQuote ?? "",
-                        author: state.data.korAuthor ?? "",
+                        quote: _selectedQuote,
+                        author: _selectedAuthor,
                         beforeOnClick: () {
                           ref
                               .read(homeViewModelProvider.notifier)

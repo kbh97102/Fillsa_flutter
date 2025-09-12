@@ -19,6 +19,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
+import '../util/LocaleOption.dart';
 
 @injectable
 class HomeViewModel extends AsyncNotifier<HomeState> {
@@ -147,6 +148,12 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
         });
       }
     }
+  }
+
+  void updateLocale(LocaleOption selected) {
+    state = AsyncValue.data(
+      state.requireValue.copyWith(currentLocale: selected),
+    );
   }
 
   void _postLocalLike() async {

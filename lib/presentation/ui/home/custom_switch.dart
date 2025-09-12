@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:flutter/material.dart';
 
-class KoreanEnglishSwitch extends StatefulWidget {
-  const KoreanEnglishSwitch({super.key});
+import '../../util/LocaleOption.dart';
 
-  @override
-  State<KoreanEnglishSwitch> createState() => _KoreanEnglishSwitchState();
-}
+class KoreanEnglishSwitch extends StatelessWidget {
+  final LocaleOption selected;
+  final Function(LocaleOption) onClick;
 
-class _KoreanEnglishSwitchState extends State<KoreanEnglishSwitch> {
-  bool isKorean = true;
-
-  void toggle() => setState(() => isKorean = !isKorean);
+  const KoreanEnglishSwitch({
+    super.key,
+    required this.selected,
+    required this.onClick,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,11 @@ class _KoreanEnglishSwitchState extends State<KoreanEnglishSwitch> {
     const Color backgroundColor = Color(0xFFE8E6FB); // 연보라색
 
     return GestureDetector(
-      onTap: toggle,
+      onTap: () => {
+        onClick(
+          selected == LocaleOption.KR ? LocaleOption.EN : LocaleOption.KR,
+        ),
+      },
       child: Container(
         width: containerWidth,
         height: containerHeight,
@@ -36,7 +40,7 @@ class _KoreanEnglishSwitchState extends State<KoreanEnglishSwitch> {
           children: [
             // ✅ 흰색 thumb (이동 애니메이션)
             AnimatedAlign(
-              alignment: isKorean
+              alignment: selected == LocaleOption.KR
                   ? Alignment.centerLeft
                   : Alignment.centerRight,
               duration: const Duration(milliseconds: 200),

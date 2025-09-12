@@ -1,0 +1,1 @@
+enum LocaleOption { KR, EN }
