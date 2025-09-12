@@ -15,6 +15,7 @@ abstract class HomeState with _$HomeState {
     @Default(false) bool isLogged,
     required DateTime? targetDate,
     @Default(LocaleOption.KR) LocaleOption currentLocale,
+    @Default(false) bool isLiked,
   }) = _HomeState;
 
   factory HomeState.initial() =>

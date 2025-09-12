@@ -173,7 +173,7 @@ class LocalRepositoryImpl extends LocalRepository {
     required YN likeYN,
     required int seq,
   }) async {
-    if (likeYN == YN.n) {
+    if (likeYN == YN.N) {
       final entity = await localQuoteInfoDao.findQuoteById(seq);
       if (entity != null &&
           entity.korTyping.isEmpty &&

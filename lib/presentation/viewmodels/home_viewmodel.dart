@@ -94,14 +94,12 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     return uiQuote;
   }
 
-  void postLike() async {
+  void postLike(bool isLiked) async {
     final isLogged = state.requireValue.isLogged;
-
+    state = AsyncValue.data(state.requireValue.copyWith(isLiked: isLiked));
     if (isLogged) {
       final quote = state.requireValue.data;
-      final String like = (state.requireValue.data.likeYn == YN.y.name)
-          ? YN.y.name
-          : YN.n.name;
+      final String like = isLiked ? YN.Y.name : YN.N.name;
 
       _postLikeUseCase.call(
         PostLikeParams(
@@ -163,12 +161,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     );
     if (localQuote != null) {
       _updateLocalQuoteLikeUseCase.call((
-        likeYN: (localQuote.likeYn == YN.y.name ? YN.y : YN.n),
+        likeYN: (localQuote.likeYn == YN.Y.name ? YN.Y : YN.N),
         seq: localQuote.dailyQuoteSeq,
       ));
     } else {
-      // TODO: 선택된 명언의 날짜로 변경
-      final now = DateTime.now();
+      final now = state.requireValue.targetDate ?? DateTime.now();
       _addLocalQuoteUseCase.call(
         LocalQuoteInfo(
           dailyQuoteSeq: quote.dailyQuoteSeq,
@@ -178,7 +175,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
           engAuthor: quote.engAuthor ?? "",
           korTyping: "",
           engTyping: "",
-          likeYn: YN.y.name,
+          likeYn: YN.Y.name,
           memo: "",
           date: now,
           dayOfWeek: DateFormat('E', 'ko_KR').format(now),

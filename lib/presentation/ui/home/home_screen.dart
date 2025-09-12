@@ -104,7 +104,14 @@ class HomeScreen extends ConsumerWidget {
 
                     Padding(
                       padding: const EdgeInsets.only(top: 28, bottom: 20),
-                      child: InteractionButtonSection(),
+                      child: InteractionButtonSection(
+                        isLiked: state.isLiked,
+                        setIsLiked: (liked) {
+                          ref
+                              .read(homeViewModelProvider.notifier)
+                              .postLike(liked);
+                        },
+                      ),
                     ),
                   ],
                 ),
