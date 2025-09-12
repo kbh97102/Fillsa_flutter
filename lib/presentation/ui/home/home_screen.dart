@@ -54,14 +54,11 @@ class HomeScreen extends ConsumerWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // TODO: Login 여부 추가
-                                showDialog(
+                                imageOnClick(
                                   context: context,
-                                  builder: (context) => getImageDialog(
-                                    context: context,
-                                    quote: state.data.korQuote ?? "",
-                                    author: state.data.korAuthor ?? "",
-                                  ),
+                                  quote: state.data.korQuote ?? "",
+                                  author: state.data.korAuthor ?? "",
+                                  isLogged: state.isLogged,
                                 );
                               },
                               child: ImageSection(isLogin: false),
@@ -161,5 +158,26 @@ class HomeScreen extends ConsumerWidget {
         );
       },
     );
+  }
+
+  void imageOnClick({
+    required BuildContext context,
+    required String quote,
+    required String author,
+    required bool isLogged,
+  }) {
+    if (isLogged) {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            getImageDialog(context: context, quote: quote, author: author),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            CommonDialog(title: "로그인 후 사용하실 수 있습니다.", okButtonText: "로그인 하기"),
+      );
+    }
   }
 }
