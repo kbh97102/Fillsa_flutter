@@ -83,6 +83,7 @@ class HomeScreen extends ConsumerWidget {
                               .read(homeViewModelProvider.notifier)
                               .afterOnClick();
                         },
+                        today: state.targetDate ?? DateTime.now(),
                       ),
                     ),
 

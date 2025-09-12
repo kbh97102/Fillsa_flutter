@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:fillsa_flutter/presentation/ui/common/my_deferred_pointer.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_body.dart';
+import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import '../../util/colors.dart' as Colors;
@@ -11,16 +13,31 @@ import '../guide/custom_svg.dart';
 class QuoteSection extends StatelessWidget {
   final String quote;
   final String author;
+  final DateTime today;
   final VoidCallback beforeOnClick;
   final VoidCallback afterOnClick;
+  late final bool _displayNextButton;
+  late final bool _displayBeforeButton;
 
-  const QuoteSection({
+  // 생성자에서 날짜 비교 로직을 초기화합니다.
+  QuoteSection({
     super.key,
     required this.quote,
     required this.author,
     required this.beforeOnClick,
     required this.afterOnClick,
-  });
+    required this.today,
+  }) {
+    final DateTime nowOnlyDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+    );
+
+    _displayNextButton = today.isBefore(nowOnlyDate);
+
+    _displayBeforeButton = !today.isBefore(DateCondition.startDay);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,30 +66,32 @@ class QuoteSection extends StatelessWidget {
                   id: "body",
                   child: QuoteBody(quote: quote, author: author),
                 ),
-                LayoutId(
-                  id: "start",
-                  child: MyDeferPointer(
-                    child: GestureDetector(
-                      child: CustomSvg(svgName: "icn_arrow_filled"),
-                      onTap: () {
-                        logger.e("Click Before");
-                        beforeOnClick();
-                      },
-                    ),
-                  ),
-                ),
-                LayoutId(
-                  id: "end",
-                  child: MyDeferPointer(
-                    child: Transform.rotate(
-                      angle: math.pi,
+                if (_displayBeforeButton)
+                  LayoutId(
+                    id: "start",
+                    child: MyDeferPointer(
                       child: GestureDetector(
                         child: CustomSvg(svgName: "icn_arrow_filled"),
-                        onTap: afterOnClick,
+                        onTap: () {
+                          logger.e("Click Before");
+                          beforeOnClick();
+                        },
                       ),
                     ),
                   ),
-                ),
+                if (_displayNextButton)
+                  LayoutId(
+                    id: "end",
+                    child: MyDeferPointer(
+                      child: Transform.rotate(
+                        angle: math.pi,
+                        child: GestureDetector(
+                          child: CustomSvg(svgName: "icn_arrow_filled"),
+                          onTap: afterOnClick,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
