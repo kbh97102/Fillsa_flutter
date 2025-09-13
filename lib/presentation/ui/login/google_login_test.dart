@@ -20,9 +20,6 @@ Future<void> signInWithGoogle() async {
           .listen(_handleAuthenticationEvent)
           .onError(_handleAuthenticationError);
 
-      /// This example always uses the stream-based approach to determining
-      /// which UI state to show, rather than using the future returned here,
-      /// if any, to conditionally skip directly to the signed-in state.
       signIn.attemptLightweightAuthentication();
     }),
   );
