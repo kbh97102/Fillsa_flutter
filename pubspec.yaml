@@ -35,6 +35,8 @@ dependencies:
   riverpod: ^3.0.0-dev.17
   google_sign_in: ^7.1.1
   flutter_localization: ^0.3.3
+  firebase_auth: ^6.0.2
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +58,7 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+    - ./local_properties.env
   fonts:
     - family: pretendard
       fonts:

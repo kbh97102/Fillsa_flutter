@@ -1,6 +1,7 @@
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/util/typo.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -15,6 +16,7 @@ final fillsaTheme = ThemeData(
 void main() async {
   configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "local_properties.env");
   await initializeDateFormatting("ko_KR", null);
 
   runApp(
