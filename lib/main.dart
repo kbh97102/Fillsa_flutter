@@ -1,5 +1,6 @@
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/util/typo.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -8,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'di_config.dart';
+import 'firebase_options.dart';
 
 final fillsaTheme = ThemeData(
   extensions: <ThemeExtension<dynamic>>[fillsaTypoData],
@@ -16,6 +18,7 @@ final fillsaTheme = ThemeData(
 void main() async {
   configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: "local_properties.env");
   await initializeDateFormatting("ko_KR", null);
 

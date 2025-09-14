@@ -2,11 +2,12 @@ import 'package:flutter/widgets.dart';
 
 import '../../util/colors.dart';
 import '../../util/routes.dart';
-import 'google_login_test.dart';
 import 'login_button.dart';
 
 class LoginButtonSection extends StatelessWidget {
-  const LoginButtonSection({super.key});
+  final VoidCallback doGoogleLogin;
+
+  const LoginButtonSection({super.key, required this.doGoogleLogin});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class LoginButtonSection extends StatelessWidget {
           text: "구글 계정으로 시작하기",
           svgPath: "assets/images/icn_google.svg",
           backgroundColor: googleButtonBackgroundColor,
-          onPressed: () => {signInWithGoogle()},
+          onPressed: () => {doGoogleLogin()},
           textColor: grey700,
         ),
 

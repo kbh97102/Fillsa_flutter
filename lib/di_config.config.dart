@@ -50,6 +50,7 @@ import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
+import 'presentation/viewmodels/login_viewmodel.dart' as _i15;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i174.GetIt init(
@@ -178,6 +179,9 @@ _i174.GetIt init(
       gh<_i177.UpdateLocalQuoteLikeUseCase>(),
       gh<_i359.AddLocalQuoteUseCase>(),
     ),
+  );
+  gh.factory<_i15.LoginViewModel>(
+    () => _i15.LoginViewModel(loginUseCase: gh<_i579.LoginUseCase>()),
   );
   return getIt;
 }
