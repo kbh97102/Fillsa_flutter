@@ -6,8 +6,13 @@ import 'login_button.dart';
 
 class LoginButtonSection extends StatelessWidget {
   final VoidCallback doGoogleLogin;
+  final VoidCallback doKakaoLogin;
 
-  const LoginButtonSection({super.key, required this.doGoogleLogin});
+  const LoginButtonSection({
+    super.key,
+    required this.doGoogleLogin,
+    required this.doKakaoLogin,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +24,7 @@ class LoginButtonSection extends StatelessWidget {
           svgPath: "assets/images/icn_kakao.svg",
           backgroundColor: kakaoButtonBackgroundColor,
           textColor: kakaoTextColor,
-          onPressed: () => {},
+          onPressed: () => {doKakaoLogin()},
         ),
 
         LoginButton(

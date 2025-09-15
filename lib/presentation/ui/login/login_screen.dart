@@ -68,6 +68,9 @@ class LoginScreen extends ConsumerWidget {
                 doGoogleLogin: () {
                   ref.read(loginViewModelProvider.notifier).signInWithGoogle();
                 },
+                doKakaoLogin: () {
+                  ref.read(loginViewModelProvider.notifier).signInWithKakao();
+                },
               ),
             ),
 

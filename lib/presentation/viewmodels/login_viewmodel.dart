@@ -21,6 +21,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../domain/model/response/login_response.dart';
@@ -45,6 +46,27 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
   @override
   FutureOr<LoginResult> build() {
     return LoginInitial();
+  }
+
+  signInWithKakao() async {
+    try {
+      await UserApi.instance.loginWithKakaoTalk();
+      User user = await UserApi.instance.me();
+
+      final nickName = user.kakaoAccount?.profile?.nickname;
+      final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
+
+      logger.d("user? $user");
+      logger.d("id ${user.id.toString()} nick ${nickName} image $imageUrl");
+
+      _postLogin(
+        id: user.id.toString(),
+        nickName: nickName,
+        profileImageUri: imageUrl,
+      );
+    } catch (error) {
+      logger.e('카카오톡으로 로그인 실패 $error');
+    }
   }
 
   Future<void> signInWithGoogle() async {
