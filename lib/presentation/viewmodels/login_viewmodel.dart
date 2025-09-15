@@ -10,6 +10,7 @@ import 'package:fillsa_flutter/domain/model/request/login_request.dart';
 import 'package:fillsa_flutter/domain/model/request/memo_request.dart';
 import 'package:fillsa_flutter/domain/model/request/typing_quote_request.dart';
 import 'package:fillsa_flutter/domain/model/request/user_data.dart';
+import 'package:fillsa_flutter/domain/usecase/clear_all_data_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/get_local_quotes_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/login_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
@@ -31,11 +32,13 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
   final SetAccessTokenUseCase setAccessTokenUseCase;
   final SetRefreshTokenUseCase setRefreshTokenUseCase;
   final GetLocalQuotesUseCase getLocalQuotesUseCase;
+  final ClearAllDataUseCase clearAllDataUseCase;
 
   LoginViewModel(
     this.setAccessTokenUseCase,
     this.setRefreshTokenUseCase,
-    this.getLocalQuotesUseCase, {
+    this.getLocalQuotesUseCase,
+    this.clearAllDataUseCase, {
     required this.loginUseCase,
   });
 
@@ -133,7 +136,7 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
   _saveLoginResponse(LoginResponse loginResponse) {
     setAccessTokenUseCase.call(loginResponse.accessToken);
     setRefreshTokenUseCase.call(loginResponse.refreshToken);
-    // TODO: 로컬 데이터 제거
+    clearAllDataUseCase.call();
   }
 
   (String, String, String) _getLoginUserData(String? idToken) {
