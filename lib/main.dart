@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'di_config.dart';
 import 'firebase_options.dart';
@@ -20,19 +21,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: "local_properties.env");
+  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
   await initializeDateFormatting("ko_KR", null);
 
-  runApp(
-    ProviderScope(
-      // overrides: [
-      //   presentation_provider.getDailyNonMemberUseCaseProvider.overrideWith(
-      //     (ref) => ref.watch(root_provider.getDailyNonMemberUseCaseProvider),
-      //   ),
-      // ],
-      child: const MyApp(),
-    ),
-  );
-  // runApp(DevMain());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
 class DevMain extends StatelessWidget {
