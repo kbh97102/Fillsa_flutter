@@ -170,13 +170,6 @@ _i174.GetIt init(
   gh.lazySingleton<_i579.LoginUseCase>(
     () => _i579.LoginUseCase(gh<_i373.LoginRepository>()),
   );
-  gh.factory<_i15.LoginViewModel>(
-    () => _i15.LoginViewModel(
-      gh<_i173.SetAccessTokenUseCase>(),
-      gh<_i904.SetRefreshTokenUseCase>(),
-      loginUseCase: gh<_i579.LoginUseCase>(),
-    ),
-  );
   gh.factory<_i199.HomeViewModel>(
     () => _i199.HomeViewModel(
       gh<_i580.GetDailyNonMemberUseCase>(),
@@ -185,6 +178,14 @@ _i174.GetIt init(
       gh<_i531.FindLocalQuoteByIdUseCase>(),
       gh<_i177.UpdateLocalQuoteLikeUseCase>(),
       gh<_i359.AddLocalQuoteUseCase>(),
+    ),
+  );
+  gh.factory<_i15.LoginViewModel>(
+    () => _i15.LoginViewModel(
+      gh<_i173.SetAccessTokenUseCase>(),
+      gh<_i904.SetRefreshTokenUseCase>(),
+      gh<_i1037.GetLocalQuotesUseCase>(),
+      loginUseCase: gh<_i579.LoginUseCase>(),
     ),
   );
   return getIt;

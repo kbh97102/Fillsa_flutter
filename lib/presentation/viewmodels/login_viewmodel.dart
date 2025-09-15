@@ -2,10 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:fillsa_flutter/domain/model/request/daily_sync_data.dart';
 import 'package:fillsa_flutter/domain/model/request/device_data.dart';
+import 'package:fillsa_flutter/domain/model/request/like_request.dart';
 import 'package:fillsa_flutter/domain/model/request/login_data.dart';
 import 'package:fillsa_flutter/domain/model/request/login_request.dart';
+import 'package:fillsa_flutter/domain/model/request/memo_request.dart';
+import 'package:fillsa_flutter/domain/model/request/typing_quote_request.dart';
 import 'package:fillsa_flutter/domain/model/request/user_data.dart';
+import 'package:fillsa_flutter/domain/usecase/get_local_quotes_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/login_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_refresh_token_usecase.dart';
@@ -25,10 +30,12 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
   final LoginUseCase loginUseCase;
   final SetAccessTokenUseCase setAccessTokenUseCase;
   final SetRefreshTokenUseCase setRefreshTokenUseCase;
+  final GetLocalQuotesUseCase getLocalQuotesUseCase;
 
   LoginViewModel(
     this.setAccessTokenUseCase,
-    this.setRefreshTokenUseCase, {
+    this.setRefreshTokenUseCase,
+    this.getLocalQuotesUseCase, {
     required this.loginUseCase,
   });
 
@@ -82,7 +89,20 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
     final fid = await FirebaseInstallations.instance.getId();
     final platformInfo = await PackageInfo.fromPlatform();
 
-    // TODO: 로컬데이터 sync 맞추기
+    final localData = await getLocalQuotesUseCase.call();
+    final localSyncDataList = localData
+        .map(
+          (local) => DailySyncData(
+            dailyQuoteSeq: local.dailyQuoteSeq,
+            typingQuoteRequest: TypingQuoteRequest(
+              typingKorQuote: local.korTyping,
+              typingEngQuote: local.engTyping,
+            ),
+            memoRequest: MemoRequest(memo: local.memo),
+            likeRequest: LikeRequest(likeYn: local.likeYn),
+          ),
+        )
+        .toList();
 
     final loginRequest = LoginRequest(
       loginData: LoginData(
@@ -100,7 +120,7 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
           profileImageUrl: profileImageUri ?? "",
         ),
       ),
-      syncData: List.empty(),
+      syncData: localSyncDataList,
     );
 
     final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
