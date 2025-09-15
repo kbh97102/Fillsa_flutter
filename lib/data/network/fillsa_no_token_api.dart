@@ -14,6 +14,9 @@ part 'fillsa_no_token_api.g.dart';
 abstract class FillsaNoTokenApi {
   factory FillsaNoTokenApi(Dio dio, {String baseUrl}) = _FillsaNoTokenApi;
 
+  @GET("/test/code/{code}")
+  Future<HttpResponse<String>> testErrorCode(@Path("code") int code);
+
   @GET(ApiEndPoints.getDailyQuoteNonMember)
   Future<DailyQuotaNoToken> getDailyQuoteNonMember(
     @Query("quoteDate") String quoteDate,

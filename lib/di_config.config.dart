@@ -46,6 +46,7 @@ import 'domain/usecase/set_access_token_usecase.dart' as _i173;
 import 'domain/usecase/set_first_open_usecase.dart' as _i504;
 import 'domain/usecase/set_image_uri_usecase.dart' as _i1000;
 import 'domain/usecase/set_refresh_token_usecase.dart' as _i904;
+import 'domain/usecase/test_error_code_usecase.dart' as _i1046;
 import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
@@ -170,12 +171,16 @@ _i174.GetIt init(
   gh.lazySingleton<_i579.LoginUseCase>(
     () => _i579.LoginUseCase(gh<_i373.LoginRepository>()),
   );
+  gh.lazySingleton<_i1046.TestErrorCodeUsecase>(
+    () => _i1046.TestErrorCodeUsecase(gh<_i373.LoginRepository>()),
+  );
   gh.factory<_i15.LoginViewModel>(
     () => _i15.LoginViewModel(
       gh<_i173.SetAccessTokenUseCase>(),
       gh<_i904.SetRefreshTokenUseCase>(),
       gh<_i1037.GetLocalQuotesUseCase>(),
       gh<_i601.ClearAllDataUseCase>(),
+      gh<_i1046.TestErrorCodeUsecase>(),
       loginUseCase: gh<_i579.LoginUseCase>(),
     ),
   );

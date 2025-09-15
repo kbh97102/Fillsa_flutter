@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:fillsa_flutter/domain/model/api_result.dart';
 import 'package:fillsa_flutter/domain/model/request/daily_sync_data.dart';
 import 'package:fillsa_flutter/domain/model/request/device_data.dart';
 import 'package:fillsa_flutter/domain/model/request/like_request.dart';
@@ -15,13 +17,13 @@ import 'package:fillsa_flutter/domain/usecase/get_local_quotes_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/login_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_refresh_token_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/test_error_code_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/logger.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../domain/model/response/login_response.dart';
@@ -34,12 +36,14 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
   final SetRefreshTokenUseCase setRefreshTokenUseCase;
   final GetLocalQuotesUseCase getLocalQuotesUseCase;
   final ClearAllDataUseCase clearAllDataUseCase;
+  final TestErrorCodeUsecase testErrorCodeUsecase;
 
   LoginViewModel(
     this.setAccessTokenUseCase,
     this.setRefreshTokenUseCase,
     this.getLocalQuotesUseCase,
-    this.clearAllDataUseCase, {
+    this.clearAllDataUseCase,
+    this.testErrorCodeUsecase, {
     required this.loginUseCase,
   });
 
@@ -50,23 +54,46 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
 
   signInWithKakao() async {
     try {
-      await UserApi.instance.loginWithKakaoTalk();
-      User user = await UserApi.instance.me();
+      final test = await testErrorCodeUsecase(1002);
 
-      final nickName = user.kakaoAccount?.profile?.nickname;
-      final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
+      switch (test) {
+        case Success(data: final data):
+          {
+            break;
+          }
+        case Fail(error: final error):
+          {
+            logger.e("parsing Success $error}");
+            break;
+          }
+      }
+    } on DioException catch (e) {
+      final data = e.response;
 
-      logger.d("user? $user");
-      logger.d("id ${user.id.toString()} nick ${nickName} image $imageUrl");
-
-      _postLogin(
-        id: user.id.toString(),
-        nickName: nickName,
-        profileImageUri: imageUrl,
-      );
-    } catch (error) {
-      logger.e('카카오톡으로 로그인 실패 $error');
+      if (data != null) {
+        logger.e("data ${data.data} code? ${data.statusCode}");
+      }
+    } catch (e) {
+      logger.e(e);
     }
+    // try {
+    //   await UserApi.instance.loginWithKakaoTalk();
+    //   User user = await UserApi.instance.me();
+    //
+    //   final nickName = user.kakaoAccount?.profile?.nickname;
+    //   final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
+    //
+    //   logger.d("user? $user");
+    //   logger.d("id ${user.id.toString()} nick ${nickName} image $imageUrl");
+    //
+    //   _postLogin(
+    //     id: user.id.toString(),
+    //     nickName: nickName,
+    //     profileImageUri: imageUrl,
+    //   );
+    // } catch (error) {
+    //   logger.e('카카오톡으로 로그인 실패 $error');
+    // }
   }
 
   Future<void> signInWithGoogle() async {

@@ -1,4 +1,6 @@
 import 'package:fillsa_flutter/data/network/fillsa_no_token_api.dart';
+import 'package:fillsa_flutter/data/util/safe_api.dart';
+import 'package:fillsa_flutter/domain/model/api_result.dart';
 import 'package:fillsa_flutter/domain/repository/login_repository.dart';
 import 'package:injectable/injectable.dart';
 
@@ -14,5 +16,12 @@ class LoginRepositoryImpl extends LoginRepository {
   @override
   Future<LoginResponse> login({required LoginRequest loginRequest}) {
     return api.login(loginRequest);
+  }
+
+  @override
+  Future<ApiResult<void>> testErrorCode(int code) async {
+    final test = await api.testErrorCode(code);
+
+    return safeApiCall(() => api.testErrorCode(code));
   }
 }
