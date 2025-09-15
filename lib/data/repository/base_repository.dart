@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:retrofit/dio.dart';
 
 import '../../domain/model/api_result.dart';
 import '../../domain/model/response/ErrorResponse.dart';
 
 mixin class BaseRepository {
   Future<ApiResult<T>> safeApiCall<T>(
-    Future<Response<T>> Function() call,
+    Future<HttpResponse<T>> Function() call,
   ) async {
     try {
       final response = await call();
@@ -13,7 +14,7 @@ mixin class BaseRepository {
       // Dio는 성공적인 응답(2xx)만 이곳으로 내려주고, 나머지는 DioException을 던집니다.
       // 따라서 isSuccessful 체크는 사실상 필요 없지만, 명시적으로 방어 코드를 넣을 수 있습니다.
       if (response.data != null) {
-        return Success(response.data as T);
+        return Success(response.data);
       } else {
         // body가 null인 성공 응답 처리 (예: 204 No Content)
         // 이 경우 T가 dynamic 또는 Unit/void와 같은 타입이어야 합니다.

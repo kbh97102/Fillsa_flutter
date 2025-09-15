@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:fillsa_flutter/domain/model/api_result.dart';
 import 'package:fillsa_flutter/domain/model/request/daily_sync_data.dart';
 import 'package:fillsa_flutter/domain/model/request/device_data.dart';
 import 'package:fillsa_flutter/domain/model/request/like_request.dart';
@@ -19,18 +17,20 @@ import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_refresh_token_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/test_error_code_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/logger.dart';
+import 'package:fillsa_flutter/presentation/viewmodels/base_viewmodel.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../domain/model/response/login_response.dart';
 import '../ui/login/login_result.dart';
 
 @injectable
-class LoginViewModel extends AsyncNotifier<LoginResult> {
+class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
   final LoginUseCase loginUseCase;
   final SetAccessTokenUseCase setAccessTokenUseCase;
   final SetRefreshTokenUseCase setRefreshTokenUseCase;
@@ -54,46 +54,20 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
 
   signInWithKakao() async {
     try {
-      final test = await testErrorCodeUsecase(1002);
+      await UserApi.instance.loginWithKakaoTalk();
+      User user = await UserApi.instance.me();
 
-      switch (test) {
-        case Success(data: final data):
-          {
-            break;
-          }
-        case Fail(error: final error):
-          {
-            logger.e("parsing Success $error}");
-            break;
-          }
-      }
-    } on DioException catch (e) {
-      final data = e.response;
+      final nickName = user.kakaoAccount?.profile?.nickname;
+      final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
 
-      if (data != null) {
-        logger.e("data ${data.data} code? ${data.statusCode}");
-      }
-    } catch (e) {
-      logger.e(e);
+      _postLogin(
+        id: user.id.toString(),
+        nickName: nickName,
+        profileImageUri: imageUrl,
+      );
+    } catch (error) {
+      logger.e('카카오톡으로 로그인 실패 $error');
     }
-    // try {
-    //   await UserApi.instance.loginWithKakaoTalk();
-    //   User user = await UserApi.instance.me();
-    //
-    //   final nickName = user.kakaoAccount?.profile?.nickname;
-    //   final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
-    //
-    //   logger.d("user? $user");
-    //   logger.d("id ${user.id.toString()} nick ${nickName} image $imageUrl");
-    //
-    //   _postLogin(
-    //     id: user.id.toString(),
-    //     nickName: nickName,
-    //     profileImageUri: imageUrl,
-    //   );
-    // } catch (error) {
-    //   logger.e('카카오톡으로 로그인 실패 $error');
-    // }
   }
 
   Future<void> signInWithGoogle() async {
@@ -175,9 +149,13 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
       syncData: localSyncDataList,
     );
 
-    final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
+    final loginResponse = await getResponse(
+      () => loginUseCase.call(loginRequest),
+    );
 
-    _saveLoginResponse(loginResponse);
+    if (loginResponse != null) {
+      _saveLoginResponse(loginResponse);
+    }
 
     state = AsyncData(LoginSuccess());
   }

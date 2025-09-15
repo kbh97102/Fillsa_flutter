@@ -23,7 +23,7 @@ abstract class FillsaNoTokenApi {
   );
 
   @POST(ApiEndPoints.login)
-  Future<LoginResponse> login(@Body() LoginRequest loginRequest);
+  Future<HttpResponse<LoginResponse>> login(@Body() LoginRequest loginRequest);
 
   @GET(ApiEndPoints.getNotice)
   Future<HttpResponse<PageResponseNoticeResponse>> getNotice({
