@@ -5,7 +5,14 @@ import '../../util/routes.dart';
 import 'login_button.dart';
 
 class LoginButtonSection extends StatelessWidget {
-  const LoginButtonSection({super.key});
+  final VoidCallback doGoogleLogin;
+  final VoidCallback doKakaoLogin;
+
+  const LoginButtonSection({
+    super.key,
+    required this.doGoogleLogin,
+    required this.doKakaoLogin,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +24,14 @@ class LoginButtonSection extends StatelessWidget {
           svgPath: "assets/images/icn_kakao.svg",
           backgroundColor: kakaoButtonBackgroundColor,
           textColor: kakaoTextColor,
-          onPressed: () => {},
+          onPressed: () => {doKakaoLogin()},
         ),
 
         LoginButton(
           text: "구글 계정으로 시작하기",
           svgPath: "assets/images/icn_google.svg",
           backgroundColor: googleButtonBackgroundColor,
-          onPressed: () => {},
+          onPressed: () => {doGoogleLogin()},
           textColor: grey700,
         ),
 

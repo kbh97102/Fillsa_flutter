@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "19346889738",
+    "project_id": "fillsa-flutter",
+    "storage_bucket": "fillsa-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19346889738:android:64915af986ddb7abf6d3f3",
+        "android_client_info": {
+          "package_name": "com.arakene.fillsa_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYAbnxm5Hw4BswRN9V-64qerZeEuPZqic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19346889738:android:f43148e8ba49de3ff6d3f3",
+        "android_client_info": {
+          "package_name": "com.example.fillsa_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYAbnxm5Hw4BswRN9V-64qerZeEuPZqic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

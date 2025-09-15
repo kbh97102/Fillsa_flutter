@@ -20,9 +20,11 @@ import 'data/network/fillsa_api.dart' as _i183;
 import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
+import 'data/repository/login_repository_impl.dart' as _i371;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
 import 'domain/repository/home_repository.dart' as _i405;
 import 'domain/repository/local_repository.dart' as _i279;
+import 'domain/repository/login_repository.dart' as _i373;
 import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
 import 'domain/usecase/clear_all_data_usecase.dart' as _i601;
 import 'domain/usecase/delete_quote_by_seq_usecase.dart' as _i457;
@@ -37,16 +39,19 @@ import 'domain/usecase/get_login_status_usecase.dart' as _i383;
 import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
 import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
 import 'domain/usecase/is_first_open_usecase.dart' as _i133;
+import 'domain/usecase/login_usecase.dart' as _i579;
 import 'domain/usecase/post_like_request_usecase.dart' as _i783;
 import 'domain/usecase/post_upload_image_usecase.dart' as _i426;
 import 'domain/usecase/set_access_token_usecase.dart' as _i173;
 import 'domain/usecase/set_first_open_usecase.dart' as _i504;
 import 'domain/usecase/set_image_uri_usecase.dart' as _i1000;
 import 'domain/usecase/set_refresh_token_usecase.dart' as _i904;
+import 'domain/usecase/test_error_code_usecase.dart' as _i1046;
 import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
+import 'presentation/viewmodels/login_viewmodel.dart' as _i15;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i174.GetIt init(
@@ -159,6 +164,25 @@ _i174.GetIt init(
   );
   gh.lazySingleton<_i904.SetRefreshTokenUseCase>(
     () => _i904.SetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i373.LoginRepository>(
+    () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),
+  );
+  gh.lazySingleton<_i579.LoginUseCase>(
+    () => _i579.LoginUseCase(gh<_i373.LoginRepository>()),
+  );
+  gh.lazySingleton<_i1046.TestErrorCodeUsecase>(
+    () => _i1046.TestErrorCodeUsecase(gh<_i373.LoginRepository>()),
+  );
+  gh.factory<_i15.LoginViewModel>(
+    () => _i15.LoginViewModel(
+      gh<_i173.SetAccessTokenUseCase>(),
+      gh<_i904.SetRefreshTokenUseCase>(),
+      gh<_i1037.GetLocalQuotesUseCase>(),
+      gh<_i601.ClearAllDataUseCase>(),
+      gh<_i1046.TestErrorCodeUsecase>(),
+      loginUseCase: gh<_i579.LoginUseCase>(),
+    ),
   );
   gh.factory<_i199.HomeViewModel>(
     () => _i199.HomeViewModel(

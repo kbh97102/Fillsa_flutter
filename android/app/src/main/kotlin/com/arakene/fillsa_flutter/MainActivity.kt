@@ -1,4 +1,4 @@
-package com.example.fillsa_flutter
+package com.arakene.fillsa_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
