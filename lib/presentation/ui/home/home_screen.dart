@@ -62,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
                                   isLogged: state.isLogged,
                                 );
                               },
-                              child: ImageSection(isLogin: false),
+                              child: ImageSection(isLogin: state.isLogged),
                             ),
                           ),
                         ],

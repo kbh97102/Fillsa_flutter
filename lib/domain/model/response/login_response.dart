@@ -1,9 +1,11 @@
-import 'package:json_annotation/json_annotation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
+part 'login_response.freezed.dart';
 part 'login_response.g.dart';
 
+@freezed
 @JsonSerializable()
-class LoginResponse {
+class LoginResponse with _$LoginResponse {
   @JsonKey(name: 'accessToken')
   final String accessToken;
 
