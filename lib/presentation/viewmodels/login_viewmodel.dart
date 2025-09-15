@@ -16,17 +16,22 @@ import 'package:injectable/injectable.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../domain/model/response/login_response.dart';
+import '../ui/login/login_result.dart';
 
 @injectable
-class LoginViewModel extends AsyncNotifier<void> {
+class LoginViewModel extends AsyncNotifier<LoginResult> {
   final LoginUseCase loginUseCase;
 
   LoginViewModel({required this.loginUseCase});
 
   @override
-  FutureOr<void> build() {}
+  FutureOr<LoginResult> build() {
+    return LoginInitial();
+  }
 
   Future<void> signInWithGoogle() async {
+    state = AsyncValue.loading();
+
     final GoogleSignIn signIn = GoogleSignIn.instance;
 
     final clientId = dotenv.env['CLIENT_ID'];
@@ -66,31 +71,32 @@ class LoginViewModel extends AsyncNotifier<void> {
     required String? nickName,
     required String? profileImageUri,
   }) async {
-    final fid = await FirebaseInstallations.instance.getId();
-    final platformInfo = await PackageInfo.fromPlatform();
+    state = await AsyncValue.guard(() async {
+      final fid = await FirebaseInstallations.instance.getId();
+      final platformInfo = await PackageInfo.fromPlatform();
 
-    final loginRequest = LoginRequest(
-      loginData: LoginData(
-        deviceData: DeviceData(
-          deviceId: fid,
-          osType: "ANDROID",
-          appVersion: _getOsType(),
-          osVersion: platformInfo.version,
-          deviceModel: platformInfo.buildNumber,
+      final loginRequest = LoginRequest(
+        loginData: LoginData(
+          deviceData: DeviceData(
+            deviceId: fid,
+            osType: "ANDROID",
+            appVersion: _getOsType(),
+            osVersion: platformInfo.version,
+            deviceModel: platformInfo.buildNumber,
+          ),
+          userData: UserData(
+            oAuthProvider: "GOOGLE",
+            oAuthId: id ?? "",
+            nickname: nickName ?? "",
+            profileImageUrl: profileImageUri ?? "",
+          ),
         ),
-        userData: UserData(
-          oAuthProvider: "GOOGLE",
-          oAuthId: id ?? "",
-          nickname: nickName ?? "",
-          profileImageUrl: profileImageUri ?? "",
-        ),
-      ),
-      syncData: List.empty(),
-    );
+        syncData: List.empty(),
+      );
 
-    final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
+      final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
 
-    logger.d("""
+      logger.d("""
     
     refresh ${loginResponse.refreshToken}
     access ${loginResponse.accessToken}{
@@ -98,6 +104,9 @@ class LoginViewModel extends AsyncNotifier<void> {
     seq ${loginResponse.memberSeq}
      
     """);
+
+      return LoginSuccess();
+    });
   }
 
   (String, String, String) _getLoginUserData(String? idToken) {
