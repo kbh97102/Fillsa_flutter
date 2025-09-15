@@ -7,6 +7,8 @@ import 'package:fillsa_flutter/domain/model/request/login_data.dart';
 import 'package:fillsa_flutter/domain/model/request/login_request.dart';
 import 'package:fillsa_flutter/domain/model/request/user_data.dart';
 import 'package:fillsa_flutter/domain/usecase/login_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/set_refresh_token_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/logger.dart';
 import 'package:firebase_app_installations/firebase_app_installations.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,8 +23,14 @@ import '../ui/login/login_result.dart';
 @injectable
 class LoginViewModel extends AsyncNotifier<LoginResult> {
   final LoginUseCase loginUseCase;
+  final SetAccessTokenUseCase setAccessTokenUseCase;
+  final SetRefreshTokenUseCase setRefreshTokenUseCase;
 
-  LoginViewModel({required this.loginUseCase});
+  LoginViewModel(
+    this.setAccessTokenUseCase,
+    this.setRefreshTokenUseCase, {
+    required this.loginUseCase,
+  });
 
   @override
   FutureOr<LoginResult> build() {
@@ -71,42 +79,41 @@ class LoginViewModel extends AsyncNotifier<LoginResult> {
     required String? nickName,
     required String? profileImageUri,
   }) async {
-    state = await AsyncValue.guard(() async {
-      final fid = await FirebaseInstallations.instance.getId();
-      final platformInfo = await PackageInfo.fromPlatform();
+    final fid = await FirebaseInstallations.instance.getId();
+    final platformInfo = await PackageInfo.fromPlatform();
 
-      final loginRequest = LoginRequest(
-        loginData: LoginData(
-          deviceData: DeviceData(
-            deviceId: fid,
-            osType: "ANDROID",
-            appVersion: _getOsType(),
-            osVersion: platformInfo.version,
-            deviceModel: platformInfo.buildNumber,
-          ),
-          userData: UserData(
-            oAuthProvider: "GOOGLE",
-            oAuthId: id ?? "",
-            nickname: nickName ?? "",
-            profileImageUrl: profileImageUri ?? "",
-          ),
+    // TODO: 로컬데이터 sync 맞추기
+
+    final loginRequest = LoginRequest(
+      loginData: LoginData(
+        deviceData: DeviceData(
+          deviceId: fid,
+          osType: "ANDROID",
+          appVersion: _getOsType(),
+          osVersion: platformInfo.version,
+          deviceModel: platformInfo.buildNumber,
         ),
-        syncData: List.empty(),
-      );
+        userData: UserData(
+          oAuthProvider: "GOOGLE",
+          oAuthId: id ?? "",
+          nickname: nickName ?? "",
+          profileImageUrl: profileImageUri ?? "",
+        ),
+      ),
+      syncData: List.empty(),
+    );
 
-      final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
+    final LoginResponse loginResponse = await loginUseCase.call(loginRequest);
 
-      logger.d("""
-    
-    refresh ${loginResponse.refreshToken}
-    access ${loginResponse.accessToken}{
-    nick ${loginResponse.nickname}
-    seq ${loginResponse.memberSeq}
-     
-    """);
+    _saveLoginResponse(loginResponse);
 
-      return LoginSuccess();
-    });
+    state = AsyncData(LoginSuccess());
+  }
+
+  _saveLoginResponse(LoginResponse loginResponse) {
+    setAccessTokenUseCase.call(loginResponse.accessToken);
+    setRefreshTokenUseCase.call(loginResponse.refreshToken);
+    // TODO: 로컬 데이터 제거
   }
 
   (String, String, String) _getLoginUserData(String? idToken) {

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../util/colors.dart';
-import '../../util/logger.dart';
 import '../guide/custom_svg.dart';
 import 'agreement_text.dart';
 import 'login_button_section.dart';
@@ -21,9 +20,7 @@ class LoginScreen extends ConsumerWidget {
         switch (next.value) {
           case LoginSuccess():
             {
-              HomeRoute().push(context);
-              // TODO: 로그인 성공 이후 화면 이동 처리
-              logger.d("여기오는거니???");
+              HomeRoute().go(context);
             }
         }
       }
