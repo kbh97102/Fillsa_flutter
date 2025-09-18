@@ -7,7 +7,9 @@ import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
 import 'package:fillsa_flutter/domain/model/yn.dart';
 import 'package:fillsa_flutter/domain/repository/local_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stream_transform/stream_transform.dart';
 
 @LazySingleton(as: LocalRepository)
 class LocalRepositoryImpl extends LocalRepository {
@@ -15,6 +17,9 @@ class LocalRepositoryImpl extends LocalRepository {
   final LocalDatabase localQuoteInfoDao;
   final _loginStatusController = StreamController<bool>.broadcast();
   late final _loginStatusStream = _loginStatusController.stream;
+
+  final _test = BehaviorSubject<bool>();
+  late final _testStream = _test.stream;
 
   LocalRepositoryImpl({required this.prefs, required this.localQuoteInfoDao});
 
@@ -85,11 +90,22 @@ class LocalRepositoryImpl extends LocalRepository {
         (refreshToken != null && refreshToken.isNotEmpty));
 
     _loginStatusController.add(isLogged);
+    _test.add(isLogged);
+  }
+
+  Future<bool> _getLogin() async {
+    final accessToken = await prefs.getString(PrefKey.accessToken);
+    final refreshToken = await prefs.getString(PrefKey.refreshToken);
+
+    return ((accessToken != null && accessToken.isNotEmpty) &&
+        (refreshToken != null && refreshToken.isNotEmpty));
   }
 
   @override
   Stream<bool> getLoginStatus() {
-    return _loginStatusStream;
+    final initStream = Stream.fromFuture(_getLogin());
+
+    return _test.startWithStream(initStream);
   }
 
   @override

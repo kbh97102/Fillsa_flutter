@@ -15,7 +15,7 @@ class UpdateLocalQuoteLikeUseCase extends UseCase<int?, UpdateLikeParams> {
   @override
   Future<int?> call(UpdateLikeParams param) {
     return _localRepository.updateLocalQuoteLike(
-      likeYN: param!.likeYN,
+      likeYN: param.likeYN,
       seq: param.seq,
     );
   }

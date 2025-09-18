@@ -35,13 +35,17 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
   final DateFormat _dateRequestFormat = DateFormat("yyyy-MM-dd");
 
   @override
-  FutureOr<HomeState> build() {
+  FutureOr<HomeState> build() async {
     ref.onDispose(() {
       _loginStatusSubscription.cancel();
     });
 
     getData().then((data) {
-      state = AsyncValue.data(HomeState.initial().copyWith(data: data));
+      state = AsyncValue.data(
+        (state.hasValue ? state.requireValue : HomeState.initial()).copyWith(
+          data: data,
+        ),
+      );
     });
 
     _loginStatusSubscription = _getLoginStatusUseCase().listen((status) {

@@ -1,5 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../util/colors.dart';
 import '../guide/custom_svg.dart';
@@ -17,7 +17,7 @@ class ImageSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         child: Stack(
           children: [
-            CustomSvg(svgName: "img_default_background", fit: BoxFit.fill),
+            CustomSvg(svgName: "img_share_1", fit: BoxFit.fill),
             if (!isLogin) ...[
               Container(color: grey700.withOpacityPercent(60)),
               Center(child: CustomSvg(svgName: "icn_lock")),
