@@ -24,7 +24,7 @@ abstract class FillsaApi {
   Future<DailyQuoteDto> getDailyQuote(@Query("quoteDate") String quoteDate);
 
   @POST(ApiEndPoints.postLike)
-  Future<SimpleIntResponse> postLike(
+  Future<int> postLike(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
     @Body() LikeRequest body,
   );

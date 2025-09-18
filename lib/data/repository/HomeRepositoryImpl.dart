@@ -5,7 +5,6 @@ import 'package:injectable/injectable.dart';
 import '../../domain/model/request/like_request.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/model/response/DailyQuoteDto.dart';
-import '../../domain/model/response/SimpleIntResponse.dart';
 import '../../domain/repository/home_repository.dart';
 import '../network/fillsa_api.dart';
 import '../network/fillsa_no_token_api.dart';
@@ -32,10 +31,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<SimpleIntResponse> postLike(
-    LikeRequest likeRequest,
-    int dailyQuoteSeq,
-  ) {
+  Future<int> postLike(LikeRequest likeRequest, int dailyQuoteSeq) {
     return _api.postLike(dailyQuoteSeq, likeRequest);
   }
 

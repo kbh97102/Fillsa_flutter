@@ -45,16 +45,13 @@ class _FillsaApi implements FillsaApi {
   }
 
   @override
-  Future<SimpleIntResponse> postLike(
-    int dailyQuoteSeq,
-    LikeRequest body,
-  ) async {
+  Future<int> postLike(int dailyQuoteSeq, LikeRequest body) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body.toJson());
-    final _options = _setStreamType<SimpleIntResponse>(
+    final _options = _setStreamType<int>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -64,10 +61,10 @@ class _FillsaApi implements FillsaApi {
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late SimpleIntResponse _value;
+    final _result = await _dio.fetch<int>(_options);
+    late int _value;
     try {
-      _value = SimpleIntResponse.fromJson(_result.data!);
+      _value = _result.data!;
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

@@ -21,6 +21,7 @@ import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'data/repository/login_repository_impl.dart' as _i371;
+import 'data/util/token_interceptor.dart' as _i672;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
 import 'domain/repository/home_repository.dart' as _i405;
 import 'domain/repository/local_repository.dart' as _i279;
@@ -62,20 +63,7 @@ _i174.GetIt init(
   final gh = _i526.GetItHelper(getIt, environment, environmentFilter);
   final apiModule = _$ApiModule();
   gh.factory<_i17.LocalDatabase>(() => _i17.LocalDatabase());
-  gh.lazySingleton<_i361.Dio>(() => apiModule.dio());
   gh.lazySingleton<_i460.SharedPreferencesAsync>(() => apiModule.providePref());
-  gh.lazySingleton<_i183.FillsaApi>(
-    () => apiModule.provideFillsaApi(gh<_i361.Dio>()),
-  );
-  gh.lazySingleton<_i704.FillsaNoTokenApi>(
-    () => apiModule.provideFillsaNoTokenApi(gh<_i361.Dio>()),
-  );
-  gh.lazySingleton<_i405.HomeRepository>(
-    () => _i104.HomeRepositoryImpl(
-      gh<_i183.FillsaApi>(),
-      gh<_i704.FillsaNoTokenApi>(),
-    ),
-  );
   gh.lazySingleton<_i279.LocalRepository>(
     () => _i239.LocalRepositoryImpl(
       prefs: gh<_i460.SharedPreferencesAsync>(),
@@ -98,18 +86,6 @@ _i174.GetIt init(
       engAuthor: gh<String>(),
       authorUrl: gh<String>(),
     ),
-  );
-  gh.lazySingleton<_i783.PostLikeUseCase>(
-    () => _i783.PostLikeUseCase(gh<_i405.HomeRepository>()),
-  );
-  gh.lazySingleton<_i580.GetDailyNonMemberUseCase>(
-    () => _i580.GetDailyNonMemberUseCase(gh<_i405.HomeRepository>()),
-  );
-  gh.lazySingleton<_i12.GetDailyQuoteUseCase>(
-    () => _i12.GetDailyQuoteUseCase(gh<_i405.HomeRepository>()),
-  );
-  gh.lazySingleton<_i426.PostUploadImageUseCase>(
-    () => _i426.PostUploadImageUseCase(gh<_i405.HomeRepository>()),
   );
   gh.lazySingleton<_i751.GetTokenExpiredUseCase>(
     () => _i751.GetTokenExpiredUseCase(gh<_i279.LocalRepository>()),
@@ -164,6 +140,36 @@ _i174.GetIt init(
   );
   gh.lazySingleton<_i904.SetRefreshTokenUseCase>(
     () => _i904.SetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.factory<_i672.TokenInterceptor>(
+    () => _i672.TokenInterceptor(gh<_i193.GetAccessTokenUseCase>()),
+  );
+  gh.lazySingleton<_i361.Dio>(
+    () => apiModule.dio(gh<_i672.TokenInterceptor>()),
+  );
+  gh.lazySingleton<_i183.FillsaApi>(
+    () => apiModule.provideFillsaApi(gh<_i361.Dio>()),
+  );
+  gh.lazySingleton<_i704.FillsaNoTokenApi>(
+    () => apiModule.provideFillsaNoTokenApi(gh<_i361.Dio>()),
+  );
+  gh.lazySingleton<_i405.HomeRepository>(
+    () => _i104.HomeRepositoryImpl(
+      gh<_i183.FillsaApi>(),
+      gh<_i704.FillsaNoTokenApi>(),
+    ),
+  );
+  gh.lazySingleton<_i783.PostLikeUseCase>(
+    () => _i783.PostLikeUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i580.GetDailyNonMemberUseCase>(
+    () => _i580.GetDailyNonMemberUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i12.GetDailyQuoteUseCase>(
+    () => _i12.GetDailyQuoteUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i426.PostUploadImageUseCase>(
+    () => _i426.PostUploadImageUseCase(gh<_i405.HomeRepository>()),
   );
   gh.lazySingleton<_i373.LoginRepository>(
     () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),

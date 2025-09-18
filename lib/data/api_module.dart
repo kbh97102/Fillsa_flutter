@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fillsa_flutter/data/util/token_interceptor.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,7 @@ abstract class ApiModule {
   FillsaNoTokenApi provideFillsaNoTokenApi(Dio dio) => FillsaNoTokenApi(dio);
 
   @lazySingleton
-  Dio dio() {
+  Dio dio(TokenInterceptor tokenInterceptor) {
     final baseUrl = "https://www.fillsa.store";
 
     final options = BaseOptions(
@@ -27,8 +28,8 @@ abstract class ApiModule {
 
     final dio = Dio(options);
 
-    // 로깅 인터셉터 추가 (디버깅 시 매우 유용)
     dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
+    dio.interceptors.add(tokenInterceptor);
 
     return dio;
   }
