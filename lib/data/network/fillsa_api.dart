@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:retrofit/dio.dart';
 import 'package:retrofit/error_logger.dart';
 import 'package:retrofit/http.dart';
 
@@ -21,7 +22,9 @@ abstract class FillsaApi {
   factory FillsaApi(Dio dio, {String baseUrl}) = _FillsaApi;
 
   @GET(ApiEndPoints.getDailyQuote)
-  Future<DailyQuoteDto> getDailyQuote(@Query("quoteDate") String quoteDate);
+  Future<HttpResponse<DailyQuoteDto>> getDailyQuote(
+    @Query("quoteDate") String quoteDate,
+  );
 
   @POST(ApiEndPoints.postLike)
   Future<int> postLike(

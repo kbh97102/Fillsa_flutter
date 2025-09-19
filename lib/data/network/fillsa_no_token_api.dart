@@ -18,7 +18,7 @@ abstract class FillsaNoTokenApi {
   Future<HttpResponse<String>> testErrorCode(@Path("code") int code);
 
   @GET(ApiEndPoints.getDailyQuoteNonMember)
-  Future<DailyQuotaNoToken> getDailyQuoteNonMember(
+  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember(
     @Query("quoteDate") String quoteDate,
   );
 

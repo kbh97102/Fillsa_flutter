@@ -9,6 +9,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i687;
+
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -171,6 +173,18 @@ _i174.GetIt init(
   gh.lazySingleton<_i426.PostUploadImageUseCase>(
     () => _i426.PostUploadImageUseCase(gh<_i405.HomeRepository>()),
   );
+  gh.factory<_i199.HomeViewModel>(
+    () => _i199.HomeViewModel(
+      gh<_i580.GetDailyNonMemberUseCase>(),
+      gh<_i383.GetLoginStatusUseCase>(),
+      gh<_i783.PostLikeUseCase>(),
+      gh<_i531.FindLocalQuoteByIdUseCase>(),
+      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
+      gh<_i359.AddLocalQuoteUseCase>(),
+      gh<_i12.GetDailyQuoteUseCase>(),
+      gh<_i687.StreamSubscription<bool?>>(),
+    ),
+  );
   gh.lazySingleton<_i373.LoginRepository>(
     () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),
   );
@@ -188,16 +202,6 @@ _i174.GetIt init(
       gh<_i601.ClearAllDataUseCase>(),
       gh<_i1046.TestErrorCodeUsecase>(),
       loginUseCase: gh<_i579.LoginUseCase>(),
-    ),
-  );
-  gh.factory<_i199.HomeViewModel>(
-    () => _i199.HomeViewModel(
-      gh<_i580.GetDailyNonMemberUseCase>(),
-      gh<_i383.GetLoginStatusUseCase>(),
-      gh<_i783.PostLikeUseCase>(),
-      gh<_i531.FindLocalQuoteByIdUseCase>(),
-      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
-      gh<_i359.AddLocalQuoteUseCase>(),
     ),
   );
   return getIt;

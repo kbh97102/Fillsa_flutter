@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:fillsa_flutter/data/repository/base_repository.dart';
+import 'package:fillsa_flutter/domain/model/api_result.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/model/request/like_request.dart';
@@ -10,7 +12,7 @@ import '../network/fillsa_api.dart';
 import '../network/fillsa_no_token_api.dart';
 
 @LazySingleton(as: HomeRepository)
-class HomeRepositoryImpl implements HomeRepository {
+class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   final FillsaApi _api;
   final FillsaNoTokenApi _noTokenApi;
   HomeRepositoryImpl(this._api, this._noTokenApi);
@@ -21,13 +23,15 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<DailyQuoteDto> getDailyQuote(String quoteDate) {
-    return _api.getDailyQuote(quoteDate);
+  Future<ApiResult<DailyQuoteDto>> getDailyQuote(String quoteDate) {
+    return safeApiCall(() => _api.getDailyQuote(quoteDate));
   }
 
   @override
-  Future<DailyQuotaNoToken> getDailyQuoteNoToken(String quoteDate) async {
-    return _noTokenApi.getDailyQuoteNonMember(quoteDate);
+  Future<ApiResult<DailyQuotaNoToken>> getDailyQuoteNoToken(
+    String quoteDate,
+  ) async {
+    return safeApiCall(() => _noTokenApi.getDailyQuoteNonMember(quoteDate));
   }
 
   @override

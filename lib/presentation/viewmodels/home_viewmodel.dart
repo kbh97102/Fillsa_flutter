@@ -6,11 +6,13 @@ import 'package:fillsa_flutter/domain/model/response/DailyQuoteDto.dart';
 import 'package:fillsa_flutter/domain/model/yn.dart';
 import 'package:fillsa_flutter/domain/usecase/add_local_quote_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/find_local_quote_by_id_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/get_daily_quote_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/post_like_request_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/update_local_quote_like_usecase.dart';
 import 'package:fillsa_flutter/presentation/state/HomeState.dart';
 import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
+import 'package:fillsa_flutter/presentation/viewmodels/base_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:intl/intl.dart';
@@ -22,13 +24,14 @@ import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
 import '../util/LocaleOption.dart';
 
 @injectable
-class HomeViewModel extends AsyncNotifier<HomeState> {
+class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final GetDailyNonMemberUseCase _getDailyNonMemberUseCase;
   final GetLoginStatusUseCase _getLoginStatusUseCase;
   final PostLikeUseCase _postLikeUseCase;
   final FindLocalQuoteByIdUseCase _findLocalQuoteByIdUseCase;
   final UpdateLocalQuoteLikeUseCase _updateLocalQuoteLikeUseCase;
   final AddLocalQuoteUseCase _addLocalQuoteUseCase;
+  final GetDailyQuoteUseCase _getDailyQuoteUseCase;
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
@@ -41,6 +44,10 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     });
 
     getData().then((data) {
+      if (data == null) {
+        return;
+      }
+
       state = AsyncValue.data(
         (state.hasValue ? state.requireValue : HomeState.initial()).copyWith(
           data: data,
@@ -70,10 +77,12 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
     this._findLocalQuoteByIdUseCase,
     this._updateLocalQuoteLikeUseCase,
     this._addLocalQuoteUseCase,
+    this._getDailyQuoteUseCase,
+    this._loginStatusSubscription,
   ) {}
 
   // TODO: 아무리 생각해도 state와 연동을 하려면 APiResult는 쓸모없는 것 같다.
-  Future<DailyQuoteDto> getData() async {
+  Future<DailyQuoteDto?> getData() async {
     final targetDate = state.hasValue
         ? state.requireValue.targetDate
         : DateTime.now();
@@ -82,20 +91,34 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
         ? _dateRequestFormat.format(targetDate)
         : _dateRequestFormat.format(DateTime.now());
 
-    final data = await _getDailyNonMemberUseCase.call(requestDate);
+    if (state.requireValue.isLogged) {
+      final data = await getResponse(
+        () => _getDailyQuoteUseCase.call(requestDate),
+      );
 
-    final DailyQuotaNoToken noTokenDto = data;
-    final uiQuote = DailyQuoteDto(
-      likeYn: 'N',
-      imagePath: "",
-      dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
-      korQuote: noTokenDto.korQuote,
-      engQuote: noTokenDto.engQuote,
-      korAuthor: noTokenDto.korAuthor,
-      engAuthor: noTokenDto.engAuthor,
-      authorUrl: noTokenDto.authorUrl,
-    );
-    return uiQuote;
+      return data;
+    } else {
+      final data = await getResponse(
+        () => _getDailyNonMemberUseCase.call(requestDate),
+      );
+
+      if (data == null) {
+        return null;
+      }
+
+      final DailyQuotaNoToken noTokenDto = data;
+      final uiQuote = DailyQuoteDto(
+        likeYn: 'N',
+        imagePath: "",
+        dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
+        korQuote: noTokenDto.korQuote,
+        engQuote: noTokenDto.engQuote,
+        korAuthor: noTokenDto.korAuthor,
+        engAuthor: noTokenDto.engAuthor,
+        authorUrl: noTokenDto.authorUrl,
+      );
+      return uiQuote;
+    }
   }
 
   void postLike(bool isLiked) async {
@@ -128,6 +151,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
         state = await AsyncValue.guard(() async {
           final data = await getData();
 
+          if (data == null) {
+            // TODO: 에러 하나 만들기
+            throw Exception("Data is Null");
+          }
+
           return state.requireValue.copyWith(data: data);
         });
       }
@@ -145,6 +173,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> {
         );
         state = await AsyncValue.guard(() async {
           final data = await getData();
+
+          if (data == null) {
+            // TODO: 에러 하나 만들기
+            throw Exception("Data is Null");
+          }
 
           return state.requireValue.copyWith(data: data);
         });

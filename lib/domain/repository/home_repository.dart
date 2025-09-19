@@ -1,13 +1,15 @@
 import 'dart:io';
 
+import 'package:fillsa_flutter/domain/model/api_result.dart';
+
 import '../model/request/like_request.dart';
 import '../model/response/DailyQuotaNoToken.dart';
 import '../model/response/DailyQuoteDto.dart';
 
 abstract class HomeRepository {
-  Future<DailyQuotaNoToken> getDailyQuoteNoToken(String quoteDate);
+  Future<ApiResult<DailyQuotaNoToken>> getDailyQuoteNoToken(String quoteDate);
 
-  Future<DailyQuoteDto> getDailyQuote(String quoteDate);
+  Future<ApiResult<DailyQuoteDto>> getDailyQuote(String quoteDate);
 
   Future<int> postLike(LikeRequest likeRequest, int dailyQuoteSeq);
 
