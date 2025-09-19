@@ -21,6 +21,7 @@ import 'package:riverpod/riverpod.dart';
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
+import '../../domain/usecase/get_local_quotes_usecase.dart';
 import '../util/LocaleOption.dart';
 
 @injectable
@@ -32,7 +33,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final UpdateLocalQuoteLikeUseCase _updateLocalQuoteLikeUseCase;
   final AddLocalQuoteUseCase _addLocalQuoteUseCase;
   final GetDailyQuoteUseCase _getDailyQuoteUseCase;
-  // final GetLocalQuotesUseCase _getLocalQuotesUseCase;
+  final GetLocalQuotesUseCase _getLocalQuotesUseCase;
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
@@ -46,8 +47,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     this._updateLocalQuoteLikeUseCase,
     this._addLocalQuoteUseCase,
     this._getDailyQuoteUseCase,
-    this._loginStatusSubscription,
-    // this._getLocalQuotesUseCase,
+    this._getLocalQuotesUseCase,
   ) {}
 
   @override
@@ -64,6 +64,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       state = AsyncValue.data(
         (state.hasValue ? state.requireValue : HomeState.initial()).copyWith(
           data: data,
+          isLiked: data.likeYn == YN.Y.name,
         ),
       );
     });
@@ -93,14 +94,14 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
         ? _dateRequestFormat.format(targetDate)
         : _dateRequestFormat.format(DateTime.now());
 
-    if (state.requireValue.isLogged) {
+    if (state.hasValue && state.requireValue.isLogged) {
       final data = await getResponse(
         () => _getDailyQuoteUseCase.call(requestDate),
       );
 
       return data;
     } else {
-      // final localData = await _getLocalQuotesUseCase();
+      final localData = await _getLocalQuotesUseCase();
 
       final data = await getResponse(
         () => _getDailyNonMemberUseCase.call(requestDate),
@@ -110,20 +111,22 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
         return null;
       }
 
-      // LocalQuoteInfo? localSavedData;
-      //
-      // try {
-      //   localSavedData = localData.firstWhere(
-      //     (target) => target.dailyQuoteSeq == data.dailyQuoteSeq,
-      //   );
-      // } catch (e) {
-      //   localSavedData = null;
-      // }
+      LocalQuoteInfo? localSavedData;
+
+      try {
+        localSavedData = localData.firstWhere(
+          (target) => target.dailyQuoteSeq == data.dailyQuoteSeq,
+        );
+      } catch (e) {
+        localSavedData = null;
+      }
 
       final DailyQuotaNoToken noTokenDto = data;
 
+      final liked = localSavedData == null ? "N" : localSavedData.likeYn;
+
       final uiQuote = DailyQuoteDto(
-        likeYn: "N",
+        likeYn: liked,
         imagePath: "",
         dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
         korQuote: noTokenDto.korQuote,
@@ -150,7 +153,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
         ),
       );
     } else {
-      _postLocalLike();
+      _postLocalLike(isLiked);
     }
   }
 
@@ -171,7 +174,10 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
             throw Exception("Data is Null");
           }
 
-          return state.requireValue.copyWith(data: data);
+          return state.requireValue.copyWith(
+            data: data,
+            isLiked: data.likeYn == YN.Y.name,
+          );
         });
       }
     }
@@ -194,7 +200,10 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
             throw Exception("Data is Null");
           }
 
-          return state.requireValue.copyWith(data: data);
+          return state.requireValue.copyWith(
+            data: data,
+            isLiked: data.likeYn == YN.Y.name,
+          );
         });
       }
     }
@@ -206,14 +215,14 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     );
   }
 
-  void _postLocalLike() async {
+  void _postLocalLike(bool isLiked) async {
     final quote = state.requireValue.data;
     final localQuote = await _findLocalQuoteByIdUseCase.call(
       quote.dailyQuoteSeq,
     );
     if (localQuote != null) {
       _updateLocalQuoteLikeUseCase.call((
-        likeYN: (localQuote.likeYn == YN.Y.name ? YN.Y : YN.N),
+        likeYN: (isLiked ? YN.Y : YN.N),
         seq: localQuote.dailyQuoteSeq,
       ));
     } else {

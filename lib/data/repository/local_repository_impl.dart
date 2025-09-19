@@ -194,6 +194,7 @@ class LocalRepositoryImpl extends LocalRepository {
       if (entity != null &&
           entity.korTyping.isEmpty &&
           entity.engTyping.isEmpty) {
+        localQuoteInfoDao.deleteQuoteById(seq);
         return 0;
       }
     }

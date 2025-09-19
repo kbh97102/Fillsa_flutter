@@ -9,8 +9,6 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i687;
-
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -182,7 +180,7 @@ _i174.GetIt init(
       gh<_i177.UpdateLocalQuoteLikeUseCase>(),
       gh<_i359.AddLocalQuoteUseCase>(),
       gh<_i12.GetDailyQuoteUseCase>(),
-      gh<_i687.StreamSubscription<bool?>>(),
+      gh<_i1037.GetLocalQuotesUseCase>(),
     ),
   );
   gh.lazySingleton<_i373.LoginRepository>(
