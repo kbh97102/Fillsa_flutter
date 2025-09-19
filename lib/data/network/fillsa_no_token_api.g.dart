@@ -46,12 +46,14 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
   }
 
   @override
-  Future<DailyQuotaNoToken> getDailyQuoteNonMember(String quoteDate) async {
+  Future<HttpResponse<DailyQuotaNoToken>> getDailyQuoteNonMember(
+    String quoteDate,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'quoteDate': quoteDate};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DailyQuotaNoToken>(
+    final _options = _setStreamType<HttpResponse<DailyQuotaNoToken>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -69,7 +71,8 @@ class _FillsaNoTokenApi implements FillsaNoTokenApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override

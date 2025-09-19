@@ -18,12 +18,12 @@ class _FillsaApi implements FillsaApi {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<DailyQuoteDto> getDailyQuote(String quoteDate) async {
+  Future<HttpResponse<DailyQuoteDto>> getDailyQuote(String quoteDate) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'quoteDate': quoteDate};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<DailyQuoteDto>(
+    final _options = _setStreamType<HttpResponse<DailyQuoteDto>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -41,7 +41,8 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override

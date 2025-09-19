@@ -32,10 +32,23 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final UpdateLocalQuoteLikeUseCase _updateLocalQuoteLikeUseCase;
   final AddLocalQuoteUseCase _addLocalQuoteUseCase;
   final GetDailyQuoteUseCase _getDailyQuoteUseCase;
+  // final GetLocalQuotesUseCase _getLocalQuotesUseCase;
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
   final DateFormat _dateRequestFormat = DateFormat("yyyy-MM-dd");
+
+  HomeViewModel(
+    this._getDailyNonMemberUseCase,
+    this._getLoginStatusUseCase,
+    this._postLikeUseCase,
+    this._findLocalQuoteByIdUseCase,
+    this._updateLocalQuoteLikeUseCase,
+    this._addLocalQuoteUseCase,
+    this._getDailyQuoteUseCase,
+    this._loginStatusSubscription,
+    // this._getLocalQuotesUseCase,
+  ) {}
 
   @override
   FutureOr<HomeState> build() async {
@@ -70,17 +83,6 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     return HomeState.initial();
   }
 
-  HomeViewModel(
-    this._getDailyNonMemberUseCase,
-    this._getLoginStatusUseCase,
-    this._postLikeUseCase,
-    this._findLocalQuoteByIdUseCase,
-    this._updateLocalQuoteLikeUseCase,
-    this._addLocalQuoteUseCase,
-    this._getDailyQuoteUseCase,
-    this._loginStatusSubscription,
-  ) {}
-
   // TODO: 아무리 생각해도 state와 연동을 하려면 APiResult는 쓸모없는 것 같다.
   Future<DailyQuoteDto?> getData() async {
     final targetDate = state.hasValue
@@ -98,6 +100,8 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
 
       return data;
     } else {
+      // final localData = await _getLocalQuotesUseCase();
+
       final data = await getResponse(
         () => _getDailyNonMemberUseCase.call(requestDate),
       );
@@ -106,9 +110,20 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
         return null;
       }
 
+      // LocalQuoteInfo? localSavedData;
+      //
+      // try {
+      //   localSavedData = localData.firstWhere(
+      //     (target) => target.dailyQuoteSeq == data.dailyQuoteSeq,
+      //   );
+      // } catch (e) {
+      //   localSavedData = null;
+      // }
+
       final DailyQuotaNoToken noTokenDto = data;
+
       final uiQuote = DailyQuoteDto(
-        likeYn: 'N',
+        likeYn: "N",
         imagePath: "",
         dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
         korQuote: noTokenDto.korQuote,
