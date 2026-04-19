@@ -26,7 +26,7 @@ class ListViewModel extends AsyncNotifier<QuoteListState> with BaseViewModel {
   final UpdateLocalQuoteMemoUseCase _updateLocalQuoteMemoUseCase;
   final PostSaveMemoUseCase _postSaveMemoUseCase;
 
-  late final StreamSubscription<bool?> _loginStatusSubscription;
+  StreamSubscription<bool?>? _loginStatusSubscription;
 
   static const int _pageSize = 30;
   final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
@@ -42,8 +42,11 @@ class ListViewModel extends AsyncNotifier<QuoteListState> with BaseViewModel {
 
   @override
   FutureOr<QuoteListState> build() async {
+    _loginStatusSubscription?.cancel();
+    _loginStatusSubscription = null;
+
     ref.onDispose(() {
-      _loginStatusSubscription.cancel();
+      _loginStatusSubscription?.cancel();
       onDispose();
     });
 
@@ -59,6 +62,7 @@ class ListViewModel extends AsyncNotifier<QuoteListState> with BaseViewModel {
       if (!state.hasValue) return;
       final logged = status == true;
       final current = state.requireValue;
+      if (current.isLogged == logged) return;
       state = AsyncValue.data(
         current.copyWith(
           isLogged: logged,
