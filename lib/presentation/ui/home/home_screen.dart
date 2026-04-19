@@ -193,8 +193,10 @@ class HomeScreen extends ConsumerWidget {
       cancelButtonBorderColor: purple01,
       cancelTextColor: purple01,
       okButtonOnClick: () async {
-        Navigator.pop(context);
-        Navigator.pop(context);
+        if (!context.mounted) return;
+        Navigator.pop(context); // 삭제 확인 다이얼로그
+        if (!context.mounted) return;
+        Navigator.pop(context); // 이미지 다이얼로그
         await ref.read(homeViewModelProvider.notifier).deleteImage();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

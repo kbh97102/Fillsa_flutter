@@ -64,76 +64,80 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       _loginStatusSubscription.cancel();
     });
 
-    getData().then((data) {
-      if (data == null) {
-        return;
-      }
+    // 1. 로그인 상태를 먼저 확정한 뒤 getData() 호출
+    //    LocalRepository가 BehaviorSubject를 사용하므로 .first는 즉시 반환됨
+    bool initialIsLogged = false;
+    try {
+      initialIsLogged = await _getLoginStatusUseCase().first == true;
+    } catch (_) {}
 
+    // 2. 확정된 로그인 상태를 넘겨 올바른 API(회원/비회원) 호출
+    final data = await getData(isLoggedOverride: initialIsLogged);
+
+    // 3. 로그인 상태가 이후 변경될 때: 상태 갱신 + 데이터 재조회
+    //    skip(1) — 첫 번째 방출(이미 처리한 initialIsLogged)은 무시
+    _loginStatusSubscription = _getLoginStatusUseCase().skip(1).listen((status) {
+      if (!state.hasValue) return;
+      final isLogged = status == true;
+      state = AsyncValue.data(state.requireValue.copyWith(isLogged: isLogged));
+      _refreshData();
+    });
+
+    return HomeState.initial().copyWith(
+      isLogged: initialIsLogged,
+      data: data ?? DailyQuoteDto.empty,
+      isLiked: data?.likeYn == YN.Y.name,
+    );
+  }
+
+  // 로그인 상태 변경 후 현재 날짜 기준으로 데이터 재조회
+  void _refreshData() async {
+    if (!state.hasValue) return;
+    final data = await getData();
+    if (data != null && state.hasValue) {
       state = AsyncValue.data(
-        (state.hasValue ? state.requireValue : HomeState.initial()).copyWith(
+        state.requireValue.copyWith(
           data: data,
           isLiked: data.likeYn == YN.Y.name,
         ),
       );
-    });
-
-    _loginStatusSubscription = _getLoginStatusUseCase().listen((status) {
-      if (state.hasValue) {
-        state = AsyncValue.data(
-          state.requireValue.copyWith(isLogged: status == true),
-        );
-      } else {
-        state = AsyncValue.data(
-          HomeState.initial().copyWith(isLogged: status == true),
-        );
-      }
-    });
-
-    return HomeState.initial();
+    }
   }
 
-  Future<DailyQuoteDto?> getData() async {
-    final targetDate = state.hasValue
-        ? state.requireValue.targetDate
-        : DateTime.now();
+  /// [isLoggedOverride] — build() 초기화 시 state가 확정되기 전에 호출할 경우 직접 전달
+  Future<DailyQuoteDto?> getData({bool? isLoggedOverride}) async {
+    final targetDate =
+        state.hasValue ? state.requireValue.targetDate : DateTime.now();
 
     final requestDate = targetDate != null
         ? _dateRequestFormat.format(targetDate)
         : _dateRequestFormat.format(DateTime.now());
 
-    if (state.hasValue && state.requireValue.isLogged) {
-      final data = await getResponse(
-        () => _getDailyQuoteUseCase.call(requestDate),
-      );
+    final isLogged =
+        isLoggedOverride ?? (state.hasValue && state.requireValue.isLogged);
 
-      return data;
+    if (isLogged) {
+      return getResponse(() => _getDailyQuoteUseCase.call(requestDate));
     } else {
       final localData = await _getLocalQuotesUseCase();
-
       final data = await getResponse(
         () => _getDailyNonMemberUseCase.call(requestDate),
       );
 
-      if (data == null) {
-        return null;
-      }
+      if (data == null) return null;
 
+      final DailyQuotaNoToken noTokenDto = data;
       LocalQuoteInfo? localSavedData;
-
       try {
         localSavedData = localData.firstWhere(
-          (target) => target.dailyQuoteSeq == data.dailyQuoteSeq,
+          (t) => t.dailyQuoteSeq == data.dailyQuoteSeq,
         );
-      } catch (e) {
+      } catch (_) {
         localSavedData = null;
       }
 
-      final DailyQuotaNoToken noTokenDto = data;
-
-      final liked = localSavedData == null ? "N" : localSavedData.likeYn;
-
-      final uiQuote = DailyQuoteDto(
-        likeYn: liked,
+      return DailyQuoteDto(
+        likeYn: localSavedData?.likeYn ?? YN.N.name,
         imagePath: "",
         dailyQuoteSeq: noTokenDto.dailyQuoteSeq,
         korQuote: noTokenDto.korQuote,
@@ -142,21 +146,19 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
         engAuthor: noTokenDto.engAuthor,
         authorUrl: noTokenDto.authorUrl,
       );
-      return uiQuote;
     }
   }
 
   void postLike(bool isLiked) async {
+    if (!state.hasValue) return;
     final isLogged = state.requireValue.isLogged;
     state = AsyncValue.data(state.requireValue.copyWith(isLiked: isLiked));
     if (isLogged) {
       final quote = state.requireValue.data;
-      final String like = isLiked ? YN.Y.name : YN.N.name;
-
       _postLikeUseCase.call(
         PostLikeParams(
           dailyQuoteSeq: quote.dailyQuoteSeq,
-          likeRequest: LikeRequest(likeYn: like),
+          likeRequest: LikeRequest(likeYn: isLiked ? YN.Y.name : YN.N.name),
         ),
       );
     } else {
@@ -165,59 +167,46 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   }
 
   Future<void> beforeOnClick() async {
+    if (!state.hasValue) return;
     final targetDate = state.requireValue.targetDate;
+    if (targetDate == null) return;
 
-    if (targetDate != null) {
-      final target = DateUtils.addDaysToDate(targetDate, -1);
-      if (!target.isBefore(DateCondition.startDay)) {
-        state = AsyncValue.data(
-          state.requireValue.copyWith(targetDate: target),
-        );
-        state = await AsyncValue.guard(() async {
-          final data = await getData();
+    final target = DateUtils.addDaysToDate(targetDate, -1);
+    if (target.isBefore(DateCondition.startDay)) return;
 
-          if (data == null) {
-            throw Exception("Data is Null");
-          }
-
-          return state.requireValue.copyWith(
-            data: data,
-            isLiked: data.likeYn == YN.Y.name,
-          );
-        });
-      }
-    }
+    state = AsyncValue.data(state.requireValue.copyWith(targetDate: target));
+    state = await AsyncValue.guard(() async {
+      final data = await getData();
+      if (data == null) throw Exception("Data is Null");
+      return state.requireValue.copyWith(
+        data: data,
+        isLiked: data.likeYn == YN.Y.name,
+      );
+    });
   }
 
-  void afterOnClick() async {
+  Future<void> afterOnClick() async {
+    if (!state.hasValue) return;
     final targetDate = state.requireValue.targetDate;
+    if (targetDate == null) return;
 
-    if (targetDate != null) {
-      final target = DateUtils.addDaysToDate(targetDate, 1);
-      if (!target.isAfter(DateTime.now())) {
-        state = AsyncValue.data(
-          state.requireValue.copyWith(targetDate: target),
-        );
-        state = await AsyncValue.guard(() async {
-          final data = await getData();
+    final target = DateUtils.addDaysToDate(targetDate, 1);
+    if (target.isAfter(DateTime.now())) return;
 
-          if (data == null) {
-            throw Exception("Data is Null");
-          }
-
-          return state.requireValue.copyWith(
-            data: data,
-            isLiked: data.likeYn == YN.Y.name,
-          );
-        });
-      }
-    }
+    state = AsyncValue.data(state.requireValue.copyWith(targetDate: target));
+    state = await AsyncValue.guard(() async {
+      final data = await getData();
+      if (data == null) throw Exception("Data is Null");
+      return state.requireValue.copyWith(
+        data: data,
+        isLiked: data.likeYn == YN.Y.name,
+      );
+    });
   }
 
   void updateLocale(LocaleOption selected) {
-    state = AsyncValue.data(
-      state.requireValue.copyWith(currentLocale: selected),
-    );
+    if (!state.hasValue) return;
+    state = AsyncValue.data(state.requireValue.copyWith(currentLocale: selected));
   }
 
   Future<void> uploadImage(File file) async {
@@ -227,11 +216,10 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       await _postUploadImageUseCase.call(
         PostUploadImageParams(dailyQuoteSeq: seq, imageFile: file),
       );
+      // 업로드 후 회원 API 재조회하여 최신 imagePath 반영
       final refreshed = await getData();
       if (refreshed != null && state.hasValue) {
-        state = AsyncValue.data(
-          state.requireValue.copyWith(data: refreshed),
-        );
+        state = AsyncValue.data(state.requireValue.copyWith(data: refreshed));
       }
     } catch (e) {
       emitError(e.toString());
@@ -244,7 +232,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     try {
       await _deleteUploadImageUseCase.call(seq);
       if (state.hasValue) {
-        final updated = state.requireValue.data.copyWith(imagePath: "");
+        final updated = state.requireValue.data.copyWith(imagePath: null);
         state = AsyncValue.data(state.requireValue.copyWith(data: updated));
       }
     } catch (e) {
@@ -253,10 +241,9 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   }
 
   void _postLocalLike(bool isLiked) async {
+    if (!state.hasValue) return;
     final quote = state.requireValue.data;
-    final localQuote = await _findLocalQuoteByIdUseCase.call(
-      quote.dailyQuoteSeq,
-    );
+    final localQuote = await _findLocalQuoteByIdUseCase.call(quote.dailyQuoteSeq);
     if (localQuote != null) {
       _updateLocalQuoteLikeUseCase.call((
         likeYN: (isLiked ? YN.Y : YN.N),
