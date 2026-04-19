@@ -23,7 +23,7 @@ class ThemeNotifier extends AsyncNotifier<ThemeMode> {
   static ThemeMode _fromString(String? value) => switch (value) {
         'light' => ThemeMode.light,
         'dark' => ThemeMode.dark,
-        _ => ThemeMode.system,
+        _ => ThemeMode.light,
       };
 
   static String _toString(ThemeMode mode) => switch (mode) {

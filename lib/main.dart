@@ -1,8 +1,8 @@
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/login_status_notifier.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
+import 'package:fillsa_flutter/presentation/theme/app_theme.dart';
 import 'package:fillsa_flutter/presentation/util/theme_notifier.dart';
-import 'package:fillsa_flutter/presentation/util/typo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,10 +15,6 @@ import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
 import 'di_config.dart';
 import 'firebase_options.dart';
-
-final fillsaTheme = ThemeData(
-  extensions: <ThemeExtension<dynamic>>[fillsaTypoData],
-);
 
 void main() async {
   configureDependencies();
@@ -83,8 +79,8 @@ class _MyAppState extends ConsumerState<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: fillsaTheme,
-      darkTheme: fillsaTheme,
+      theme: lightThemeData,
+      darkTheme: darkThemeData,
       themeMode: themeMode,
       routerConfig: _router,
       title: "Fillsa",

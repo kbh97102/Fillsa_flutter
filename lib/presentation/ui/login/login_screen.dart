@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/login/login_result.dart';
 import 'package:fillsa_flutter/presentation/ui/login/login_viewmodel_provider.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
@@ -5,7 +6,6 @@ import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../util/colors.dart';
 import '../guide/custom_svg.dart';
 import 'agreement_text.dart';
 import 'login_button_section.dart';
@@ -15,13 +15,13 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colors = FillsaColorScheme.of(context);
+
     ref.listen<AsyncValue<void>>(loginViewModelProvider, (previous, next) {
       if (next is AsyncData && next.value != null) {
         switch (next.value) {
           case LoginSuccess():
-            {
-              HomeRoute().go(context);
-            }
+            HomeRoute().go(context);
         }
       }
 
@@ -30,7 +30,7 @@ class LoginScreen extends ConsumerWidget {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('로그인 실패'),
-            content: Text(next.error.toString()), // 실제 에러 메시지 표시
+            content: Text(next.error.toString()),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -43,21 +43,22 @@ class LoginScreen extends ConsumerWidget {
     });
 
     return Container(
-      color: yellow03,
+      color: colors.background,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 162),
+              padding: const EdgeInsets.only(top: 154),
               child: CustomSvg(svgName: "img_logo"),
             ),
 
             Padding(
-              padding: const EdgeInsets.only(top: 32),
+              padding: const EdgeInsets.only(top: 80),
               child: Text(
                 "로그인 후, 나만의 필사를 안전하게 저장할 수 있습니다.",
-                style: context.textStyles.body2,
+                style: context.fillsaTypo.body2.copyWith(color: colors.onBackground1),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -74,9 +75,10 @@ class LoginScreen extends ConsumerWidget {
               ),
             ),
 
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 12),
+            Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 50),
+              child: SizedBox(
+                width: double.infinity,
                 child: AgreementText(),
               ),
             ),

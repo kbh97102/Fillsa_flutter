@@ -1,7 +1,7 @@
+import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../util/colors.dart';
-import '../../util/routes.dart';
 import 'login_button.dart';
 
 class LoginButtonSection extends StatelessWidget {
@@ -24,23 +24,23 @@ class LoginButtonSection extends StatelessWidget {
           svgPath: "assets/images/icn_kakao.svg",
           backgroundColor: kakaoButtonBackgroundColor,
           textColor: kakaoTextColor,
-          onPressed: () => {doKakaoLogin()},
+          onPressed: doKakaoLogin,
         ),
 
         LoginButton(
           text: "구글 계정으로 시작하기",
           svgPath: "assets/images/icn_google.svg",
           backgroundColor: googleButtonBackgroundColor,
-          onPressed: () => {doGoogleLogin()},
-          textColor: grey700,
+          textColor: kakaoTextColor,
+          onPressed: doGoogleLogin,
         ),
 
         LoginButton(
           text: "비회원으로 시작하기",
           svgPath: "assets/images/icn_non_member.svg",
           backgroundColor: white,
-          onPressed: () => {HomeRoute().go(context)},
-          textColor: grey700,
+          textColor: kakaoTextColor,
+          onPressed: () => HomeRoute().go(context),
         ),
       ],
     );

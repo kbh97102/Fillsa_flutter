@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LoginButton extends StatelessWidget {
   final String text;
@@ -23,6 +23,7 @@ class LoginButton extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
+        width: double.infinity,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.circular(8),
@@ -33,10 +34,10 @@ class LoginButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(svgPath, width: 30, height: 30),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
                 text,
-                style: context.textStyles.subtitle2.copyWith(color: textColor),
+                style: context.fillsaTypo.subtitle2.copyWith(color: textColor),
               ),
             ],
           ),

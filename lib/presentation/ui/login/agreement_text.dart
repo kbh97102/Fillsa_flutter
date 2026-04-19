@@ -1,15 +1,15 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../../util/colors.dart';
-
 class AgreementText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final defaultStyle = context.textStyles.body3.copyWith(color: grey500);
-    final linkStyle = context.textStyles.subtitle2.copyWith(
-      color: grey500,
+    final color = FillsaColorScheme.of(context).onBackground1;
+    final defaultStyle = context.fillsaTypo.body3.copyWith(color: color);
+    final linkStyle = context.fillsaTypo.subtitle2.copyWith(
+      color: color,
       decoration: TextDecoration.underline,
     );
 
@@ -18,27 +18,25 @@ class AgreementText extends StatelessWidget {
       text: TextSpan(
         style: defaultStyle,
         children: [
-          TextSpan(text: '로그인 시, '),
+          const TextSpan(text: '로그인 시, '),
           TextSpan(
             text: '이용약관',
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 // TODO: 이용약관 페이지 이동
-                print('이용약관 클릭됨');
               },
           ),
-          TextSpan(text: ' 및 '),
+          const TextSpan(text: ' 및 '),
           TextSpan(
             text: '개인정보 처리방침',
             style: linkStyle,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 // TODO: 개인정보 처리방침 페이지 이동
-                print('개인정보 처리방침 클릭됨');
               },
           ),
-          TextSpan(text: '에 동의하는 것으로 간주됩니다.'),
+          const TextSpan(text: '에 동의하는 것으로 간주됩니다.'),
         ],
       ),
     );

@@ -18,6 +18,8 @@ const Color yellow02 = Color(0xFFFFCB5C);
 const Color yellow03 = Color(0xFFFFEFCC);
 
 const Color white = Color(0xFFFFFFFF);
+const Color primary = Color(0xFFFFEFCC);
+const Color green1a = Color(0xFF1ACE35);
 
 const Color kakaoTextColor = Color(0xFF371D1E);
 final Color kakaoButtonBackgroundColor = '#FFE600'.toColor();
