@@ -5,8 +5,10 @@ import 'package:fillsa_flutter/domain/model/api_result.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../domain/model/request/like_request.dart';
+import '../../domain/model/request/typing_quote_request.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
 import '../../domain/model/response/DailyQuoteDto.dart';
+import '../../domain/model/response/MemberTypingQuoteResponse.dart';
 import '../../domain/repository/home_repository.dart';
 import '../network/fillsa_api.dart';
 import '../network/fillsa_no_token_api.dart';
@@ -15,6 +17,7 @@ import '../network/fillsa_no_token_api.dart';
 class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   final FillsaApi _api;
   final FillsaNoTokenApi _noTokenApi;
+
   HomeRepositoryImpl(this._api, this._noTokenApi);
 
   @override
@@ -42,5 +45,15 @@ class HomeRepositoryImpl with BaseRepository implements HomeRepository {
   @override
   Future<int> postUploadImage(File imageFile, int dailyQuoteSeq) {
     return _api.postUploadImage(dailyQuoteSeq, imageFile);
+  }
+
+  @override
+  Future<void> postTyping(int dailyQuoteSeq, TypingQuoteRequest request) {
+    return _api.postTyping(dailyQuoteSeq, request);
+  }
+
+  @override
+  Future<MemberTypingQuoteResponse> getTyping(int dailyQuoteSeq) {
+    return _api.getTyping(dailyQuoteSeq);
   }
 }

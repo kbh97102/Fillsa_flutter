@@ -65,7 +65,7 @@ abstract class FillsaApi {
   Future<SimpleIntResponse> deleteResign();
 
   @POST(ApiEndPoints.postTyping)
-  Future<SimpleIntResponse> postTyping(
+  Future<void> postTyping(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
     @Body() TypingQuoteRequest body,
   );

@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/domain/model/response/DailyQuoteDto.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -12,9 +13,13 @@ part 'routes.g.dart';
 
 @TypedGoRoute<TypingRoute>(path: "/typing")
 class TypingRoute extends GoRouteData with $TypingRoute {
+  final DailyQuoteDto? $extra;
+
+  const TypingRoute({this.$extra});
+
   @override
   Widget build(BuildContext context, GoRouterState state) =>
-      const TypingScreen();
+      TypingScreen(dailyQuoteDto: $extra);
 }
 
 @TypedGoRoute<ShareRoute>(path: "/share")

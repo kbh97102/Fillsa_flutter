@@ -116,7 +116,8 @@ class HomeScreen extends ConsumerWidget {
                                   .afterOnClick();
                             },
                             today: state.targetDate ?? DateTime.now(),
-                            onQuoteTap: () => TypingRoute().push(context),
+                            onQuoteTap: () =>
+                                TypingRoute($extra: state.data).push(context),
                             onAuthorTap: () => _openAuthorUrl(
                               context,
                               state.data.authorUrl,

@@ -1,4 +1,6 @@
+import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/presentation/ui/list/quote_list_item.dart';
+import 'package:fillsa_flutter/presentation/util/login_status_notifier.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/util/typo.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
@@ -25,7 +28,13 @@ void main() async {
   KakaoSdk.init(nativeAppKey: dotenv.maybeGet("KAKAO_KEY") ?? "");
   await initializeDateFormatting("ko_KR", null);
 
-  runApp(const ProviderScope(child: MyApp()));
+  final getLoginStatus = GetIt.instance<GetLoginStatusUseCase>();
+  final initialLoginStatus = await getLoginStatus.call().first;
+
+  final loginStatusNotifier = LoginStatusNotifier(initialLoginStatus ?? false);
+  loginStatusNotifier.listenForUpdates(getLoginStatus.call());
+
+  runApp(ProviderScope(child: MyApp(loginStatusNotifier: loginStatusNotifier)));
 }
 
 class DevMain extends StatelessWidget {
@@ -42,15 +51,41 @@ class DevMain extends StatelessWidget {
   }
 }
 
-final _router = GoRouter(
-  routes: $appRoutes,
-  initialLocation: LoginRoute().location,
-);
+GoRouter _buildRouter(LoginStatusNotifier loginStatusNotifier) {
+  return GoRouter(
+    routes: $appRoutes,
+    initialLocation: loginStatusNotifier.isLoggedIn
+        ? HomeRoute().location
+        : LoginRoute().location,
+    refreshListenable: loginStatusNotifier,
+    redirect: (context, state) {
+      final isLoggedIn = loginStatusNotifier.isLoggedIn;
+      final isLoginRoute = state.matchedLocation == LoginRoute().location;
+      if (isLoggedIn && isLoginRoute) return HomeRoute().location;
+      if (!isLoggedIn && !isLoginRoute) return LoginRoute().location;
+      return null;
+    },
+  );
+}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({super.key, required this.loginStatusNotifier});
 
-  // This widget is the root of your application.
+  final LoginStatusNotifier loginStatusNotifier;
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late final GoRouter _router;
+
+  @override
+  void initState() {
+    super.initState();
+    _router = _buildRouter(widget.loginStatusNotifier);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

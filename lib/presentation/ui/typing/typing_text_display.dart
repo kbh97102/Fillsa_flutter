@@ -49,9 +49,9 @@ class TypingTextDisplay extends StatelessWidget {
     }
 
     return Align(
-      alignment: Alignment.topCenter,
+      alignment: Alignment.topLeft,
       child: RichText(
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.left,
         text: TextSpan(style: baseStyle, children: spans),
       ),
     );

@@ -180,10 +180,11 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
       () => loginUseCase.call(loginRequest),
     );
 
-    if (loginResponse != null) {
-      await _saveLoginResponse(loginResponse);
+    if (loginResponse == null) {
+      throw Exception('로그인에 실패했습니다. 다시 시도해주세요.');
     }
 
+    await _saveLoginResponse(loginResponse);
     state = AsyncData(LoginSuccess());
   }
 

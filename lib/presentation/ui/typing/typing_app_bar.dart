@@ -27,10 +27,7 @@ class TypingAppBar extends StatelessWidget {
           children: [
             GestureDetector(
               onTap: onBack,
-              child: RotatedBox(
-                quarterTurns: 2,
-                child: CustomSvg(svgName: 'icn_arrow', width: 32, height: 32),
-              ),
+              child: CustomSvg(svgName: 'icn_arrow', width: 32, height: 32),
             ),
             KoreanEnglishSwitch(
               selected: locale,

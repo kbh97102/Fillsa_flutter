@@ -21,6 +21,7 @@ import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'data/repository/login_repository_impl.dart' as _i371;
+import 'data/util/auth_interceptor.dart' as _i472;
 import 'data/util/token_interceptor.dart' as _i672;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
 import 'domain/repository/home_repository.dart' as _i405;
@@ -40,9 +41,11 @@ import 'domain/usecase/get_local_quotes_usecase.dart' as _i1037;
 import 'domain/usecase/get_login_status_usecase.dart' as _i383;
 import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
 import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
+import 'domain/usecase/get_typing_usecase.dart' as _i102;
 import 'domain/usecase/is_first_open_usecase.dart' as _i133;
 import 'domain/usecase/login_usecase.dart' as _i579;
 import 'domain/usecase/post_like_request_usecase.dart' as _i783;
+import 'domain/usecase/post_typing_usecase.dart' as _i329;
 import 'domain/usecase/post_upload_image_usecase.dart' as _i426;
 import 'domain/usecase/set_access_token_usecase.dart' as _i173;
 import 'domain/usecase/set_first_open_usecase.dart' as _i504;
@@ -54,6 +57,7 @@ import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
 import 'presentation/viewmodels/login_viewmodel.dart' as _i15;
+import 'presentation/viewmodels/typing_viewmodel.dart' as _i484;
 
 // initializes the registration of main-scope dependencies inside of GetIt
 _i174.GetIt init(
@@ -65,6 +69,9 @@ _i174.GetIt init(
   final apiModule = _$ApiModule();
   gh.factory<_i17.LocalDatabase>(() => _i17.LocalDatabase());
   gh.lazySingleton<_i460.SharedPreferencesAsync>(() => apiModule.providePref());
+  gh.factory<_i472.AuthInterceptor>(
+    () => _i472.AuthInterceptor(gh<_i460.SharedPreferencesAsync>()),
+  );
   gh.lazySingleton<_i279.LocalRepository>(
     () => _i239.LocalRepositoryImpl(
       prefs: gh<_i460.SharedPreferencesAsync>(),
@@ -146,7 +153,10 @@ _i174.GetIt init(
     () => _i672.TokenInterceptor(gh<_i193.GetAccessTokenUseCase>()),
   );
   gh.lazySingleton<_i361.Dio>(
-    () => apiModule.dio(gh<_i672.TokenInterceptor>()),
+    () => apiModule.dio(
+      gh<_i672.TokenInterceptor>(),
+      gh<_i472.AuthInterceptor>(),
+    ),
   );
   gh.lazySingleton<_i183.FillsaApi>(
     () => apiModule.provideFillsaApi(gh<_i361.Dio>()),
@@ -192,11 +202,26 @@ _i174.GetIt init(
   gh.lazySingleton<_i373.LoginRepository>(
     () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),
   );
+  gh.lazySingleton<_i329.PostTypingUseCase>(
+    () => _i329.PostTypingUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i102.GetTypingUseCase>(
+    () => _i102.GetTypingUseCase(gh<_i405.HomeRepository>()),
+  );
   gh.lazySingleton<_i579.LoginUseCase>(
     () => _i579.LoginUseCase(gh<_i373.LoginRepository>()),
   );
   gh.lazySingleton<_i1046.TestErrorCodeUsecase>(
     () => _i1046.TestErrorCodeUsecase(gh<_i373.LoginRepository>()),
+  );
+  gh.factory<_i484.TypingViewModel>(
+    () => _i484.TypingViewModel(
+      gh<_i383.GetLoginStatusUseCase>(),
+      gh<_i329.PostTypingUseCase>(),
+      gh<_i359.AddLocalQuoteUseCase>(),
+      gh<_i102.GetTypingUseCase>(),
+      gh<_i531.FindLocalQuoteByIdUseCase>(),
+    ),
   );
   gh.factory<_i15.LoginViewModel>(
     () => _i15.LoginViewModel(

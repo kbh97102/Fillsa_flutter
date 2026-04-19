@@ -4,19 +4,19 @@ import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
 class TypingActionBar extends StatelessWidget {
-  final VoidCallback onExit;
   final bool isLiked;
   final VoidCallback onCopy;
   final VoidCallback onShare;
   final VoidCallback onLike;
+  final VoidCallback onSave;
 
   const TypingActionBar({
     super.key,
-    required this.onExit,
     required this.isLiked,
     required this.onCopy,
     required this.onShare,
     required this.onLike,
+    required this.onSave,
   });
 
   @override
@@ -29,7 +29,6 @@ class TypingActionBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _ExitButton(onTap: onExit),
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -53,16 +52,17 @@ class TypingActionBar extends StatelessWidget {
               ),
             ],
           ),
+          _SaveButton(onTap: onSave),
         ],
       ),
     );
   }
 }
 
-class _ExitButton extends StatelessWidget {
+class _SaveButton extends StatelessWidget {
   final VoidCallback onTap;
 
-  const _ExitButton({required this.onTap});
+  const _SaveButton({required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _ExitButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
-          '나가기',
+          '저장하기',
           style: context.fillsaTypo.body3.copyWith(color: grey700),
         ),
       ),
