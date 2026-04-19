@@ -16,10 +16,11 @@ class QuoteSection extends StatelessWidget {
   final DateTime today;
   final VoidCallback beforeOnClick;
   final VoidCallback afterOnClick;
+  final VoidCallback? onQuoteTap;
+  final VoidCallback? onAuthorTap;
   late final bool _displayNextButton;
   late final bool _displayBeforeButton;
 
-  // 생성자에서 날짜 비교 로직을 초기화합니다.
   QuoteSection({
     super.key,
     required this.quote,
@@ -27,6 +28,8 @@ class QuoteSection extends StatelessWidget {
     required this.beforeOnClick,
     required this.afterOnClick,
     required this.today,
+    this.onQuoteTap,
+    this.onAuthorTap,
   }) {
     final DateTime nowOnlyDate = DateTime(
       DateTime.now().year,
@@ -35,7 +38,6 @@ class QuoteSection extends StatelessWidget {
     );
 
     _displayNextButton = today.isBefore(nowOnlyDate);
-
     _displayBeforeButton = !today.isBefore(DateCondition.startDay);
   }
 
@@ -46,8 +48,8 @@ class QuoteSection extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: const Color(0xB3CBC0A8), // #CBC0A8 + 70% 알파 = B3
-            offset: const Offset(0, 0), // X, Y
+            color: const Color(0xB3CBC0A8),
+            offset: const Offset(0, 0),
             blurRadius: 16,
             spreadRadius: -3,
           ),
@@ -59,40 +61,48 @@ class QuoteSection extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 320 / 250.0,
-            child: CustomMultiChildLayout(
-              delegate: _TestDelegate(),
-              children: [
-                LayoutId(
-                  id: "body",
-                  child: QuoteBody(quote: quote, author: author),
-                ),
-                if (_displayBeforeButton)
+            child: GestureDetector(
+              behavior: HitTestBehavior.deferToChild,
+              onTap: onQuoteTap,
+              child: CustomMultiChildLayout(
+                delegate: _QuoteSectionDelegate(),
+                children: [
                   LayoutId(
-                    id: "start",
-                    child: MyDeferPointer(
-                      child: GestureDetector(
-                        child: CustomSvg(svgName: "icn_arrow_filled"),
-                        onTap: () {
-                          logger.e("Click Before");
-                          beforeOnClick();
-                        },
-                      ),
+                    id: "body",
+                    child: QuoteBody(
+                      quote: quote,
+                      author: author,
+                      onAuthorTap: onAuthorTap,
                     ),
                   ),
-                if (_displayNextButton)
-                  LayoutId(
-                    id: "end",
-                    child: MyDeferPointer(
-                      child: Transform.rotate(
-                        angle: math.pi,
+                  if (_displayBeforeButton)
+                    LayoutId(
+                      id: "start",
+                      child: MyDeferPointer(
                         child: GestureDetector(
                           child: CustomSvg(svgName: "icn_arrow_filled"),
-                          onTap: afterOnClick,
+                          onTap: () {
+                            logger.e("Click Before");
+                            beforeOnClick();
+                          },
                         ),
                       ),
                     ),
-                  ),
-              ],
+                  if (_displayNextButton)
+                    LayoutId(
+                      id: "end",
+                      child: MyDeferPointer(
+                        child: Transform.rotate(
+                          angle: math.pi,
+                          child: GestureDetector(
+                            child: CustomSvg(svgName: "icn_arrow_filled"),
+                            onTap: afterOnClick,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
           ),
         ],
@@ -101,7 +111,7 @@ class QuoteSection extends StatelessWidget {
   }
 }
 
-class _TestDelegate extends MultiChildLayoutDelegate {
+class _QuoteSectionDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     if (hasChild("body")) {
@@ -116,7 +126,6 @@ class _TestDelegate extends MultiChildLayoutDelegate {
       positionChild("start", Offset(-16, buttonY));
     }
 
-    // 💡 오른쪽 화살표
     if (hasChild("end")) {
       layoutChild("end", BoxConstraints.tight(const Size(32, 32)));
       positionChild("end", Offset(size.width - 16, buttonY));
@@ -124,7 +133,5 @@ class _TestDelegate extends MultiChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) {
-    return false;
-  }
+  bool shouldRelayout(covariant MultiChildLayoutDelegate oldDelegate) => false;
 }

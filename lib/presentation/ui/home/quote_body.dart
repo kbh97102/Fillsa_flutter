@@ -7,7 +7,14 @@ import '../guide/custom_svg.dart';
 class QuoteBody extends StatelessWidget {
   final String quote;
   final String author;
-  const QuoteBody({super.key, required this.quote, required this.author});
+  final VoidCallback? onAuthorTap;
+
+  const QuoteBody({
+    super.key,
+    required this.quote,
+    required this.author,
+    this.onAuthorTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +42,15 @@ class QuoteBody extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        author,
-                        style: context.textStyles.body2.copyWith(
-                          decoration: TextDecoration.underline,
+                      child: GestureDetector(
+                        onTap: onAuthorTap,
+                        child: Text(
+                          author,
+                          style: context.textStyles.body2.copyWith(
+                            decoration: TextDecoration.underline,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                   ],

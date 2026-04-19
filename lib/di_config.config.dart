@@ -29,6 +29,7 @@ import 'domain/repository/login_repository.dart' as _i373;
 import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
 import 'domain/usecase/clear_all_data_usecase.dart' as _i601;
 import 'domain/usecase/delete_quote_by_seq_usecase.dart' as _i457;
+import 'domain/usecase/delete_upload_image_usecase.dart' as _i546;
 import 'domain/usecase/find_local_quote_by_id_usecase.dart' as _i531;
 import 'domain/usecase/get_access_token_usecase.dart' as _i193;
 import 'domain/usecase/get_daily_quote_non_member_usecase.dart' as _i580;
@@ -165,6 +166,9 @@ _i174.GetIt init(
   gh.lazySingleton<_i580.GetDailyNonMemberUseCase>(
     () => _i580.GetDailyNonMemberUseCase(gh<_i405.HomeRepository>()),
   );
+  gh.lazySingleton<_i546.DeleteUploadImageUseCase>(
+    () => _i546.DeleteUploadImageUseCase(gh<_i405.HomeRepository>()),
+  );
   gh.lazySingleton<_i12.GetDailyQuoteUseCase>(
     () => _i12.GetDailyQuoteUseCase(gh<_i405.HomeRepository>()),
   );
@@ -181,6 +185,8 @@ _i174.GetIt init(
       gh<_i359.AddLocalQuoteUseCase>(),
       gh<_i12.GetDailyQuoteUseCase>(),
       gh<_i1037.GetLocalQuotesUseCase>(),
+      gh<_i426.PostUploadImageUseCase>(),
+      gh<_i546.DeleteUploadImageUseCase>(),
     ),
   );
   gh.lazySingleton<_i373.LoginRepository>(

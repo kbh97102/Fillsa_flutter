@@ -5,8 +5,24 @@ import '../ui/calendar/calendar_screen.dart';
 import '../ui/home/home_screen.dart';
 import '../ui/home/scaffoldwithnavbar.dart';
 import '../ui/login/login_screen.dart';
+import '../ui/share/share_screen.dart';
+import '../ui/typing/typing_screen.dart';
 
 part 'routes.g.dart';
+
+@TypedGoRoute<TypingRoute>(path: "/typing")
+class TypingRoute extends GoRouteData with $TypingRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const TypingScreen();
+}
+
+@TypedGoRoute<ShareRoute>(path: "/share")
+class ShareRoute extends GoRouteData with $ShareRoute {
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const ShareScreen();
+}
 
 @TypedGoRoute<LoginRoute>(path: "/login")
 class LoginRoute extends GoRouteData with $LoginRoute {

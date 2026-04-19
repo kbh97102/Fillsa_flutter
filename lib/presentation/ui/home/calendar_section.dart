@@ -6,8 +6,9 @@ import '../../util/colors.dart';
 
 class CalendarSection extends StatefulWidget {
   final DateTime date;
+  final VoidCallback? onTap;
 
-  CalendarSection({super.key, required this.date});
+  const CalendarSection({super.key, required this.date, this.onTap});
 
   @override
   State<CalendarSection> createState() => _CalendarSectionState();
@@ -15,9 +16,7 @@ class CalendarSection extends StatefulWidget {
 
 class _CalendarSectionState extends State<CalendarSection> {
   final DateFormat _dayFormat = DateFormat("yyyy.MM");
-
   final DateFormat _dayOfWeekFormat = DateFormat('EEEE', 'ko_KR');
-
   final DateFormat _dayOfMonth = DateFormat("dd");
 
   @override
@@ -27,57 +26,60 @@ class _CalendarSectionState extends State<CalendarSection> {
     final dayOfWeek = _dayOfWeekFormat.format(widget.date);
     final dayOfMonth = _dayOfMonth.format(widget.date);
 
-    return AspectRatio(
-      aspectRatio: 155 / 120.0,
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: purple02, width: 1),
-        ),
-        child: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: purple02,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(day, style: titleStyle),
-                  Text(dayOfWeek, style: titleStyle),
-                ],
-              ),
-            ),
+    return GestureDetector(
+      onTap: widget.onTap,
+      child: AspectRatio(
+        aspectRatio: 155 / 120.0,
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: purple02, width: 1),
           ),
-
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: white,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(12),
-                  bottomRight: Radius.circular(12),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: purple02,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(day, style: titleStyle),
+                      Text(dayOfWeek, style: titleStyle),
+                    ],
+                  ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    dayOfMonth,
-                    style: context.textStyles.buttonXs.copyWith(fontSize: 40),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
                   ),
-                ],
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        dayOfMonth,
+                        style: context.textStyles.buttonXs
+                            .copyWith(fontSize: 40),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
         ),
       ),
     );

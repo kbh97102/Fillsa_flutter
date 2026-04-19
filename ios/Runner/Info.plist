@@ -62,5 +62,7 @@
 		<string>kakaolink</string>
 		<string>kakaoplus</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>필사 배경 이미지를 업로드하기 위해 사진 라이브러리에 접근합니다.</string>
 </dict>
 </plist>

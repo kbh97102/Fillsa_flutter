@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
 import 'package:fillsa_flutter/domain/model/request/like_request.dart';
+import 'package:fillsa_flutter/domain/model/request/post_upload_image_params.dart';
 import 'package:fillsa_flutter/domain/model/response/DailyQuoteDto.dart';
 import 'package:fillsa_flutter/domain/model/yn.dart';
 import 'package:fillsa_flutter/domain/usecase/add_local_quote_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/delete_upload_image_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/find_local_quote_by_id_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/get_daily_quote_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/post_like_request_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/post_upload_image_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/update_local_quote_like_usecase.dart';
 import 'package:fillsa_flutter/presentation/state/HomeState.dart';
 import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
@@ -34,6 +38,8 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final AddLocalQuoteUseCase _addLocalQuoteUseCase;
   final GetDailyQuoteUseCase _getDailyQuoteUseCase;
   final GetLocalQuotesUseCase _getLocalQuotesUseCase;
+  final PostUploadImageUseCase _postUploadImageUseCase;
+  final DeleteUploadImageUseCase _deleteUploadImageUseCase;
 
   late final StreamSubscription<bool?> _loginStatusSubscription;
 
@@ -48,7 +54,9 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     this._addLocalQuoteUseCase,
     this._getDailyQuoteUseCase,
     this._getLocalQuotesUseCase,
-  ) {}
+    this._postUploadImageUseCase,
+    this._deleteUploadImageUseCase,
+  );
 
   @override
   FutureOr<HomeState> build() async {
@@ -84,7 +92,6 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     return HomeState.initial();
   }
 
-  // TODO: 아무리 생각해도 state와 연동을 하려면 APiResult는 쓸모없는 것 같다.
   Future<DailyQuoteDto?> getData() async {
     final targetDate = state.hasValue
         ? state.requireValue.targetDate
@@ -170,7 +177,6 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
           final data = await getData();
 
           if (data == null) {
-            // TODO: 에러 하나 만들기
             throw Exception("Data is Null");
           }
 
@@ -196,7 +202,6 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
           final data = await getData();
 
           if (data == null) {
-            // TODO: 에러 하나 만들기
             throw Exception("Data is Null");
           }
 
@@ -213,6 +218,38 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     state = AsyncValue.data(
       state.requireValue.copyWith(currentLocale: selected),
     );
+  }
+
+  Future<void> uploadImage(File file) async {
+    if (!state.hasValue) return;
+    final seq = state.requireValue.data.dailyQuoteSeq;
+    try {
+      await _postUploadImageUseCase.call(
+        PostUploadImageParams(dailyQuoteSeq: seq, imageFile: file),
+      );
+      final refreshed = await getData();
+      if (refreshed != null && state.hasValue) {
+        state = AsyncValue.data(
+          state.requireValue.copyWith(data: refreshed),
+        );
+      }
+    } catch (e) {
+      emitError(e.toString());
+    }
+  }
+
+  Future<void> deleteImage() async {
+    if (!state.hasValue) return;
+    final seq = state.requireValue.data.dailyQuoteSeq;
+    try {
+      await _deleteUploadImageUseCase.call(seq);
+      if (state.hasValue) {
+        final updated = state.requireValue.data.copyWith(imagePath: "");
+        state = AsyncValue.data(state.requireValue.copyWith(data: updated));
+      }
+    } catch (e) {
+      emitError(e.toString());
+    }
   }
 
   void _postLocalLike(bool isLiked) async {

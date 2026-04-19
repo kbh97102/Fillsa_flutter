@@ -29,6 +29,8 @@ mixin class BaseViewModel {
     };
   }
 
+  void emitError(String message) => _errorController.add(message);
+
   onDispose() {
     _errorController.close();
   }

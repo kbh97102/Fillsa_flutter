@@ -6,7 +6,59 @@ part of 'routes.dart';
 // GoRouterGenerator
 // **************************************************************************
 
-List<RouteBase> get $appRoutes => [$loginRoute, $shellRoute, $calendarRoute];
+List<RouteBase> get $appRoutes => [
+  $typingRoute,
+  $shareRoute,
+  $loginRoute,
+  $shellRoute,
+  $calendarRoute,
+];
+
+RouteBase get $typingRoute =>
+    GoRouteData.$route(path: '/typing', factory: $TypingRoute._fromState);
+
+mixin $TypingRoute on GoRouteData {
+  static TypingRoute _fromState(GoRouterState state) => TypingRoute();
+
+  @override
+  String get location => GoRouteData.$location('/typing');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+RouteBase get $shareRoute =>
+    GoRouteData.$route(path: '/share', factory: $ShareRoute._fromState);
+
+mixin $ShareRoute on GoRouteData {
+  static ShareRoute _fromState(GoRouterState state) => ShareRoute();
+
+  @override
+  String get location => GoRouteData.$location('/share');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
 
 RouteBase get $loginRoute =>
     GoRouteData.$route(path: '/login', factory: $LoginRoute._fromState);

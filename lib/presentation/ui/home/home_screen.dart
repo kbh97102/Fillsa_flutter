@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fillsa_flutter/presentation/ui/common/common_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/common/image_change_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/home/home_app_bar.dart';
@@ -5,7 +7,10 @@ import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/LocaleOption.dart';
 import '../../util/colors.dart';
@@ -54,20 +59,26 @@ class HomeScreen extends ConsumerWidget {
                               Expanded(
                                 child: CalendarSection(
                                   date: state.targetDate ?? DateTime.now(),
+                                  onTap: () =>
+                                      CalendarRoute().go(context),
                                 ),
                               ),
                               const SizedBox(width: 20),
                               Expanded(
                                 child: GestureDetector(
                                   onTap: () {
-                                    imageOnClick(
+                                    _imageOnClick(
                                       context: context,
+                                      ref: ref,
                                       quote: state.data.korQuote ?? "",
                                       author: state.data.korAuthor ?? "",
                                       isLogged: state.isLogged,
                                     );
                                   },
-                                  child: ImageSection(isLogin: state.isLogged),
+                                  child: ImageSection(
+                                    isLogin: state.isLogged,
+                                    imagePath: state.data.imagePath,
+                                  ),
                                 ),
                               ),
                             ],
@@ -105,6 +116,11 @@ class HomeScreen extends ConsumerWidget {
                                   .afterOnClick();
                             },
                             today: state.targetDate ?? DateTime.now(),
+                            onQuoteTap: () => TypingRoute().push(context),
+                            onAuthorTap: () => _openAuthorUrl(
+                              context,
+                              state.data.authorUrl,
+                            ),
                           ),
                         ),
 
@@ -112,6 +128,12 @@ class HomeScreen extends ConsumerWidget {
                           padding: const EdgeInsets.only(top: 28, bottom: 20),
                           child: InteractionButtonSection(
                             isLiked: state.isLiked,
+                            onCopy: () => _copyQuote(
+                              context,
+                              _selectedQuote,
+                              _selectedAuthor,
+                            ),
+                            onShare: () => ShareRoute().push(context),
                             setIsLiked: (liked) {
                               ref
                                   .read(homeViewModelProvider.notifier)
@@ -135,48 +157,93 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
-  Widget getDeleteDialog(BuildContext context) {
-    return CommonDialog(
-      title: "이미지를 삭제하시겠습니까?",
-      body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
-      cancelButtonText: "삭제하기",
-      cancelButtonColor: purple01,
-      cancelButtonBorderColor: purple01,
-      cancelTextColor: Colors.white,
-      okButtonText: "취소",
-      okButtonColor: Colors.white,
-      okTextColor: purple01,
-      okButtonBorderColor: purple01,
-      okButtonOnClick: () => {Navigator.pop(context)},
+  void _copyQuote(BuildContext context, String quote, String author) {
+    Clipboard.setData(ClipboardData(text: "$quote - $author"));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("복사되었습니다.")),
     );
   }
 
-  Widget getImageDialog({
+  Future<void> _openAuthorUrl(BuildContext context, String? authorUrl) async {
+    if (authorUrl == null || authorUrl.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("저자 정보가 없습니다.")),
+      );
+      return;
+    }
+    final uri = Uri.tryParse(authorUrl);
+    if (uri != null) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
+  }
+
+  Widget _getDeleteDialog({
     required BuildContext context,
+    required WidgetRef ref,
+  }) {
+    return CommonDialog(
+      title: "이미지를 삭제하시겠습니까?",
+      body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
+      okButtonText: "삭제",
+      okButtonColor: purple01,
+      okButtonBorderColor: purple01,
+      okTextColor: white,
+      cancelButtonText: "취소",
+      cancelButtonColor: white,
+      cancelButtonBorderColor: purple01,
+      cancelTextColor: purple01,
+      okButtonOnClick: () async {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        await ref.read(homeViewModelProvider.notifier).deleteImage();
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("이미지가 삭제되었습니다.")),
+          );
+        }
+      },
+      cancelButtonOnClick: () => Navigator.pop(context),
+    );
+  }
+
+  Widget _getImageDialog({
+    required BuildContext context,
+    required WidgetRef ref,
     required String quote,
     required String author,
   }) {
     return ImageChangeDialog(
       quote: quote,
       author: author,
-      imageChangeOnClick: () {
-        // TODO: 갤러리 접근
-      },
-      okOnClick: () {
+      imageChangeOnClick: () async {
+        final picker = ImagePicker();
+        final xFile = await picker.pickImage(source: ImageSource.gallery);
+        if (xFile == null) return;
+        if (!context.mounted) return;
         Navigator.pop(context);
+        await ref
+            .read(homeViewModelProvider.notifier)
+            .uploadImage(File(xFile.path));
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("이미지가 변경되었습니다.")),
+          );
+        }
       },
+      okOnClick: () => Navigator.pop(context),
       deleteOnClick: () {
-        // TODO: 사진 제거 이벤트
         showDialog(
           context: context,
-          builder: (context) => getDeleteDialog(context),
+          builder: (ctx) =>
+              _getDeleteDialog(context: ctx, ref: ref),
         );
       },
     );
   }
 
-  void imageOnClick({
+  void _imageOnClick({
     required BuildContext context,
+    required WidgetRef ref,
     required String quote,
     required String author,
     required bool isLogged,
@@ -184,22 +251,24 @@ class HomeScreen extends ConsumerWidget {
     if (isLogged) {
       showDialog(
         context: context,
-        builder: (context) =>
-            getImageDialog(context: context, quote: quote, author: author),
+        builder: (ctx) => _getImageDialog(
+          context: ctx,
+          ref: ref,
+          quote: quote,
+          author: author,
+        ),
       );
     } else {
       showDialog(
         context: context,
-        builder: (context) => CommonDialog(
+        builder: (ctx) => CommonDialog(
           title: "로그인 후 사용하실 수 있습니다.",
           okButtonText: "로그인 하기",
           okButtonOnClick: () {
-            Navigator.pop(context);
-            LoginRoute()..push(context);
+            Navigator.pop(ctx);
+            LoginRoute()..push(ctx);
           },
-          cancelButtonOnClick: () {
-            Navigator.pop(context);
-          },
+          cancelButtonOnClick: () => Navigator.pop(ctx),
         ),
       );
     }

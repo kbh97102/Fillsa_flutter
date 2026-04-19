@@ -45,6 +45,8 @@ dependencies:
   kakao_flutter_sdk_share: ^1.9.5
   rxdart: ^0.28.0
   stream_transform: ^2.1.1
+  image_picker: ^1.1.2
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
