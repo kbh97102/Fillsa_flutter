@@ -23,6 +23,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -75,21 +76,36 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
     );
   }
 
-  signInWithKakao() async {
+  Future<void> signInWithKakao() async {
+    state = const AsyncValue.loading();
     try {
-      await UserApi.instance.loginWithKakaoTalk();
-      User user = await UserApi.instance.me();
+      if (await isKakaoTalkInstalled()) {
+        try {
+          await UserApi.instance.loginWithKakaoTalk();
+        } catch (e) {
+          if (e is KakaoClientException && e.reason == ClientErrorCause.cancelled) {
+            rethrow;
+          }
+          await UserApi.instance.loginWithKakaoAccount();
+        }
+      } else {
+        await UserApi.instance.loginWithKakaoAccount();
+      }
 
-      final nickName = user.kakaoAccount?.profile?.nickname;
-      final imageUrl = user.kakaoAccount?.profile?.profileImageUrl;
-
-      _postLogin(
+      final user = await UserApi.instance.me();
+      await _postLogin(
         id: user.id.toString(),
-        nickName: nickName,
-        profileImageUri: imageUrl,
+        nickName: user.kakaoAccount?.profile?.nickname,
+        profileImageUri: user.kakaoAccount?.profile?.profileImageUrl,
+        oAuthProvider: "KAKAO",
       );
-    } catch (error) {
-      logger.e('카카오톡으로 로그인 실패 $error');
+    } catch (e, st) {
+      if (e is KakaoClientException && e.reason == ClientErrorCause.cancelled) {
+        state = AsyncData(LoginInitial());
+      } else {
+        logger.e('카카오 로그인 실패: $e');
+        state = AsyncError(e, st);
+      }
     }
   }
 
@@ -113,14 +129,15 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
         account.authentication.idToken,
       );
 
-      _postLogin(id: id, nickName: nickName, profileImageUri: profileImageUri);
+      _postLogin(id: id, nickName: nickName, profileImageUri: profileImageUri, oAuthProvider: "GOOGLE");
     }
   }
 
-  void _postLogin({
+  Future<void> _postLogin({
     required String? id,
     required String? nickName,
     required String? profileImageUri,
+    required String oAuthProvider,
   }) async {
     final fid = await FirebaseInstallations.instance.getId();
     final platformInfo = await PackageInfo.fromPlatform();
@@ -150,7 +167,7 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
           deviceModel: platformInfo.buildNumber,
         ),
         userData: UserData(
-          oAuthProvider: "GOOGLE",
+          oAuthProvider: oAuthProvider,
           oAuthId: id ?? "",
           nickname: nickName ?? "",
           profileImageUrl: profileImageUri ?? "",

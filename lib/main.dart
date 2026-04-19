@@ -22,7 +22,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await dotenv.load(fileName: "local_properties.env");
-  KakaoSdk.init(nativeAppKey: dotenv.get("KAKAO_KEY"));
+  KakaoSdk.init(nativeAppKey: dotenv.maybeGet("KAKAO_KEY") ?? "");
   await initializeDateFormatting("ko_KR", null);
 
   runApp(const ProviderScope(child: MyApp()));

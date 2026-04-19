@@ -8,6 +8,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
+val kakaoKey: String = runCatching {
+    val envFile = rootProject.file("../local_properties.env")
+    if (!envFile.exists()) return@runCatching ""
+    val line = envFile.readLines().firstOrNull { it.trim().startsWith("KAKAO_KEY=") }
+        ?: return@runCatching ""
+    line.substringAfter("=").trim().trim('\'').trim('"')
+}.getOrDefault("")
+
 android {
     namespace = "com.arakene.fillsa_flutter"
     compileSdk = flutter.compileSdkVersion
@@ -31,6 +39,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["KAKAO_NATIVE_APP_KEY"] = kakaoKey
     }
 
     buildTypes {
