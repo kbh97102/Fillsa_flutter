@@ -1,5 +1,6 @@
 import 'package:fillsa_flutter/presentation/ui/common/common_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/common/image_change_dialog.dart';
+import 'package:fillsa_flutter/presentation/ui/home/home_app_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_section.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
@@ -37,85 +38,91 @@ class HomeScreen extends ConsumerWidget {
           color: yellow03,
           child: SafeArea(
             child: MyDeferredPointerHandler(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: CalendarSection(
-                              date: state.targetDate ?? DateTime.now(),
-                            ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  HomeAppBar(streakDays: 0),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: CalendarSection(
+                                  date: state.targetDate ?? DateTime.now(),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () {
+                                    imageOnClick(
+                                      context: context,
+                                      quote: state.data.korQuote ?? "",
+                                      author: state.data.korAuthor ?? "",
+                                      isLogged: state.isLogged,
+                                    );
+                                  },
+                                  child: ImageSection(isLogin: state.isLogged),
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                imageOnClick(
-                                  context: context,
-                                  quote: state.data.korQuote ?? "",
-                                  author: state.data.korAuthor ?? "",
-                                  isLogged: state.isLogged,
-                                );
-                              },
-                              child: ImageSection(isLogin: state.isLogged),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: KoreanEnglishSwitch(
-                          selected: state.currentLocale,
-                          onClick: (selected) {
-                            ref
-                                .read(homeViewModelProvider.notifier)
-                                .updateLocale(selected);
-                          },
                         ),
-                      ),
-                    ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 22),
-                      child: QuoteSection(
-                        quote: _selectedQuote,
-                        author: _selectedAuthor,
-                        beforeOnClick: () {
-                          ref
-                              .read(homeViewModelProvider.notifier)
-                              .beforeOnClick();
-                        },
-                        afterOnClick: () {
-                          ref
-                              .read(homeViewModelProvider.notifier)
-                              .afterOnClick();
-                        },
-                        today: state.targetDate ?? DateTime.now(),
-                      ),
-                    ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: KoreanEnglishSwitch(
+                              selected: state.currentLocale,
+                              onClick: (selected) {
+                                ref
+                                    .read(homeViewModelProvider.notifier)
+                                    .updateLocale(selected);
+                              },
+                            ),
+                          ),
+                        ),
 
-                    Padding(
-                      padding: const EdgeInsets.only(top: 28, bottom: 20),
-                      child: InteractionButtonSection(
-                        isLiked: state.isLiked,
-                        setIsLiked: (liked) {
-                          ref
-                              .read(homeViewModelProvider.notifier)
-                              .postLike(liked);
-                        },
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 22),
+                          child: QuoteSection(
+                            quote: _selectedQuote,
+                            author: _selectedAuthor,
+                            beforeOnClick: () {
+                              ref
+                                  .read(homeViewModelProvider.notifier)
+                                  .beforeOnClick();
+                            },
+                            afterOnClick: () {
+                              ref
+                                  .read(homeViewModelProvider.notifier)
+                                  .afterOnClick();
+                            },
+                            today: state.targetDate ?? DateTime.now(),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(top: 28, bottom: 20),
+                          child: InteractionButtonSection(
+                            isLiked: state.isLiked,
+                            setIsLiked: (liked) {
+                              ref
+                                  .read(homeViewModelProvider.notifier)
+                                  .postLike(liked);
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

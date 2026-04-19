@@ -2,6 +2,7 @@ import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../../util/LocaleOption.dart';
+import '../../util/colors.dart';
 
 class KoreanEnglishSwitch extends StatelessWidget {
   final LocaleOption selected;
@@ -19,7 +20,7 @@ class KoreanEnglishSwitch extends StatelessWidget {
     const double containerHeight = 28;
     const double thumbWidth = 28;
     const double thumbHeight = 22;
-    const Color backgroundColor = Color(0xFFE8E6FB); // 연보라색
+    const Color backgroundColor = purple02;
 
     return GestureDetector(
       onTap: () => {

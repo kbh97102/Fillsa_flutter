@@ -37,7 +37,9 @@ class QuoteBody extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 12),
                       child: Text(
                         author,
-                        style: context.textStyles.body2,
+                        style: context.textStyles.body2.copyWith(
+                          decoration: TextDecoration.underline,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                     ),

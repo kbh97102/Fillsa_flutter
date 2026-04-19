@@ -29,7 +29,13 @@ class _CalendarSectionState extends State<CalendarSection> {
 
     return AspectRatio(
       aspectRatio: 155 / 120.0,
-      child: Column(
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: purple02, width: 1),
+        ),
+        child: Column(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -72,6 +78,7 @@ class _CalendarSectionState extends State<CalendarSection> {
             ),
           ),
         ],
+        ),
       ),
     );
   }
