@@ -18,12 +18,14 @@ import 'data/api_module.dart' as _i753;
 import 'data/local/local_database.dart' as _i17;
 import 'data/network/fillsa_api.dart' as _i183;
 import 'data/network/fillsa_no_token_api.dart' as _i704;
+import 'data/repository/calendar_repository_impl.dart' as _i807;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'data/repository/login_repository_impl.dart' as _i371;
 import 'data/util/auth_interceptor.dart' as _i472;
 import 'data/util/token_interceptor.dart' as _i672;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
+import 'domain/repository/calendar_repository.dart' as _i718;
 import 'domain/repository/home_repository.dart' as _i405;
 import 'domain/repository/local_repository.dart' as _i279;
 import 'domain/repository/login_repository.dart' as _i373;
@@ -39,6 +41,8 @@ import 'domain/usecase/get_image_uri_usecase.dart' as _i300;
 import 'domain/usecase/get_local_quotes_paging_usecase.dart' as _i292;
 import 'domain/usecase/get_local_quotes_usecase.dart' as _i1037;
 import 'domain/usecase/get_login_status_usecase.dart' as _i383;
+import 'domain/usecase/get_monthly_quotes_non_member_usecase.dart' as _i378;
+import 'domain/usecase/get_monthly_quotes_usecase.dart' as _i762;
 import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
 import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
 import 'domain/usecase/get_typing_usecase.dart' as _i102;
@@ -55,6 +59,7 @@ import 'domain/usecase/test_error_code_usecase.dart' as _i1046;
 import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
+import 'presentation/viewmodels/calendar_viewmodel.dart' as _i772;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
 import 'presentation/viewmodels/login_viewmodel.dart' as _i15;
 import 'presentation/viewmodels/typing_viewmodel.dart' as _i484;
@@ -199,6 +204,12 @@ _i174.GetIt init(
       gh<_i546.DeleteUploadImageUseCase>(),
     ),
   );
+  gh.lazySingleton<_i718.CalendarRepository>(
+    () => _i807.CalendarRepositoryImpl(
+      gh<_i183.FillsaApi>(),
+      gh<_i704.FillsaNoTokenApi>(),
+    ),
+  );
   gh.lazySingleton<_i373.LoginRepository>(
     () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),
   );
@@ -231,6 +242,22 @@ _i174.GetIt init(
       gh<_i601.ClearAllDataUseCase>(),
       gh<_i1046.TestErrorCodeUsecase>(),
       loginUseCase: gh<_i579.LoginUseCase>(),
+    ),
+  );
+  gh.lazySingleton<_i762.GetMonthlyQuotesUseCase>(
+    () => _i762.GetMonthlyQuotesUseCase(gh<_i718.CalendarRepository>()),
+  );
+  gh.lazySingleton<_i378.GetMonthlyQuotesNonMemberUseCase>(
+    () => _i378.GetMonthlyQuotesNonMemberUseCase(
+      gh<_i718.CalendarRepository>(),
+      gh<_i279.LocalRepository>(),
+    ),
+  );
+  gh.factory<_i772.CalendarViewModel>(
+    () => _i772.CalendarViewModel(
+      gh<_i762.GetMonthlyQuotesUseCase>(),
+      gh<_i378.GetMonthlyQuotesNonMemberUseCase>(),
+      gh<_i383.GetLoginStatusUseCase>(),
     ),
   );
   return getIt;

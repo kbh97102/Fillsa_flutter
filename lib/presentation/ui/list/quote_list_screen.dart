@@ -3,7 +3,8 @@ import 'package:fillsa_flutter/presentation/ui/list/like_filter.dart';
 import 'package:flutter/material.dart';
 
 class QuoteListScreen extends StatelessWidget {
-  const QuoteListScreen({super.key});
+  const QuoteListScreen({super.key, this.yearMonth});
+  final String? yearMonth;
 
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,6 @@ List<RouteBase> get $appRoutes => [
   $shareRoute,
   $loginRoute,
   $shellRoute,
-  $calendarRoute,
 ];
 
 RouteBase get $typingRoute =>
@@ -107,10 +106,20 @@ RouteBase get $shellRoute => StatefulShellRouteData.$route(
     ),
     StatefulShellBranchData.$branch(
       routes: [
+        GoRouteData.$route(path: '/list', factory: $ListRoute._fromState),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
         GoRouteData.$route(
           path: '/calendar',
           factory: $CalendarRoute._fromState,
         ),
+      ],
+    ),
+    StatefulShellBranchData.$branch(
+      routes: [
+        GoRouteData.$route(path: '/mypage', factory: $MyPageRoute._fromState),
       ],
     ),
   ],
@@ -164,8 +173,34 @@ mixin $HomeDateRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
+mixin $ListRoute on GoRouteData {
+  static ListRoute _fromState(GoRouterState state) =>
+      ListRoute(yearMonth: state.uri.queryParameters['year-month']);
+
+  ListRoute get _self => this as ListRoute;
+
+  @override
+  String get location => GoRouteData.$location(
+    '/list',
+    queryParams: {if (_self.yearMonth != null) 'year-month': _self.yearMonth},
+  );
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
 mixin $CalendarRoute on GoRouteData {
-  static CalendarRoute _fromState(GoRouterState state) => CalendarRoute();
+  static CalendarRoute _fromState(GoRouterState state) => const CalendarRoute();
 
   @override
   String get location => GoRouteData.$location('/calendar');
@@ -184,5 +219,22 @@ mixin $CalendarRoute on GoRouteData {
   void replace(BuildContext context) => context.replace(location);
 }
 
-RouteBase get $calendarRoute =>
-    GoRouteData.$route(path: '/calendar', factory: $CalendarRoute._fromState);
+mixin $MyPageRoute on GoRouteData {
+  static MyPageRoute _fromState(GoRouterState state) => const MyPageRoute();
+
+  @override
+  String get location => GoRouteData.$location('/mypage');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}

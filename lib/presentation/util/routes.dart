@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../ui/calendar/calendar_screen.dart';
 import '../ui/home/home_screen.dart';
 import '../ui/home/scaffoldwithnavbar.dart';
+import '../ui/list/quote_list_screen.dart';
 import '../ui/login/login_screen.dart';
 import '../ui/share/share_screen.dart';
 import '../ui/typing/typing_screen.dart';
@@ -47,9 +48,19 @@ class LoginRoute extends GoRouteData with $LoginRoute {
         ),
       ],
     ),
+    TypedStatefulShellBranch<ListScreenBranch>(
+      routes: <TypedGoRoute<GoRouteData>>[
+        TypedGoRoute<ListRoute>(path: '/list'),
+      ],
+    ),
     TypedStatefulShellBranch<CalendarScreenBranch>(
       routes: <TypedGoRoute<GoRouteData>>[
         TypedGoRoute<CalendarRoute>(path: '/calendar'),
+      ],
+    ),
+    TypedStatefulShellBranch<MyPageScreenBranch>(
+      routes: <TypedGoRoute<GoRouteData>>[
+        TypedGoRoute<MyPageRoute>(path: '/mypage'),
       ],
     ),
   ],
@@ -71,9 +82,7 @@ class HomeRoute extends GoRouteData with $HomeRoute {
   const HomeRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return HomeScreen();
-  }
+  Widget build(BuildContext context, GoRouterState state) => HomeScreen();
 }
 
 class HomeDateRoute extends GoRouteData with $HomeDateRoute {
@@ -81,21 +90,47 @@ class HomeDateRoute extends GoRouteData with $HomeDateRoute {
   final String date;
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return HomeScreen();
-  }
+  Widget build(BuildContext context, GoRouterState state) => HomeScreen();
 }
 
-@TypedGoRoute<CalendarRoute>(path: "/calendar")
-class CalendarRoute extends GoRouteData with $CalendarRoute {
+class ListRoute extends GoRouteData with $ListRoute {
+  const ListRoute({this.yearMonth});
+  final String? yearMonth;
+
   @override
-  Widget build(BuildContext context, GoRouterState state) => CalendarScreen();
+  Widget build(BuildContext context, GoRouterState state) =>
+      QuoteListScreen(yearMonth: yearMonth);
+}
+
+class CalendarRoute extends GoRouteData with $CalendarRoute {
+  const CalendarRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const CalendarScreen();
+}
+
+class MyPageRoute extends GoRouteData with $MyPageRoute {
+  const MyPageRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) => const Scaffold(
+        body: Center(child: Text('마이페이지 준비중')),
+      );
 }
 
 class HomeScreenBranch extends StatefulShellBranchData {
   const HomeScreenBranch();
 }
 
+class ListScreenBranch extends StatefulShellBranchData {
+  const ListScreenBranch();
+}
+
 class CalendarScreenBranch extends StatefulShellBranchData {
   const CalendarScreenBranch();
+}
+
+class MyPageScreenBranch extends StatefulShellBranchData {
+  const MyPageScreenBranch();
 }

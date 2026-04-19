@@ -57,7 +57,7 @@ abstract class FillsaApi {
   );
 
   @GET(ApiEndPoints.getMemberMonthlyQuotes)
-  Future<MemberMonthlyQuoteResponse> getQuotesMonthly(
+  Future<HttpResponse<MemberMonthlyQuoteResponse>> getQuotesMonthly(
     @Query("yearMonth") String yearMonth,
   );
 

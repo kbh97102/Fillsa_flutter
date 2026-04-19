@@ -207,12 +207,14 @@ class _FillsaApi implements FillsaApi {
   }
 
   @override
-  Future<MemberMonthlyQuoteResponse> getQuotesMonthly(String yearMonth) async {
+  Future<HttpResponse<MemberMonthlyQuoteResponse>> getQuotesMonthly(
+    String yearMonth,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'yearMonth': yearMonth};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<MemberMonthlyQuoteResponse>(
+    final _options = _setStreamType<HttpResponse<MemberMonthlyQuoteResponse>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -230,7 +232,8 @@ class _FillsaApi implements FillsaApi {
       errorLogger?.logError(e, s, _options);
       rethrow;
     }
-    return _value;
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
   }
 
   @override
