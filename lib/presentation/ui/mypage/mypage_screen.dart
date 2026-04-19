@@ -1,9 +1,9 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/mypage_bottom_button_section.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/mypage_item.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/mypage_login_section.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/mypage_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/theme_dialog.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/util/theme_notifier.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +31,13 @@ class MyPageScreen extends ConsumerWidget {
         onLogout: viewModel.logout,
         onThemeChanged: themeNotifier.setMode,
       ),
-      loading: () => const Scaffold(
-        backgroundColor: yellow03,
-        body: Center(child: CircularProgressIndicator()),
+      loading: () => Scaffold(
+        backgroundColor: FillsaColorScheme.of(context).background,
+        body: const Center(child: CircularProgressIndicator()),
       ),
-      error: (_, __) => const Scaffold(
-        backgroundColor: yellow03,
-        body: Center(child: Text('오류가 발생했습니다.')),
+      error: (_, __) => Scaffold(
+        backgroundColor: FillsaColorScheme.of(context).background,
+        body: const Center(child: Text('오류가 발생했습니다.')),
       ),
     );
   }
@@ -64,8 +64,9 @@ class _MyPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Scaffold(
-      backgroundColor: yellow03,
+      backgroundColor: colors.background,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),

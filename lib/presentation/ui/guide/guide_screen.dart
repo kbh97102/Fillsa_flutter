@@ -1,8 +1,8 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../util/colors.dart';
 import '../common/top_bar.dart';
 import 'guide_button.dart';
 import 'guide_image_section.dart';
@@ -13,14 +13,24 @@ class GuideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
+
     return Scaffold(
       appBar: TopBar(
-        startWidget: SvgPicture.asset("assets/images/icn_arrow.svg"),
-        endWidget: Text(
-          "건너뛰기",
-          style: context.textStyles.body3.copyWith(
-            color: grey500,
-            decoration: TextDecoration.underline,
+        startWidget: SvgPicture.asset(
+          "assets/images/icn_arrow.svg",
+          colorFilter: ColorFilter.mode(colors.onBackground1, BlendMode.srcIn),
+        ),
+        endWidget: GestureDetector(
+          onTap: () {
+            // TODO: 건너뛰기 동작 연결
+          },
+          child: Text(
+            "건너뛰기",
+            style: context.fillsaTypo.body3.copyWith(
+              color: colors.onBackground1,
+              decoration: TextDecoration.underline,
+            ),
           ),
         ),
       ),
@@ -31,7 +41,9 @@ class GuideScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30),
             child: Text(
               "필사, 이렇게 사용하면 편리해요🖋️",
-              style: context.textStyles.heading4.copyWith(color: Colors.black),
+              style: context.fillsaTypo.heading4.copyWith(
+                color: colors.onBackground1,
+              ),
             ),
           ),
           Expanded(child: GuideImageSection()),

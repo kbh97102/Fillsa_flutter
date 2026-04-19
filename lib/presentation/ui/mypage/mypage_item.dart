@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -17,20 +17,26 @@ class MyPageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onClick,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.backgroundContainer,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: purple02),
+          border: Border.all(color: colors.tertiaryOutline1),
         ),
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         child: Row(
           children: [
-            Icon(icon, size: 24, color: grey700),
+            Icon(icon, size: 24, color: colors.onBackground1),
             const SizedBox(width: 8),
-            Text(text, style: context.fillsaTypo.subtitle1),
+            Text(
+              text,
+              style: context.fillsaTypo.subtitle1.copyWith(
+                color: colors.onBackground1,
+              ),
+            ),
             const Spacer(),
             Transform.rotate(
               angle: 3.1416, // 180° — icn_arrow points left by default
@@ -38,7 +44,10 @@ class MyPageItem extends StatelessWidget {
                 'assets/images/icn_arrow.svg',
                 width: 24,
                 height: 24,
-                colorFilter: const ColorFilter.mode(grey700, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                  colors.onBackground1,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ],

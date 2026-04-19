@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -33,6 +34,7 @@ class _MyPageBottomButtonSectionState extends State<MyPageBottomButtonSection> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
@@ -40,8 +42,18 @@ class _MyPageBottomButtonSectionState extends State<MyPageBottomButtonSection> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('버전', style: context.fillsaTypo.subtitle1),
-              Text(_version, style: context.fillsaTypo.body2),
+              Text(
+                '버전',
+                style: context.fillsaTypo.subtitle1.copyWith(
+                  color: colors.onBackground1,
+                ),
+              ),
+              Text(
+                _version,
+                style: context.fillsaTypo.body2.copyWith(
+                  color: colors.onBackground1,
+                ),
+              ),
             ],
           ),
           if (widget.isLogged)
@@ -51,7 +63,12 @@ class _MyPageBottomButtonSectionState extends State<MyPageBottomButtonSection> {
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: widget.onLogout,
-                  child: Text('로그아웃', style: context.fillsaTypo.subtitle1),
+                  child: Text(
+                    '로그아웃',
+                    style: context.fillsaTypo.subtitle1.copyWith(
+                      color: colors.onBackground1,
+                    ),
+                  ),
                 ),
               ),
             ),

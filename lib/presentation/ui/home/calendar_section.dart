@@ -1,8 +1,7 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
-
-import '../../util/colors.dart';
 
 class CalendarSection extends StatefulWidget {
   final DateTime date;
@@ -21,7 +20,10 @@ class _CalendarSectionState extends State<CalendarSection> {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = context.textStyles.buttonXs;
+    final colorScheme = FillsaColorScheme.of(context);
+    final titleStyle = context.fillsaTypo.buttonXSmallBold.copyWith(
+      color: colorScheme.onSecondaryContainer1,
+    );
     final day = _dayFormat.format(widget.date);
     final dayOfWeek = _dayOfWeekFormat.format(widget.date);
     final dayOfMonth = _dayOfMonth.format(widget.date);
@@ -34,13 +36,13 @@ class _CalendarSectionState extends State<CalendarSection> {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: purple02, width: 1),
+            border: Border.all(color: colorScheme.secondaryContainer, width: 1),
           ),
           child: Column(
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: purple02,
+                  color: colorScheme.secondaryContainer,
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(12),
                     topRight: Radius.circular(12),
@@ -60,7 +62,7 @@ class _CalendarSectionState extends State<CalendarSection> {
               Expanded(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: white,
+                    color: colorScheme.backgroundContainer,
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),
@@ -71,8 +73,10 @@ class _CalendarSectionState extends State<CalendarSection> {
                     children: [
                       Text(
                         dayOfMonth,
-                        style: context.textStyles.buttonXs
-                            .copyWith(fontSize: 40),
+                        style: context.fillsaTypo.buttonXSmallBold.copyWith(
+                          fontSize: 40,
+                          color: colorScheme.onSecondaryContainer1,
+                        ),
                       ),
                     ],
                   ),

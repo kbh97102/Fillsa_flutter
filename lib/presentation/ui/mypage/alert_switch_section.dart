@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +14,9 @@ class AlertSwitchSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Container(
-      color: yellow01,
+      color: colors.background,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
@@ -25,11 +26,18 @@ class AlertSwitchSection extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('알림', style: context.fillsaTypo.subtitle1),
+                  Text(
+                    '알림',
+                    style: context.fillsaTypo.subtitle1.copyWith(
+                      color: colors.onBackground1,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     '오늘의 필사 알림',
-                    style: context.fillsaTypo.body3,
+                    style: context.fillsaTypo.body3.copyWith(
+                      color: colors.onBackground1,
+                    ),
                   ),
                 ],
               ),
@@ -38,10 +46,10 @@ class AlertSwitchSection extends StatelessWidget {
           Switch(
             value: selected,
             onChanged: onChanged,
-            activeThumbColor: Colors.white,
-            activeTrackColor: purple01,
-            inactiveThumbColor: Colors.white,
-            inactiveTrackColor: grey300,
+            activeThumbColor: colors.onPrimaryContainer,
+            activeTrackColor: colors.primaryContainer,
+            inactiveThumbColor: colors.onPrimaryContainer,
+            inactiveTrackColor: colors.outlineVariant,
             trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
           ),
         ],

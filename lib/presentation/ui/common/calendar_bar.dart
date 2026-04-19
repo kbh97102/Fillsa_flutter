@@ -1,5 +1,5 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/guide/custom_svg.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -21,13 +21,14 @@ class CalendarBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fmt = DateFormat('yyyy.MM.dd');
+    final colorScheme = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: yellow01,
+          color: colorScheme.background,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: purple01.withAlpha(80)),
+          border: Border.all(color: colorScheme.outline.withAlpha(80)),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -37,7 +38,8 @@ class CalendarBar extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 '${fmt.format(startDate)} - ${fmt.format(endDate)}',
-                style: context.fillsaTypo.buttonSmallNormal,
+                style: context.fillsaTypo.buttonSmallNormal
+                    .copyWith(color: colorScheme.onBackground1),
               ),
               const Spacer(),
               AnimatedRotation(

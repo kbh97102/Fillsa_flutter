@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +11,10 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = FillsaColorScheme.of(context);
     return Container(
       height: 50,
-      color: yellow03,
+      color: colorScheme.background,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
@@ -25,7 +26,9 @@ class HomeAppBar extends StatelessWidget {
               const SizedBox(width: 2),
               Text(
                 '${streakDays}일',
-                style: context.textStyles.subtitle1,
+                style: context.fillsaTypo.subtitle1.copyWith(
+                  color: colorScheme.onBackground1,
+                ),
               ),
             ],
           ),

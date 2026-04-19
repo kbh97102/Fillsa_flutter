@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:flutter/material.dart';
 
 import '../../util/colors.dart';
 import '../guide/custom_svg.dart';
@@ -18,6 +19,7 @@ class QuoteBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = FillsaColorScheme.of(context);
     return Container(
       color: yellow01,
       child: AspectRatio(
@@ -37,7 +39,9 @@ class QuoteBody extends StatelessWidget {
                   children: [
                     Text(
                       quote,
-                      style: context.textStyles.body2,
+                      style: context.fillsaTypo.quote.copyWith(
+                        color: colorScheme.onBackground1,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                     Padding(
@@ -46,7 +50,8 @@ class QuoteBody extends StatelessWidget {
                         onTap: onAuthorTap,
                         child: Text(
                           author,
-                          style: context.textStyles.body2.copyWith(
+                          style: context.fillsaTypo.quote.copyWith(
+                            color: colorScheme.onBackground1,
                             decoration: TextDecoration.underline,
                           ),
                           textAlign: TextAlign.center,

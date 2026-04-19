@@ -1,6 +1,6 @@
-import 'package:flutter/widgets.dart';
-
-import '../guide/custom_svg.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class InteractionButtonSection extends StatelessWidget {
   final bool isLiked;
@@ -18,29 +18,38 @@ class InteractionButtonSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
+    final iconColor = colors.onBackground1;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         GestureDetector(
           onTap: onCopy,
-          child: CustomSvg(svgName: "icn_copy"),
+          child: SvgPicture.asset(
+            "assets/images/icn_copy.svg",
+            colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+          ),
         ),
         const SizedBox(width: 40),
         GestureDetector(
           onTap: onShare,
-          child: CustomSvg(svgName: "icn_share"),
+          child: SvgPicture.asset(
+            "assets/images/icn_share.svg",
+            colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+          ),
         ),
         const SizedBox(width: 40),
         GestureDetector(
           onTap: () {
             setIsLiked.call(!isLiked);
           },
-          child: CustomSvg(
-            svgName: switch (isLiked) {
-              true => "icn_heart_filled",
-              _ => "icn_heart",
-            },
-          ),
+          child: isLiked
+              ? SvgPicture.asset("assets/images/icn_heart_filled.svg")
+              : SvgPicture.asset(
+                  "assets/images/icn_heart.svg",
+                  colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
+                ),
         ),
       ],
     );

@@ -1,4 +1,4 @@
-import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -35,11 +35,12 @@ class _LoggedInSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colors.backgroundContainer,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: purple02),
+        border: Border.all(color: colors.tertiaryOutline1),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFFCBCBCB).withValues(alpha: 0.7),
@@ -53,14 +54,16 @@ class _LoggedInSection extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 25,
-            backgroundColor: grey100,
+            backgroundColor: colors.outlineVariant,
             child: CustomSvg(svgName: 'icn_non_member', width: 40, height: 40),
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Text(
               userName,
-              style: context.fillsaTypo.subtitle1,
+              style: context.fillsaTypo.subtitle1.copyWith(
+                color: colors.onBackground1,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -78,14 +81,15 @@ class _LoggedOutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onLoginTap,
       child: Column(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: colors.backgroundContainer,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
               ),
@@ -97,14 +101,19 @@ class _LoggedOutSection extends StatelessWidget {
               children: [
                 CustomSvg(svgName: 'icn_non_member', width: 24, height: 24),
                 const SizedBox(width: 10),
-                Text('로그인 후 사용 가능', style: context.fillsaTypo.subtitle1),
+                Text(
+                  '로그인 후 사용 가능',
+                  style: context.fillsaTypo.subtitle1.copyWith(
+                    color: colors.onBackground1,
+                  ),
+                ),
               ],
             ),
           ),
           Container(
-            decoration: const BoxDecoration(
-              color: purple01,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: colors.primaryContainer,
+              borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(12),
                 bottomRight: Radius.circular(12),
               ),
@@ -115,7 +124,7 @@ class _LoggedOutSection extends StatelessWidget {
             child: Text(
               '로그인',
               style: context.fillsaTypo.buttonMediumBold.copyWith(
-                color: Colors.white,
+                color: colors.onPrimaryContainer,
               ),
             ),
           ),

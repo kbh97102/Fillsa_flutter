@@ -12,8 +12,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../theme/fillsa_color_scheme.dart';
 import '../../util/LocaleOption.dart';
-import '../../util/colors.dart';
 import '../common/interaction_button_section.dart';
 import '../common/my_deferred_pointer.dart';
 import 'calendar_section.dart';
@@ -39,8 +39,9 @@ class HomeScreen extends ConsumerWidget {
           LocaleOption.EN => state.data.engAuthor ?? "",
         };
 
+        final colorScheme = FillsaColorScheme.of(context);
         return Container(
-          color: yellow03,
+          color: colorScheme.background,
           child: SafeArea(
             child: MyDeferredPointerHandler(
               child: Column(
@@ -186,13 +187,7 @@ class HomeScreen extends ConsumerWidget {
       title: "이미지를 삭제하시겠습니까?",
       body: "삭제 후 이미지를 되돌릴 수 없습니다. 😢",
       okButtonText: "삭제",
-      okButtonColor: purple01,
-      okButtonBorderColor: purple01,
-      okTextColor: white,
       cancelButtonText: "취소",
-      cancelButtonColor: white,
-      cancelButtonBorderColor: purple01,
-      cancelTextColor: purple01,
       okButtonOnClick: () async {
         if (!context.mounted) return;
         Navigator.pop(context); // 삭제 확인 다이얼로그

@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../util/colors.dart';
 import '../guide/custom_svg.dart';
 
 class QuoteListItemContent extends StatefulWidget {
@@ -46,6 +46,7 @@ class _QuoteListItemContentState extends State<QuoteListItemContent> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     final pages = [_buildQuotePage(context)];
     if (widget.hasMemo) pages.add(_buildMemoPage(context));
     final count = pages.length;
@@ -72,8 +73,8 @@ class _QuoteListItemContentState extends State<QuoteListItemContent> {
                 effect: WormEffect(
                   dotWidth: 6,
                   dotHeight: 6,
-                  dotColor: grey300,
-                  activeDotColor: yellow02,
+                  dotColor: colors.outlineVariant,
+                  activeDotColor: colors.tertiary,
                 ),
               ),
             ),
@@ -83,6 +84,7 @@ class _QuoteListItemContentState extends State<QuoteListItemContent> {
   }
 
   Widget _buildQuotePage(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -90,14 +92,14 @@ class _QuoteListItemContentState extends State<QuoteListItemContent> {
         if (widget.imagePath != null && widget.imagePath!.isNotEmpty)
           Image.network(widget.imagePath!, fit: BoxFit.cover)
         else
-          Container(color: const Color(0xFF3A3A3A)),
+          Container(color: colors.onBackground1),
         // 명언 텍스트
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 48),
           child: Text(
             widget.quote,
             style: context.fillsaTypo.body4.copyWith(
-              color: Colors.white,
+              color: colors.onPrimaryContainer,
               height: 1.6,
             ),
             maxLines: 7,
@@ -132,16 +134,17 @@ class _QuoteListItemContentState extends State<QuoteListItemContent> {
   }
 
   Widget _buildMemoPage(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Stack(
       fit: StackFit.expand,
       children: [
-        Container(color: Colors.white),
+        Container(color: colors.backgroundContainer),
         Padding(
           padding: const EdgeInsets.fromLTRB(10, 10, 10, 48),
           child: Text(
             widget.memo ?? '',
             style: context.fillsaTypo.body4.copyWith(
-              color: grey700,
+              color: colors.onBackground1,
               height: 1.6,
             ),
             maxLines: 7,
@@ -175,11 +178,12 @@ class _PillButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white.withAlpha(200),
+          color: colors.backgroundContainer.withAlpha(200),
           borderRadius: BorderRadius.circular(100),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -194,7 +198,10 @@ class _PillButton extends StatelessWidget {
             const SizedBox(width: 3),
             Text(
               label,
-              style: context.fillsaTypo.body4.copyWith(fontSize: 10),
+              style: context.fillsaTypo.body4.copyWith(
+                color: colors.onBackground1,
+                fontSize: 10,
+              ),
             ),
           ],
         ),

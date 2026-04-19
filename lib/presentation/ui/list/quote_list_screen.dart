@@ -1,12 +1,13 @@
 import 'package:fillsa_flutter/domain/model/local_quote_info.dart';
 import 'package:fillsa_flutter/domain/model/response/MemberQuotesResponse.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/common/calendar_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/list/date_range_picker_overlay.dart';
 import 'package:fillsa_flutter/presentation/ui/list/like_filter.dart';
 import 'package:fillsa_flutter/presentation/ui/list/list_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/list/quote_list_empty_section.dart';
 import 'package:fillsa_flutter/presentation/ui/list/quote_list_item.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:fillsa_flutter/presentation/viewmodels/list_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,8 +22,9 @@ class QuoteListScreen extends ConsumerWidget {
     final asyncState = ref.watch(listViewModelProvider);
     final viewModel = ref.read(listViewModelProvider.notifier);
 
+    final colors = FillsaColorScheme.of(context);
     return Container(
-      color: yellow01,
+      color: colors.background,
       child: asyncState.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('오류가 발생했습니다: $e')),
@@ -199,75 +201,90 @@ class QuoteListScreen extends ConsumerWidget {
     required String currentMemo,
   }) {
     final controller = TextEditingController(text: currentMemo);
+    final colors = FillsaColorScheme.of(context);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: colors.backgroundContainer,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom,
-          left: 16,
-          right: 16,
-          top: 16,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: grey300,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: controller,
-              autofocus: true,
-              maxLines: 5,
-              decoration: InputDecoration(
-                hintText: '메모를 입력하세요',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: grey200),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: purple01),
+      builder: (ctx) {
+        final sheetColors = FillsaColorScheme.of(ctx);
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(ctx).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: sheetColors.outlineVariant,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                  viewModel.saveMemo(
-                    memo: controller.text,
-                    memberQuote: memberQuote,
-                    localQuote: localQuote,
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: purple01,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 16),
+              TextField(
+                controller: controller,
+                autofocus: true,
+                maxLines: 5,
+                style: ctx.fillsaTypo.body3.copyWith(
+                  color: sheetColors.onBackground1,
+                ),
+                decoration: InputDecoration(
+                  hintText: '메모를 입력하세요',
+                  hintStyle: ctx.fillsaTypo.body3.copyWith(
+                    color: sheetColors.outlineVariant,
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: sheetColors.outlineVariant),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: sheetColors.outline),
+                  ),
                 ),
-                child: const Text('저장'),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
+              const SizedBox(height: 12),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    viewModel.saveMemo(
+                      memo: controller.text,
+                      memberQuote: memberQuote,
+                      localQuote: localQuote,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: sheetColors.primaryContainer,
+                    foregroundColor: sheetColors.onPrimaryContainer,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: Text(
+                    '저장',
+                    style: ctx.fillsaTypo.buttonMediumBold.copyWith(
+                      color: sheetColors.onPrimaryContainer,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
     );
   }
 }

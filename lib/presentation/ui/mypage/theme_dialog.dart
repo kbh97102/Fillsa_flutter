@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,9 @@ class _ThemeDialogState extends State<ThemeDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Dialog(
+      backgroundColor: colors.backgroundContainer,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 24, 20, 16),
@@ -50,11 +53,20 @@ class _ThemeDialogState extends State<ThemeDialog> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colors.primaryContainer,
+                  foregroundColor: colors.onPrimaryContainer,
+                ),
                 onPressed: () {
                   widget.onChanged(_selected);
                   Navigator.of(context).pop();
                 },
-                child: Text('확인', style: context.fillsaTypo.buttonMediumBold),
+                child: Text(
+                  '확인',
+                  style: context.fillsaTypo.buttonMediumBold.copyWith(
+                    color: colors.onPrimaryContainer,
+                  ),
+                ),
               ),
             ),
           ],
@@ -77,15 +89,21 @@ class _ThemeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: context.fillsaTypo.subtitle1),
+          Text(
+            label,
+            style: context.fillsaTypo.subtitle1.copyWith(
+              color: colors.onBackground1,
+            ),
+          ),
           Icon(
             selected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-            color: selected ? Theme.of(context).primaryColor : Colors.grey,
+            color: selected ? colors.onBackground2 : colors.outlineVariant,
           ),
         ],
       ),

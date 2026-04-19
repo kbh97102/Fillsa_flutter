@@ -1,10 +1,10 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/list/list_provider.dart';
+import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../util/colors.dart';
-import '../../util/typo.dart';
 import '../guide/custom_svg.dart';
 import 'ad_banner.dart';
 
@@ -17,13 +17,14 @@ class ScaffoldWithNavBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = FillsaColorScheme.of(context);
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           BottomNavigationBar(
-            backgroundColor: yellow03,
+            backgroundColor: colorScheme.background,
             type: BottomNavigationBarType.fixed,
             items: <BottomNavigationBarItem>[
               BottomNavigationBarItem(
@@ -57,8 +58,12 @@ class ScaffoldWithNavBar extends ConsumerWidget {
                 initialLocation: index == navigationShell.currentIndex,
               );
             },
-            selectedLabelStyle: fillsaTypoData.body4.copyWith(color: purple01),
-            unselectedLabelStyle: fillsaTypoData.body4,
+            selectedLabelStyle: context.fillsaTypo.body4.copyWith(
+              color: colorScheme.onBackground2,
+            ),
+            unselectedLabelStyle: context.fillsaTypo.body4.copyWith(
+              color: colorScheme.onBackground1,
+            ),
           ),
           const AdBanner(),
         ],

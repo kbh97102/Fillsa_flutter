@@ -1,5 +1,5 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/common/custom_button.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -10,12 +10,6 @@ class CommonDialog extends StatelessWidget {
   final String cancelButtonText;
   final VoidCallback okButtonOnClick;
   final VoidCallback cancelButtonOnClick;
-  final Color okButtonColor;
-  final Color cancelButtonColor;
-  final Color okTextColor;
-  final Color cancelTextColor;
-  final Color okButtonBorderColor;
-  final Color cancelButtonBorderColor;
 
   static void _defaultCallback() {}
 
@@ -26,22 +20,18 @@ class CommonDialog extends StatelessWidget {
     this.cancelButtonText = "취소",
     this.okButtonOnClick = _defaultCallback,
     this.cancelButtonOnClick = _defaultCallback,
-    this.okButtonColor = purple01,
-    this.cancelButtonColor = white,
-    this.okTextColor = white,
-    this.cancelTextColor = purple01,
-    this.okButtonBorderColor = purple01,
-    this.cancelButtonBorderColor = white,
     this.body,
   });
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.backgroundContainer,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
@@ -49,15 +39,30 @@ class CommonDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
 
               // 타이틀
-              Text(title, style: context.fillsaTypo.heading4),
+              Text(
+                title,
+                style: context.fillsaTypo.heading4.copyWith(
+                  color: colors.onBackground1,
+                ),
+                textAlign: TextAlign.center,
+              ),
               // 내용
               if (body != null && body!.isNotEmpty)
-                Text(body!, style: context.fillsaTypo.body2),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Text(
+                    body!,
+                    style: context.fillsaTypo.body2.copyWith(
+                      color: colors.onBackground1,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
 
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // 버튼
               Row(
@@ -66,21 +71,21 @@ class CommonDialog extends StatelessWidget {
                     child: CustomButton(
                       buttonText: cancelButtonText,
                       onClick: cancelButtonOnClick,
-                      backgroundColor: cancelButtonColor,
-                      textColor: cancelTextColor,
-                      borderColor: okButtonBorderColor,
+                      backgroundColor: colors.backgroundContainer,
+                      textColor: colors.primaryContainer,
+                      borderColor: colors.primaryContainer,
                     ),
                   ),
 
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
 
                   Expanded(
                     child: CustomButton(
                       buttonText: okButtonText,
                       onClick: okButtonOnClick,
-                      backgroundColor: okButtonColor,
-                      textColor: okTextColor,
-                      borderColor: cancelButtonBorderColor,
+                      backgroundColor: colors.primaryContainer,
+                      textColor: colors.onPrimaryContainer,
+                      borderColor: colors.primaryContainer,
                     ),
                   ),
                 ],

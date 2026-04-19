@@ -1,5 +1,5 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/guide/custom_svg.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
 
@@ -21,9 +21,10 @@ class TypingActionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Container(
       height: 50,
-      color: Colors.white,
+      color: colors.backgroundContainer,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,17 +67,18 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          border: Border.all(color: grey700),
+          border: Border.all(color: colors.onBackground1),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
           '저장하기',
-          style: context.fillsaTypo.body3.copyWith(color: grey700),
+          style: context.fillsaTypo.body3.copyWith(color: colors.onBackground1),
         ),
       ),
     );

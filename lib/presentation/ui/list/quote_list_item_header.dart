@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
-
-import '../../util/colors.dart';
+import 'package:flutter/material.dart';
 
 class QuoteListItemHeader extends StatelessWidget {
   final String date;
@@ -15,15 +14,26 @@ class QuoteListItemHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-      decoration: BoxDecoration(color: purple02),
+      decoration: BoxDecoration(color: colors.secondaryContainer),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(date, style: context.fillsaTypo.buttonXSmallBold),
+          Text(
+            date,
+            style: context.fillsaTypo.buttonXSmallBold.copyWith(
+              color: colors.onSecondaryContainer1,
+            ),
+          ),
           const SizedBox(width: 6),
-          Text('($dayOfWeek)', style: context.fillsaTypo.buttonXSmallNormal),
+          Text(
+            '($dayOfWeek)',
+            style: context.fillsaTypo.buttonXSmallNormal.copyWith(
+              color: colors.onSecondaryContainer1,
+            ),
+          ),
         ],
       ),
     );

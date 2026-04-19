@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/common/custom_button.dart';
 import 'package:fillsa_flutter/presentation/ui/guide/custom_svg.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
@@ -21,9 +22,11 @@ class ImageChangeDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
+
     return Dialog(
       child: ClipRRect(
-        borderRadius: BorderRadiusGeometry.all(Radius.circular(12)),
+        borderRadius: const BorderRadiusDirectional.all(Radius.circular(12)),
         child: Stack(
           children: [
             Positioned.fill(
@@ -43,11 +46,12 @@ class ImageChangeDialog extends StatelessWidget {
                       children: [
                         CustomSvg(svgName: "icn_close", width: 20, height: 20),
 
-                        SizedBox(width: 8),
+                        const SizedBox(width: 8),
 
                         Text(
                           "삭제하기",
                           style: context.fillsaTypo.body2.copyWith(
+                            color: colors.onBackground1,
                             decoration: TextDecoration.underline,
                           ),
                         ),
@@ -55,26 +59,29 @@ class ImageChangeDialog extends StatelessWidget {
                     ),
                   ),
 
-                  SizedBox(height: 90),
+                  const SizedBox(height: 90),
 
                   // 명언
                   Text(
                     quote,
-                    style: context.fillsaTypo.quote,
+                    style: context.fillsaTypo.quote.copyWith(
+                      color: colors.onBackground1,
+                    ),
                     textAlign: TextAlign.center,
                   ),
 
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
                   // 저자
                   Text(
                     author,
                     style: context.fillsaTypo.quote.copyWith(
+                      color: colors.onBackground1,
                       decoration: TextDecoration.underline,
                     ),
                   ),
 
-                  SizedBox(height: 86),
+                  const SizedBox(height: 86),
 
                   // 버튼
                   Row(
@@ -82,12 +89,18 @@ class ImageChangeDialog extends StatelessWidget {
                       CustomButton(
                         buttonText: "이미지 변경",
                         onClick: imageChangeOnClick,
+                        backgroundColor: colors.backgroundContainer,
+                        textColor: colors.primaryContainer,
+                        borderColor: colors.primaryContainer,
                       ),
-                      SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: CustomButton(
                           buttonText: "확인",
                           onClick: () => okOnClick(),
+                          backgroundColor: colors.primaryContainer,
+                          textColor: colors.onPrimaryContainer,
+                          borderColor: colors.primaryContainer,
                         ),
                       ),
                     ],

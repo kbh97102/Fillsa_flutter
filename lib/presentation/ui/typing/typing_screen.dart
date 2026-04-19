@@ -1,9 +1,11 @@
 import 'package:fillsa_flutter/domain/model/response/DailyQuoteDto.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_action_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_app_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_text_display.dart';
 import 'package:fillsa_flutter/presentation/util/LocaleOption.dart';
+import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -97,16 +99,22 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
   }
 
   void _showToast(String message) {
+    final colors = FillsaColorScheme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
           children: [
-            const Icon(Icons.check_circle, color: Color(0xFF4CAF50), size: 20),
+            Icon(Icons.check_circle, color: colors.onToastMessage2, size: 20),
             const SizedBox(width: 8),
-            Text(message, style: const TextStyle(color: Colors.white)),
+            Text(
+              message,
+              style: context.fillsaTypo.body3.copyWith(
+                color: colors.onToastMessage1,
+              ),
+            ),
           ],
         ),
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: colors.toastMessageBackground,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
@@ -148,8 +156,9 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
       }
     });
 
+    final colors = FillsaColorScheme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.backgroundContainer,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(

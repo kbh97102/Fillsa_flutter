@@ -1,7 +1,7 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/common/common_dialog.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/alert_switch_section.dart';
 import 'package:fillsa_flutter/presentation/ui/mypage/mypage_provider.dart';
-import 'package:fillsa_flutter/presentation/util/colors.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:fillsa_flutter/presentation/viewmodels/mypage_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +39,6 @@ class AlertScreen extends ConsumerWidget {
         body: '탈퇴 시 절대로 정보를 복구할 수 없습니다.',
         okButtonText: '취소',
         cancelButtonText: '탈퇴',
-        okButtonColor: purple01,
-        okTextColor: Colors.white,
-        cancelButtonColor: Colors.white,
-        cancelTextColor: purple01,
-        okButtonBorderColor: purple01,
-        cancelButtonBorderColor: purple01,
         okButtonOnClick: () => Navigator.of(context).pop(),
         cancelButtonOnClick: () {
           Navigator.of(context).pop();
@@ -70,16 +64,22 @@ class _AlertContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.background,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: colors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: grey700),
+          icon: Icon(Icons.arrow_back_ios, color: colors.onBackground1),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('알림', style: context.fillsaTypo.subtitle1),
+        title: Text(
+          '알림',
+          style: context.fillsaTypo.subtitle1.copyWith(
+            color: colors.onBackground1,
+          ),
+        ),
         centerTitle: false,
       ),
       body: Column(
@@ -95,7 +95,7 @@ class _AlertContent extends StatelessWidget {
               child: GestureDetector(
                 onTap: onWithdraw,
                 child: Container(
-                  color: yellow01,
+                  color: colors.background,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 19,
@@ -104,8 +104,13 @@ class _AlertContent extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('탈퇴하기', style: context.fillsaTypo.body2),
-                      const Icon(Icons.logout, color: grey700, size: 20),
+                      Text(
+                        '탈퇴하기',
+                        style: context.fillsaTypo.body2.copyWith(
+                          color: colors.onBackground1,
+                        ),
+                      ),
+                      Icon(Icons.logout, color: colors.onBackground1, size: 20),
                     ],
                   ),
                 ),

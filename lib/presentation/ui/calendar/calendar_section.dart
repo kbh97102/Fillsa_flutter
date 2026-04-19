@@ -3,8 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../domain/model/response/MemberQuotesData.dart';
+import '../../theme/fillsa_color_scheme.dart';
 import '../../util/DateCondition.dart';
-import '../../util/colors.dart';
 import '../../util/extensions.dart';
 
 class CalendarSection extends StatelessWidget {
@@ -28,11 +28,13 @@ class CalendarSection extends StatelessWidget {
     final today = DateTime.now();
     final startDay = DateCondition.startDay;
 
+    final colorScheme = FillsaColorScheme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: yellow01,
+        color: colorScheme.background,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: yellow02),
+        border: Border.all(color: colorScheme.tertiary),
       ),
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: TableCalendar(
@@ -54,17 +56,22 @@ class CalendarSection extends StatelessWidget {
         headerStyle: HeaderStyle(
           formatButtonVisible: false,
           titleCentered: true,
-          titleTextStyle: context.textStyles.buttonL.copyWith(color: purple01),
-          leftChevronIcon: Icon(Icons.chevron_left, color: purple01),
-          rightChevronIcon: Icon(Icons.chevron_right, color: purple01),
+          titleTextStyle: context.fillsaTypo.buttonLargeBold
+              .copyWith(color: colorScheme.onBackground2),
+          leftChevronIcon:
+              Icon(Icons.chevron_left, color: colorScheme.onBackground2),
+          rightChevronIcon:
+              Icon(Icons.chevron_right, color: colorScheme.onBackground2),
           leftChevronVisible: focusedDay.year > startDay.year ||
               focusedDay.month > startDay.month,
           rightChevronVisible: focusedDay.year < today.year ||
               focusedDay.month < today.month,
         ),
         daysOfWeekStyle: DaysOfWeekStyle(
-          weekdayStyle: context.textStyles.buttonS.copyWith(color: grey500),
-          weekendStyle: context.textStyles.buttonS.copyWith(color: grey500),
+          weekdayStyle: context.fillsaTypo.buttonSmallBold
+              .copyWith(color: colorScheme.onBackground1),
+          weekendStyle: context.fillsaTypo.buttonSmallBold
+              .copyWith(color: colorScheme.onBackground1),
         ),
         calendarBuilders: CalendarBuilders(
           defaultBuilder: (ctx, day, _) => _DayCell(
@@ -121,12 +128,13 @@ class _DayCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = FillsaColorScheme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
       child: Container(
         decoration: isSelected
             ? BoxDecoration(
-                color: purple01,
+                color: colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(10),
               )
             : null,
@@ -135,12 +143,12 @@ class _DayCell extends StatelessWidget {
           children: [
             Text(
               '${day.day}',
-              style: context.textStyles.body4.copyWith(
+              style: context.fillsaTypo.buttonSmallNormal.copyWith(
                 color: isSelected
-                    ? Colors.white
+                    ? colorScheme.onPrimaryContainer
                     : isEnabled
-                        ? grey700
-                        : grey300,
+                        ? colorScheme.onBackground1
+                        : colorScheme.outlineVariant,
               ),
             ),
             const SizedBox(height: 2),

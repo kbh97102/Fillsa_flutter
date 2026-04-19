@@ -1,7 +1,6 @@
-import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../util/colors.dart';
 import '../guide/custom_svg.dart';
 
 class ImageSection extends StatelessWidget {
@@ -32,7 +31,7 @@ class ImageSection extends StatelessWidget {
             else
               CustomSvg(svgName: "img_share_1", fit: BoxFit.fill),
             if (!isLogin) ...[
-              Container(color: grey700.withOpacityPercent(60)),
+              Container(color: FillsaColorScheme.of(context).backgroundDim),
               const Center(child: _LockIcon()),
             ],
           ],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../util/colors.dart';
+import '../../theme/fillsa_color_scheme.dart';
 import '../../util/routes.dart';
 import '../home/home_app_bar.dart';
 import 'calendar_count_section.dart';
@@ -35,7 +35,7 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
         final summary = state.monthlyData?.monthlySummary;
 
         return Container(
-          color: yellow03,
+          color: FillsaColorScheme.of(context).background,
           child: SafeArea(
             child: Column(
               children: [

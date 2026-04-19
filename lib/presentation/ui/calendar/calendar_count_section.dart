@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../util/colors.dart';
+import '../../theme/fillsa_color_scheme.dart';
 import '../../util/extensions.dart';
 
 class CalendarCountSection extends StatelessWidget {
@@ -59,7 +59,9 @@ class _CountItem extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           '$count',
-          style: context.textStyles.body3,
+          style: context.fillsaTypo.body3.copyWith(
+            color: FillsaColorScheme.of(context).onBackground1,
+          ),
         ),
       ],
     );

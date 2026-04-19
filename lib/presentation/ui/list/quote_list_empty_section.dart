@@ -1,7 +1,6 @@
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
+import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import 'package:flutter/material.dart';
-
-import '../../util/colors.dart';
-import '../../util/extensions.dart';
 
 enum QuoteListEmptyType { noItems, noResults }
 
@@ -12,6 +11,7 @@ class QuoteListEmptySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     final isNoItems = type == QuoteListEmptyType.noItems;
     return Center(
       child: Column(
@@ -21,14 +21,18 @@ class QuoteListEmptySection extends StatelessWidget {
           const SizedBox(height: 20),
           Text(
             isNoItems ? '텅 비었어요!' : '조회 결과가 없어요 :(',
-            style: context.fillsaTypo.subtitle1.copyWith(color: purple01),
+            style: context.fillsaTypo.subtitle1.copyWith(
+              color: colors.onSecondaryContainer2,
+            ),
           ),
           const SizedBox(height: 8),
           Text(
             isNoItems
                 ? '필사하거나 좋아요한 문장이 여기에 보여요 :)'
                 : '기간을 다시 선택해주세요.',
-            style: context.fillsaTypo.body3.copyWith(color: grey400),
+            style: context.fillsaTypo.body2.copyWith(
+              color: colors.onBackground1,
+            ),
           ),
         ],
       ),
@@ -42,15 +46,16 @@ class _EmptyIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = FillsaColorScheme.of(context);
     return SizedBox(
       width: 100,
       height: 100,
       child: Stack(
         children: [
           if (isNoItems)
-            _dashedBoxIcon()
+            _dashedBoxIcon(colors)
           else
-            _calendarIcon(),
+            _calendarIcon(colors),
           Positioned(
             right: 4,
             bottom: 4,
@@ -58,16 +63,14 @@ class _EmptyIcon extends StatelessWidget {
               width: 32,
               height: 32,
               decoration: BoxDecoration(
-                color: yellow02,
+                color: colors.tertiary,
                 shape: BoxShape.circle,
               ),
               child: Center(
                 child: Text(
                   '?',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                  style: context.fillsaTypo.subtitle1.copyWith(
+                    color: colors.onTertiary1,
                   ),
                 ),
               ),
@@ -78,29 +81,33 @@ class _EmptyIcon extends StatelessWidget {
     );
   }
 
-  Widget _dashedBoxIcon() {
+  Widget _dashedBoxIcon(FillsaColorScheme colors) {
     return CustomPaint(
       size: const Size(80, 80),
-      painter: _DashedBoxPainter(),
+      painter: _DashedBoxPainter(color: colors.outline),
     );
   }
 
-  Widget _calendarIcon() {
-    return Icon(Icons.calendar_month_outlined, size: 80, color: purple01);
+  Widget _calendarIcon(FillsaColorScheme colors) {
+    return Icon(Icons.calendar_month_outlined, size: 80, color: colors.outline);
   }
 }
 
 class _DashedBoxPainter extends CustomPainter {
+  final Color color;
+
+  const _DashedBoxPainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = purple01
+      ..color = color
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
     const dashWidth = 6.0;
     const dashSpace = 4.0;
-    final radius = Radius.circular(8);
+    const radius = Radius.circular(8);
     final rect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
       radius,
@@ -119,5 +126,6 @@ class _DashedBoxPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _DashedBoxPainter oldDelegate) =>
+      oldDelegate.color != color;
 }

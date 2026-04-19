@@ -1,12 +1,12 @@
 import 'dart:math' as math;
 
+import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/ui/common/my_deferred_pointer.dart';
 import 'package:fillsa_flutter/presentation/ui/home/quote_body.dart';
 import 'package:fillsa_flutter/presentation/util/DateCondition.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../util/colors.dart' as Colors;
 import '../../util/logger.dart';
 import '../guide/custom_svg.dart';
 
@@ -43,9 +43,10 @@ class QuoteSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = FillsaColorScheme.of(context);
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: colorScheme.backgroundContainer,
         boxShadow: [
           BoxShadow(
             color: const Color(0xB3CBC0A8),

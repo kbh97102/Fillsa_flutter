@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../util/colors.dart';
+import '../../theme/fillsa_color_scheme.dart';
 import '../../util/extensions.dart';
 
 class CalendarQuoteSection extends StatelessWidget {
@@ -21,11 +21,13 @@ class CalendarQuoteSection extends StatelessWidget {
     final dayNum = '${selectedDay.day}';
     final dayOfWeek = DateFormat('E', 'ko_KR').format(selectedDay);
 
+    final colorScheme = FillsaColorScheme.of(context);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colorScheme.backgroundContainer,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
@@ -38,11 +40,13 @@ class CalendarQuoteSection extends StatelessWidget {
                 children: [
                   Text(
                     dayNum,
-                    style: context.textStyles.heading4.copyWith(color: purple01),
+                    style: context.fillsaTypo.heading4
+                        .copyWith(color: colorScheme.onBackground2),
                   ),
                   Text(
                     '($dayOfWeek)',
-                    style: context.textStyles.body4.copyWith(color: purple01),
+                    style: context.fillsaTypo.body4
+                        .copyWith(color: colorScheme.onBackground2),
                   ),
                 ],
               ),
@@ -57,7 +61,8 @@ class CalendarQuoteSection extends StatelessWidget {
                   quote.isEmpty ? '' : quote,
                   maxLines: 3,
                   overflow: TextOverflow.ellipsis,
-                  style: context.textStyles.body3,
+                  style: context.fillsaTypo.body3
+                      .copyWith(color: colorScheme.onBackground1),
                 ),
               ),
             ),
