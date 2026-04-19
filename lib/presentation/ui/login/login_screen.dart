@@ -49,7 +49,7 @@ class LoginScreen extends ConsumerWidget {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 132),
+              padding: const EdgeInsets.only(top: 162),
               child: CustomSvg(svgName: "img_logo"),
             ),
 

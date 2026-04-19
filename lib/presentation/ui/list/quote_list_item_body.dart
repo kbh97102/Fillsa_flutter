@@ -1,3 +1,4 @@
+import 'package:fillsa_flutter/presentation/ui/list/quote_list_item.dart';
 import 'package:fillsa_flutter/presentation/ui/list/quote_list_item_content.dart';
 import 'package:flutter/widgets.dart';
 
@@ -11,7 +12,7 @@ class QuoteListItemBody extends StatelessWidget {
         // pager
         QuoteListItemContent(),
         // button
-        Row(children: [QuoteListItemBody(), QuoteListItemBody()]),
+        Row(children: [QuoteListItem(), QuoteListItem()]),
       ],
     );
   }

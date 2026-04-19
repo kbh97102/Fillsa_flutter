@@ -32,7 +32,7 @@ class LoginButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(svgPath),
+              SvgPicture.asset(svgPath, width: 30, height: 30),
               SizedBox(width: 8),
               Text(
                 text,
