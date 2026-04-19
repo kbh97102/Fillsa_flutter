@@ -119,7 +119,17 @@ RouteBase get $shellRoute => StatefulShellRouteData.$route(
     ),
     StatefulShellBranchData.$branch(
       routes: [
-        GoRouteData.$route(path: '/mypage', factory: $MyPageRoute._fromState),
+        GoRouteData.$route(
+          path: '/mypage',
+          factory: $MyPageRoute._fromState,
+          routes: [
+            GoRouteData.$route(path: 'alert', factory: $AlertRoute._fromState),
+            GoRouteData.$route(
+              path: 'notice',
+              factory: $NoticeRoute._fromState,
+            ),
+          ],
+        ),
       ],
     ),
   ],
@@ -224,6 +234,46 @@ mixin $MyPageRoute on GoRouteData {
 
   @override
   String get location => GoRouteData.$location('/mypage');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $AlertRoute on GoRouteData {
+  static AlertRoute _fromState(GoRouterState state) => const AlertRoute();
+
+  @override
+  String get location => GoRouteData.$location('/mypage/alert');
+
+  @override
+  void go(BuildContext context) => context.go(location);
+
+  @override
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  @override
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  @override
+  void replace(BuildContext context) => context.replace(location);
+}
+
+mixin $NoticeRoute on GoRouteData {
+  static NoticeRoute _fromState(GoRouterState state) => const NoticeRoute();
+
+  @override
+  String get location => GoRouteData.$location('/mypage/notice');
 
   @override
   void go(BuildContext context) => context.go(location);

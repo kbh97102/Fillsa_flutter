@@ -14,7 +14,9 @@ import 'package:fillsa_flutter/domain/usecase/clear_all_data_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/get_local_quotes_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/login_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_access_token_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/set_image_uri_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/set_refresh_token_usecase.dart';
+import 'package:fillsa_flutter/domain/usecase/set_user_name_usecase.dart';
 import 'package:fillsa_flutter/domain/usecase/test_error_code_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/logger.dart';
 import 'package:fillsa_flutter/presentation/viewmodels/base_viewmodel.dart';
@@ -35,6 +37,8 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
   final LoginUseCase loginUseCase;
   final SetAccessTokenUseCase setAccessTokenUseCase;
   final SetRefreshTokenUseCase setRefreshTokenUseCase;
+  final SetUserNameUseCase setUserNameUseCase;
+  final SetImageUriUseCase setImageUriUseCase;
   final GetLocalQuotesUseCase getLocalQuotesUseCase;
   final ClearAllDataUseCase clearAllDataUseCase;
   final TestErrorCodeUsecase testErrorCodeUsecase;
@@ -42,6 +46,8 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
   LoginViewModel(
     this.setAccessTokenUseCase,
     this.setRefreshTokenUseCase,
+    this.setUserNameUseCase,
+    this.setImageUriUseCase,
     this.getLocalQuotesUseCase,
     this.clearAllDataUseCase,
     this.testErrorCodeUsecase, {
@@ -191,6 +197,8 @@ class LoginViewModel extends AsyncNotifier<LoginResult> with BaseViewModel {
   Future<void> _saveLoginResponse(LoginResponse loginResponse) async {
     await setAccessTokenUseCase.call(loginResponse.accessToken);
     await setRefreshTokenUseCase.call(loginResponse.refreshToken);
+    await setUserNameUseCase.call(loginResponse.nickname);
+    await setImageUriUseCase.call(loginResponse.profileImageUrl);
     await clearAllDataUseCase.call();
   }
 

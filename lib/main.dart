@@ -1,6 +1,7 @@
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/login_status_notifier.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
+import 'package:fillsa_flutter/presentation/util/theme_notifier.dart';
 import 'package:fillsa_flutter/presentation/util/typo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -54,16 +55,16 @@ GoRouter _buildRouter(LoginStatusNotifier loginStatusNotifier) {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({super.key, required this.loginStatusNotifier});
 
   final LoginStatusNotifier loginStatusNotifier;
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  ConsumerState<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends ConsumerState<MyApp> {
   late final GoRouter _router;
 
   @override
@@ -74,6 +75,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeModeProvider).asData?.value ?? ThemeMode.system;
+
     return MaterialApp.router(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -81,6 +84,8 @@ class _MyAppState extends State<MyApp> {
         GlobalCupertinoLocalizations.delegate,
       ],
       theme: fillsaTheme,
+      darkTheme: fillsaTheme,
+      themeMode: themeMode,
       routerConfig: _router,
       title: "Fillsa",
       supportedLocales: const [Locale('en', 'US'), Locale('ko', 'KR')],

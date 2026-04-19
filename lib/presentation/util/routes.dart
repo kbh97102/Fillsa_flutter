@@ -7,6 +7,9 @@ import '../ui/home/home_screen.dart';
 import '../ui/home/scaffoldwithnavbar.dart';
 import '../ui/list/quote_list_screen.dart';
 import '../ui/login/login_screen.dart';
+import '../ui/mypage/alert_screen.dart';
+import '../ui/mypage/mypage_screen.dart';
+import '../ui/mypage/notice_screen.dart';
 import '../ui/share/share_screen.dart';
 import '../ui/typing/typing_screen.dart';
 
@@ -60,7 +63,13 @@ class LoginRoute extends GoRouteData with $LoginRoute {
     ),
     TypedStatefulShellBranch<MyPageScreenBranch>(
       routes: <TypedGoRoute<GoRouteData>>[
-        TypedGoRoute<MyPageRoute>(path: '/mypage'),
+        TypedGoRoute<MyPageRoute>(
+          path: '/mypage',
+          routes: [
+            TypedGoRoute<AlertRoute>(path: 'alert'),
+            TypedGoRoute<NoticeRoute>(path: 'notice'),
+          ],
+        ),
       ],
     ),
   ],
@@ -114,9 +123,24 @@ class MyPageRoute extends GoRouteData with $MyPageRoute {
   const MyPageRoute();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) => const Scaffold(
-        body: Center(child: Text('마이페이지 준비중')),
-      );
+  Widget build(BuildContext context, GoRouterState state) =>
+      const MyPageScreen();
+}
+
+class AlertRoute extends GoRouteData with $AlertRoute {
+  const AlertRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const AlertScreen();
+}
+
+class NoticeRoute extends GoRouteData with $NoticeRoute {
+  const NoticeRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const NoticeScreen();
 }
 
 class HomeScreenBranch extends StatefulShellBranchData {

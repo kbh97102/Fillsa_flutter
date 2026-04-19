@@ -31,6 +31,15 @@ class LocalRepositoryImpl extends LocalRepository {
   @override
   Future<void> clear() async {
     await localQuoteInfoDao.clear();
+  }
+
+  @override
+  Future<void> logout() async {
+    await localQuoteInfoDao.clear();
+    await prefs.remove(PrefKey.accessToken);
+    await prefs.remove(PrefKey.refreshToken);
+    await prefs.remove(PrefKey.userName);
+    await prefs.remove(PrefKey.imageUri);
     await _updateLoginStatus();
   }
 
@@ -213,5 +222,15 @@ class LocalRepositoryImpl extends LocalRepository {
   @override
   Future<void> updateQuote(LocalQuoteInfo quote) async {
     localQuoteInfoDao.updateQuote(quote);
+  }
+
+  @override
+  Future<String?> getThemeMode() {
+    return prefs.getString(PrefKey.themeMode);
+  }
+
+  @override
+  Future<void> setThemeMode(String value) async {
+    await prefs.setString(PrefKey.themeMode, value);
   }
 }

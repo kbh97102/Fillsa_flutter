@@ -6,6 +6,9 @@ class PrefKey {
   static const String userName = "user_name";
   static const String tokenExpired = "token_expired";
 
+  // Theme
+  static const String themeMode = "theme_mode";
+
   // Boolean keys
   static const String firstOpenKey = "is_first_open";
   static const String alarmKey = "alarm_key";

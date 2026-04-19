@@ -41,7 +41,8 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final PostUploadImageUseCase _postUploadImageUseCase;
   final DeleteUploadImageUseCase _deleteUploadImageUseCase;
 
-  late final StreamSubscription<bool?> _loginStatusSubscription;
+  StreamSubscription<bool?>? _loginStatusSubscription;
+  bool _disposed = false;
 
   final DateFormat _dateRequestFormat = DateFormat("yyyy-MM-dd");
 
@@ -60,8 +61,10 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
 
   @override
   FutureOr<HomeState> build() async {
+    _disposed = false;
     ref.onDispose(() {
-      _loginStatusSubscription.cancel();
+      _disposed = true;
+      _loginStatusSubscription?.cancel();
     });
 
     // 1. 로그인 상태를 먼저 확정한 뒤 getData() 호출
@@ -74,10 +77,12 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     // 2. 확정된 로그인 상태를 넘겨 올바른 API(회원/비회원) 호출
     final data = await getData(isLoggedOverride: initialIsLogged);
 
+    if (_disposed) return HomeState.initial();
+
     // 3. 로그인 상태가 이후 변경될 때: 상태 갱신 + 데이터 재조회
     //    skip(1) — 첫 번째 방출(이미 처리한 initialIsLogged)은 무시
     _loginStatusSubscription = _getLoginStatusUseCase().skip(1).listen((status) {
-      if (!state.hasValue) return;
+      if (_disposed || !state.hasValue) return;
       final isLogged = status == true;
       state = AsyncValue.data(state.requireValue.copyWith(isLogged: isLogged));
       _refreshData();
@@ -92,9 +97,9 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
 
   // 로그인 상태 변경 후 현재 날짜 기준으로 데이터 재조회
   void _refreshData() async {
-    if (!state.hasValue) return;
+    if (_disposed || !state.hasValue) return;
     final data = await getData();
-    if (data != null && state.hasValue) {
+    if (!_disposed && data != null && state.hasValue) {
       state = AsyncValue.data(
         state.requireValue.copyWith(
           data: data,

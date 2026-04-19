@@ -67,5 +67,11 @@ abstract class LocalRepository {
 
   Future<void> clear();
 
+  Future<void> logout();
+
   Future<void> deleteQuoteBySeq(int seq);
+
+  Future<String?> getThemeMode();
+
+  Future<void> setThemeMode(String value);
 }
