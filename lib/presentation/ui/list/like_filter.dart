@@ -32,7 +32,11 @@ class _LikeFilterState extends State<LikeFilter> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8),
-          child: CustomCheckbox(isLiked: true, setIsLike: (bool) {}, size: 24),
+          child: CustomCheckbox(
+            isLiked: widget.isLiked,
+            setIsLike: (_) => widget.setIsLike(!widget.isLiked),
+            size: 24,
+          ),
         ),
       ],
     );

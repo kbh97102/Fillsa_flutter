@@ -1,4 +1,6 @@
+import 'package:fillsa_flutter/presentation/ui/list/list_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../util/colors.dart';
@@ -6,13 +8,15 @@ import '../../util/typo.dart';
 import '../guide/custom_svg.dart';
 import 'ad_banner.dart';
 
-class ScaffoldWithNavBar extends StatelessWidget {
+class ScaffoldWithNavBar extends ConsumerWidget {
   const ScaffoldWithNavBar({required this.navigationShell, super.key});
 
   final StatefulNavigationShell navigationShell;
 
+  static const int _listTabIndex = 1;
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: Column(
@@ -45,6 +49,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
             ],
             currentIndex: navigationShell.currentIndex,
             onTap: (int index) {
+              if (index == _listTabIndex) {
+                ref.invalidate(listViewModelProvider);
+              }
               navigationShell.goBranch(
                 index,
                 initialLocation: index == navigationShell.currentIndex,

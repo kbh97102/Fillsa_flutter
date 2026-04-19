@@ -5,6 +5,28 @@ import '../../domain/model/api_result.dart';
 import '../../domain/model/response/ErrorResponse.dart';
 
 mixin class BaseRepository {
+  Future<ApiResult<T>> safeCall<T>(Future<T> Function() call) async {
+    try {
+      final result = await call();
+      return Success(result);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final statusCode = e.response!.statusCode;
+        if (statusCode == 401 || statusCode == 403) {
+          return Fail(ErrorResponse.tokenExpiredError());
+        }
+        try {
+          return Fail(ErrorResponse.fromJson(e.response!.data));
+        } catch (_) {
+          return Fail(ErrorResponse.defaultError());
+        }
+      }
+      return Fail(ErrorResponse.defaultError());
+    } catch (e) {
+      return Fail(ErrorResponse.defaultError());
+    }
+  }
+
   Future<ApiResult<T>> safeApiCall<T>(
     Future<HttpResponse<T>> Function() call,
   ) async {

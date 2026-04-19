@@ -18,8 +18,8 @@ MemberQuotesResponse _$MemberQuotesResponseFromJson(
   engAuthor: json['engAuthor'] as String?,
   authorUrl: json['authorUrl'] as String,
   memo: json['memo'] as String?,
-  memoYnString: json['memoYnString'] as String,
-  likeYnString: json['likeYnString'] as String,
+  memoYnString: json['memoYn'] as String,
+  likeYnString: json['likeYn'] as String,
   imagePath: json['imagePath'] as String?,
 );
 
@@ -35,7 +35,7 @@ Map<String, dynamic> _$MemberQuotesResponseToJson(
   'engAuthor': instance.engAuthor,
   'authorUrl': instance.authorUrl,
   'memo': instance.memo,
-  'memoYnString': instance.memoYnString,
-  'likeYnString': instance.likeYnString,
+  'memoYn': instance.memoYnString,
+  'likeYn': instance.likeYnString,
   'imagePath': instance.imagePath,
 };

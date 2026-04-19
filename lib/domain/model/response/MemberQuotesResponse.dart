@@ -13,7 +13,9 @@ class MemberQuotesResponse {
   final String? engAuthor;
   final String authorUrl;
   final String? memo;
+  @JsonKey(name: 'memoYn')
   final String memoYnString;
+  @JsonKey(name: 'likeYn')
   final String likeYnString;
   final String? imagePath;
 

@@ -20,6 +20,7 @@ import 'data/network/fillsa_api.dart' as _i183;
 import 'data/network/fillsa_no_token_api.dart' as _i704;
 import 'data/repository/calendar_repository_impl.dart' as _i807;
 import 'data/repository/HomeRepositoryImpl.dart' as _i104;
+import 'data/repository/list_repository_impl.dart' as _i13;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'data/repository/login_repository_impl.dart' as _i371;
 import 'data/util/auth_interceptor.dart' as _i472;
@@ -27,6 +28,7 @@ import 'data/util/token_interceptor.dart' as _i672;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
 import 'domain/repository/calendar_repository.dart' as _i718;
 import 'domain/repository/home_repository.dart' as _i405;
+import 'domain/repository/list_repository.dart' as _i994;
 import 'domain/repository/local_repository.dart' as _i279;
 import 'domain/repository/login_repository.dart' as _i373;
 import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
@@ -43,12 +45,14 @@ import 'domain/usecase/get_local_quotes_usecase.dart' as _i1037;
 import 'domain/usecase/get_login_status_usecase.dart' as _i383;
 import 'domain/usecase/get_monthly_quotes_non_member_usecase.dart' as _i378;
 import 'domain/usecase/get_monthly_quotes_usecase.dart' as _i762;
+import 'domain/usecase/get_quotes_list_usecase.dart' as _i300;
 import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
 import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
 import 'domain/usecase/get_typing_usecase.dart' as _i102;
 import 'domain/usecase/is_first_open_usecase.dart' as _i133;
 import 'domain/usecase/login_usecase.dart' as _i579;
 import 'domain/usecase/post_like_request_usecase.dart' as _i783;
+import 'domain/usecase/post_save_memo_usecase.dart' as _i174;
 import 'domain/usecase/post_typing_usecase.dart' as _i329;
 import 'domain/usecase/post_upload_image_usecase.dart' as _i426;
 import 'domain/usecase/set_access_token_usecase.dart' as _i173;
@@ -58,9 +62,11 @@ import 'domain/usecase/set_refresh_token_usecase.dart' as _i904;
 import 'domain/usecase/test_error_code_usecase.dart' as _i1046;
 import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
+import 'domain/usecase/update_memo_usecase.dart' as _i521;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
 import 'presentation/viewmodels/calendar_viewmodel.dart' as _i772;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
+import 'presentation/viewmodels/list_viewmodel.dart' as _i804;
 import 'presentation/viewmodels/login_viewmodel.dart' as _i15;
 import 'presentation/viewmodels/typing_viewmodel.dart' as _i484;
 
@@ -154,6 +160,9 @@ _i174.GetIt init(
   gh.lazySingleton<_i904.SetRefreshTokenUseCase>(
     () => _i904.SetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
   );
+  gh.lazySingleton<_i521.UpdateLocalQuoteMemoUseCase>(
+    () => _i521.UpdateLocalQuoteMemoUseCase(gh<_i279.LocalRepository>()),
+  );
   gh.factory<_i672.TokenInterceptor>(
     () => _i672.TokenInterceptor(gh<_i193.GetAccessTokenUseCase>()),
   );
@@ -204,6 +213,15 @@ _i174.GetIt init(
       gh<_i546.DeleteUploadImageUseCase>(),
     ),
   );
+  gh.lazySingleton<_i994.ListRepository>(
+    () => _i13.ListRepositoryImpl(gh<_i183.FillsaApi>()),
+  );
+  gh.lazySingleton<_i174.PostSaveMemoUseCase>(
+    () => _i174.PostSaveMemoUseCase(gh<_i994.ListRepository>()),
+  );
+  gh.lazySingleton<_i300.GetQuotesListUseCase>(
+    () => _i300.GetQuotesListUseCase(gh<_i994.ListRepository>()),
+  );
   gh.lazySingleton<_i718.CalendarRepository>(
     () => _i807.CalendarRepositoryImpl(
       gh<_i183.FillsaApi>(),
@@ -232,6 +250,16 @@ _i174.GetIt init(
       gh<_i359.AddLocalQuoteUseCase>(),
       gh<_i102.GetTypingUseCase>(),
       gh<_i531.FindLocalQuoteByIdUseCase>(),
+    ),
+  );
+  gh.factory<_i804.ListViewModel>(
+    () => _i804.ListViewModel(
+      gh<_i383.GetLoginStatusUseCase>(),
+      gh<_i300.GetQuotesListUseCase>(),
+      gh<_i292.GetLocalQuotesPagingUseCase>(),
+      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
+      gh<_i521.UpdateLocalQuoteMemoUseCase>(),
+      gh<_i174.PostSaveMemoUseCase>(),
     ),
   );
   gh.factory<_i15.LoginViewModel>(

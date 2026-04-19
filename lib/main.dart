@@ -1,5 +1,4 @@
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
-import 'package:fillsa_flutter/presentation/ui/list/quote_list_item.dart';
 import 'package:fillsa_flutter/presentation/util/login_status_notifier.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/util/typo.dart';
@@ -37,19 +36,6 @@ void main() async {
   runApp(ProviderScope(child: MyApp(loginStatusNotifier: loginStatusNotifier)));
 }
 
-class DevMain extends StatelessWidget {
-  DevMain({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: fillsaTheme,
-      home: SafeArea(
-        child: Container(color: Colors.white, child: QuoteListItem()),
-      ),
-    );
-  }
-}
 
 GoRouter _buildRouter(LoginStatusNotifier loginStatusNotifier) {
   return GoRouter(

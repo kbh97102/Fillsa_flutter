@@ -4,7 +4,14 @@ import 'package:fillsa_flutter/presentation/util/extensions.dart';
 import '../../util/colors.dart';
 
 class QuoteListItemHeader extends StatelessWidget {
-  const QuoteListItemHeader({super.key});
+  final String date;
+  final String dayOfWeek;
+
+  const QuoteListItemHeader({
+    super.key,
+    required this.date,
+    required this.dayOfWeek,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -14,9 +21,9 @@ class QuoteListItemHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("2025.03.25", style: context.fillsaTypo.buttonXSmallBold),
+          Text(date, style: context.fillsaTypo.buttonXSmallBold),
           const SizedBox(width: 6),
-          Text("(수)", style: context.fillsaTypo.buttonXSmallNormal),
+          Text('($dayOfWeek)', style: context.fillsaTypo.buttonXSmallNormal),
         ],
       ),
     );
