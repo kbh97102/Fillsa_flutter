@@ -4,9 +4,29 @@ import 'package:intl/intl.dart';
 import '../../theme/fillsa_color_scheme.dart';
 import '../../util/extensions.dart';
 
+class _SkeletonLine extends StatelessWidget {
+  final double width;
+  final double height;
+
+  const _SkeletonLine({required this.width, required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: FillsaColorScheme.of(context).outlineVariant,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+}
+
 class CalendarQuoteSection extends StatelessWidget {
   final DateTime selectedDay;
   final String quote;
+  final bool isLoading;
   final VoidCallback onTap;
 
   const CalendarQuoteSection({
@@ -14,6 +34,7 @@ class CalendarQuoteSection extends StatelessWidget {
     required this.selectedDay,
     required this.quote,
     required this.onTap,
+    this.isLoading = false,
   });
 
   @override
@@ -57,13 +78,23 @@ class CalendarQuoteSection extends StatelessWidget {
                   vertical: 10,
                   horizontal: 10,
                 ),
-                child: Text(
-                  quote.isEmpty ? '' : quote,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: context.fillsaTypo.body3
-                      .copyWith(color: colorScheme.onBackground1),
-                ),
+                child: isLoading
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _SkeletonLine(width: double.infinity, height: 14),
+                          const SizedBox(height: 6),
+                          _SkeletonLine(width: 140, height: 14),
+                        ],
+                      )
+                    : Text(
+                        quote,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.fillsaTypo.body3
+                            .copyWith(color: colorScheme.onBackground1),
+                      ),
               ),
             ),
           ],

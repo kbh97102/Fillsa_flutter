@@ -11,9 +11,19 @@ import '../ui/mypage/alert_screen.dart';
 import '../ui/mypage/mypage_screen.dart';
 import '../ui/mypage/notice_screen.dart';
 import '../ui/share/share_screen.dart';
+import '../ui/splash/splash_screen.dart';
 import '../ui/typing/typing_screen.dart';
 
 part 'routes.g.dart';
+
+@TypedGoRoute<SplashRoute>(path: '/splash')
+class SplashRoute extends GoRouteData with $SplashRoute {
+  const SplashRoute();
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) =>
+      const SplashScreen();
+}
 
 @TypedGoRoute<TypingRoute>(path: "/typing")
 class TypingRoute extends GoRouteData with $TypingRoute {

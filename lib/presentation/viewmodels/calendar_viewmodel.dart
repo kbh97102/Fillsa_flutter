@@ -17,7 +17,7 @@ class CalendarViewModel extends AsyncNotifier<CalendarState> with BaseViewModel 
   final GetMonthlyQuotesNonMemberUseCase _getMonthlyQuotesNonMemberUseCase;
   final GetLoginStatusUseCase _getLoginStatusUseCase;
 
-  late final StreamSubscription<bool?> _loginStatusSubscription;
+  StreamSubscription<bool?>? _loginStatusSubscription;
 
   final DateFormat _monthFormat = DateFormat('yyyy-MM');
   final DateFormat _dayFormat = DateFormat('yyyy-MM-dd');
@@ -30,8 +30,11 @@ class CalendarViewModel extends AsyncNotifier<CalendarState> with BaseViewModel 
 
   @override
   FutureOr<CalendarState> build() async {
+    _loginStatusSubscription?.cancel();
+    _loginStatusSubscription = null;
+
     ref.onDispose(() {
-      _loginStatusSubscription.cancel();
+      _loginStatusSubscription?.cancel();
       onDispose();
     });
 

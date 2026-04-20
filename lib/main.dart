@@ -1,5 +1,6 @@
 import 'package:fillsa_flutter/domain/usecase/get_login_status_usecase.dart';
 import 'package:fillsa_flutter/presentation/util/login_status_notifier.dart';
+import 'package:fillsa_flutter/presentation/util/login_status_provider.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:fillsa_flutter/presentation/theme/app_theme.dart';
 import 'package:fillsa_flutter/presentation/util/theme_notifier.dart';
@@ -30,18 +31,24 @@ void main() async {
   final loginStatusNotifier = LoginStatusNotifier(initialLoginStatus ?? false);
   loginStatusNotifier.listenForUpdates(getLoginStatus.call());
 
-  runApp(ProviderScope(child: MyApp(loginStatusNotifier: loginStatusNotifier)));
+  runApp(ProviderScope(
+    overrides: [
+      loginStatusNotifierProvider.overrideWithValue(loginStatusNotifier),
+    ],
+    child: MyApp(loginStatusNotifier: loginStatusNotifier),
+  ));
 }
 
 
 GoRouter _buildRouter(LoginStatusNotifier loginStatusNotifier) {
   return GoRouter(
     routes: $appRoutes,
-    initialLocation: loginStatusNotifier.isLoggedIn
-        ? HomeRoute().location
-        : LoginRoute().location,
+    initialLocation: SplashRoute().location,
     refreshListenable: loginStatusNotifier,
     redirect: (context, state) {
+      final isSplash = state.matchedLocation == SplashRoute().location;
+      if (isSplash) return null;
+
       final isLoggedIn = loginStatusNotifier.isLoggedIn;
       final isLoginRoute = state.matchedLocation == LoginRoute().location;
       if (isLoggedIn && isLoginRoute) return HomeRoute().location;
