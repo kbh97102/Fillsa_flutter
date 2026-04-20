@@ -16,7 +16,7 @@ class QuoteListItemHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = FillsaColorScheme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 27),
       decoration: BoxDecoration(color: colors.secondaryContainer),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,9 +27,9 @@ class QuoteListItemHeader extends StatelessWidget {
               color: colors.onSecondaryContainer1,
             ),
           ),
-          const SizedBox(width: 6),
+          const SizedBox(width: 10),
           Text(
-            '($dayOfWeek)',
+            dayOfWeek,
             style: context.fillsaTypo.buttonXSmallNormal.copyWith(
               color: colors.onSecondaryContainer1,
             ),

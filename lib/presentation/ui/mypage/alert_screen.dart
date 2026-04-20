@@ -65,6 +65,7 @@ class _AlertContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = FillsaColorScheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       backgroundColor: colors.background,
       appBar: AppBar(
@@ -95,7 +96,7 @@ class _AlertContent extends StatelessWidget {
               child: GestureDetector(
                 onTap: onWithdraw,
                 child: Container(
-                  color: colors.background,
+                  color: isDark ? colors.backgroundContainer : const Color(0xFFFFF7E6),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 19,

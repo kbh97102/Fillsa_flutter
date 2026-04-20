@@ -22,7 +22,7 @@ class InteractionButtonSection extends StatelessWidget {
     final iconColor = colors.onBackground1;
 
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         GestureDetector(
           onTap: onCopy,

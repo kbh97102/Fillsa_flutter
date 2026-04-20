@@ -1,5 +1,6 @@
 import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
 
 import '../guide/custom_svg.dart';
@@ -33,7 +34,10 @@ class HomeAppBar extends StatelessWidget {
             ],
           ),
           const SizedBox(width: 12),
-          CustomSvg(svgName: 'icn_mypage', width: 24, height: 24),
+          GestureDetector(
+            onTap: () => MyPageRoute().go(context),
+            child: CustomSvg(svgName: 'icn_mypage', width: 24, height: 24),
+          ),
         ],
       ),
     );

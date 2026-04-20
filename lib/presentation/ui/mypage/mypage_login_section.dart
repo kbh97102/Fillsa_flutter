@@ -55,7 +55,12 @@ class _LoggedInSection extends StatelessWidget {
           CircleAvatar(
             radius: 25,
             backgroundColor: colors.outlineVariant,
-            child: CustomSvg(svgName: 'icn_non_member', width: 40, height: 40),
+            backgroundImage: (imageUri != null && imageUri!.isNotEmpty)
+                ? NetworkImage(imageUri!)
+                : null,
+            child: (imageUri == null || imageUri!.isEmpty)
+                ? CustomSvg(svgName: 'icn_non_member', width: 40, height: 40)
+                : null,
           ),
           const SizedBox(width: 16),
           Expanded(

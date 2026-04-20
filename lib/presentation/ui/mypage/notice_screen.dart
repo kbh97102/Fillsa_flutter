@@ -24,8 +24,10 @@ class NoticeScreen extends ConsumerWidget {
     final async = ref.watch(_noticeProvider);
 
     final colors = FillsaColorScheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bodyBg = isDark ? colors.backgroundContainer : const Color(0xFFFFF7E6);
     return Scaffold(
-      backgroundColor: colors.background,
+      backgroundColor: bodyBg,
       appBar: AppBar(
         backgroundColor: colors.background,
         elevation: 0,

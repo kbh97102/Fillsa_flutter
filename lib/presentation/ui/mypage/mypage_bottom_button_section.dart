@@ -39,22 +39,25 @@ class _MyPageBottomButtonSectionState extends State<MyPageBottomButtonSection> {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '버전',
-                style: context.fillsaTypo.subtitle1.copyWith(
-                  color: colors.onBackground1,
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 13),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  '버전',
+                  style: context.fillsaTypo.subtitle1.copyWith(
+                    color: colors.onBackground1,
+                  ),
                 ),
-              ),
-              Text(
-                _version,
-                style: context.fillsaTypo.body2.copyWith(
-                  color: colors.onBackground1,
+                Text(
+                  _version,
+                  style: context.fillsaTypo.body2.copyWith(
+                    color: colors.onBackground1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           if (widget.isLogged)
             Padding(

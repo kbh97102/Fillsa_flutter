@@ -15,8 +15,9 @@ class AlertSwitchSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = FillsaColorScheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
-      color: colors.background,
+      color: isDark ? colors.backgroundContainer : const Color(0xFFFFF7E6),
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
@@ -46,10 +47,10 @@ class AlertSwitchSection extends StatelessWidget {
           Switch(
             value: selected,
             onChanged: onChanged,
-            activeThumbColor: colors.onPrimaryContainer,
-            activeTrackColor: colors.primaryContainer,
-            inactiveThumbColor: colors.onPrimaryContainer,
-            inactiveTrackColor: colors.outlineVariant,
+            activeThumbColor: Colors.white,
+            activeTrackColor: colors.onBackground2,
+            inactiveThumbColor: Colors.white,
+            inactiveTrackColor: const Color(0xFFBDBDBD),
             trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
           ),
         ],
