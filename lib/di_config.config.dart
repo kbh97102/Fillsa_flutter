@@ -97,9 +97,6 @@ _i174.GetIt init(
   final apiModule = _$ApiModule();
   gh.factory<_i17.LocalDatabase>(() => _i17.LocalDatabase());
   gh.lazySingleton<_i460.SharedPreferencesAsync>(() => apiModule.providePref());
-  gh.factory<_i472.AuthInterceptor>(
-    () => _i472.AuthInterceptor(gh<_i460.SharedPreferencesAsync>()),
-  );
   gh.lazySingleton<_i279.LocalRepository>(
     () => _i239.LocalRepositoryImpl(
       prefs: gh<_i460.SharedPreferencesAsync>(),
@@ -203,6 +200,12 @@ _i174.GetIt init(
   );
   gh.factory<_i672.TokenInterceptor>(
     () => _i672.TokenInterceptor(gh<_i193.GetAccessTokenUseCase>()),
+  );
+  gh.factory<_i472.AuthInterceptor>(
+    () => _i472.AuthInterceptor(
+      gh<_i460.SharedPreferencesAsync>(),
+      gh<_i684.LogoutUseCase>(),
+    ),
   );
   gh.lazySingleton<_i361.Dio>(
     () => apiModule.dio(

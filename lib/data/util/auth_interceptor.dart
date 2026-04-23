@@ -1,17 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:fillsa_flutter/data/util/PrefKey.dart';
+import 'package:fillsa_flutter/domain/usecase/logout_usecase.dart';
+import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
 class AuthInterceptor extends Interceptor {
   final SharedPreferencesAsync _prefs;
+  final LogoutUseCase _logoutUseCase;
 
-  // 토큰 갱신에 사용하는 별도 Dio (인터셉터 없이)
   static const String _baseUrl = 'https://www.fillsa.store';
   static const String _refreshPath = '/api/v1/auth/refresh';
 
-  AuthInterceptor(this._prefs);
+  AuthInterceptor(this._prefs, this._logoutUseCase);
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -21,6 +23,7 @@ class AuthInterceptor extends Interceptor {
 
     final refreshToken = await _prefs.getString(PrefKey.refreshToken);
     if (refreshToken == null || refreshToken.isEmpty) {
+      debugPrint('[AuthInterceptor] refreshToken 없음 → 갱신 불가');
       return handler.next(err);
     }
 
@@ -35,13 +38,15 @@ class AuthInterceptor extends Interceptor {
 
       final response = await refreshDio.post(
         _refreshPath,
-        data: {'refreshToken': refreshToken},
+        data: {'deviceId': '', 'refreshToken': refreshToken},
       );
 
+      debugPrint('[AuthInterceptor] refresh 성공: ${response.statusCode}');
       final newAccessToken = response.data['accessToken'] as String?;
       final newRefreshToken = response.data['refreshToken'] as String?;
 
       if (newAccessToken == null || newAccessToken.isEmpty) {
+        await _logoutUseCase();
         return handler.next(err);
       }
 
@@ -50,7 +55,6 @@ class AuthInterceptor extends Interceptor {
         await _prefs.setString(PrefKey.refreshToken, newRefreshToken);
       }
 
-      // 원래 요청에 새 토큰으로 재시도
       final retryOptions = err.requestOptions.copyWith(
         headers: {
           ...err.requestOptions.headers,
@@ -59,7 +63,10 @@ class AuthInterceptor extends Interceptor {
       );
       final retryResponse = await refreshDio.fetch(retryOptions);
       return handler.resolve(retryResponse);
-    } catch (_) {
+    } catch (e, st) {
+      debugPrint('[AuthInterceptor] refresh 실패: $e\n$st');
+      // refresh 실패(토큰 만료 등) → 강제 로그아웃
+      await _logoutUseCase();
       return handler.next(err);
     }
   }
