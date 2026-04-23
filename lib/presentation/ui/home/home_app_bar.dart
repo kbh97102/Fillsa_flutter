@@ -18,7 +18,58 @@ class HomeAppBar extends StatefulWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  bool _tooltipVisible = false;
+  OverlayEntry? _overlayEntry;
+  final LayerLink _layerLink = LayerLink();
+
+  void _showTooltip(BuildContext context, bool isDark) {
+    _removeTooltip();
+    _overlayEntry = OverlayEntry(
+      builder: (_) => GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: _removeTooltip,
+        child: Stack(
+          children: [
+            CompositedTransformFollower(
+              link: _layerLink,
+              showWhenUnlinked: false,
+              targetAnchor: Alignment.bottomRight,
+              followerAnchor: Alignment.topRight,
+              child: Material(
+                color: Colors.transparent,
+                child: _BubbleTooltip(
+                  isDark: isDark,
+                  onCalendarTap: () {
+                    _removeTooltip();
+                    CalendarRoute().go(context);
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeTooltip() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
+
+  void _toggleTooltip(BuildContext context, bool isDark) {
+    if (_overlayEntry != null) {
+      _removeTooltip();
+    } else {
+      _showTooltip(context, isDark);
+    }
+  }
+
+  @override
+  void dispose() {
+    _removeTooltip();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +84,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
         children: [
           CustomSvg(svgName: 'img_logo', height: 30),
           const Spacer(),
-          _StreakArea(
-            streakDays: widget.streakDays,
-            tooltipVisible: _tooltipVisible,
-            isDark: isDark,
-            // Android와 동일: streak 영역 클릭 시 항상 툴팁 토글
-            onStreakTap: () =>
-                setState(() => _tooltipVisible = !_tooltipVisible),
-            onTooltipCalendarTap: () {
-              setState(() => _tooltipVisible = false);
-              CalendarRoute().go(context);
-            },
+          CompositedTransformTarget(
+            link: _layerLink,
+            child: GestureDetector(
+              onTap: () => _toggleTooltip(context, isDark),
+              child: widget.streakDays > 0
+                  ? _StreakCount(streakDays: widget.streakDays)
+                  : const CustomSvg(
+                      svgName: 'icn_empty_daily_count', width: 24, height: 24),
+            ),
           ),
           const SizedBox(width: 12),
           GestureDetector(
@@ -52,48 +101,6 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _StreakArea extends StatelessWidget {
-  final int streakDays;
-  final bool tooltipVisible;
-  final bool isDark;
-  final VoidCallback onStreakTap;
-  final VoidCallback onTooltipCalendarTap;
-
-  const _StreakArea({
-    required this.streakDays,
-    required this.tooltipVisible,
-    required this.isDark,
-    required this.onStreakTap,
-    required this.onTooltipCalendarTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.topRight,
-      children: [
-        GestureDetector(
-          onTap: onStreakTap,
-          child: streakDays > 0
-              ? _StreakCount(streakDays: streakDays)
-              : const CustomSvg(
-                  svgName: 'icn_empty_daily_count', width: 24, height: 24),
-        ),
-        if (tooltipVisible)
-          Positioned(
-            top: 32,
-            right: 0,
-            child: _BubbleTooltip(
-              isDark: isDark,
-              onCalendarTap: onTooltipCalendarTap,
-            ),
-          ),
-      ],
     );
   }
 }
@@ -113,7 +120,6 @@ class _StreakCount extends StatelessWidget {
         const SizedBox(width: 2),
         Text(
           '${streakDays}일',
-          // Android와 동일: isTodayWritten 무관하게 onBackground1 고정
           style: context.fillsaTypo.subtitle1.copyWith(
             color: colorScheme.onBackground1,
           ),
@@ -138,8 +144,8 @@ class _BubbleTooltip extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        // 말풍선 꼬리 삼각형 — Android와 동일: 20x18dp
         Padding(
           padding: const EdgeInsets.only(right: 4),
           child: CustomPaint(
@@ -159,8 +165,7 @@ class _BubbleTooltip extends StatelessWidget {
             children: [
               Text(
                 '연속 필사를 완료해 주세요!',
-                style:
-                    context.fillsaTypo.subtitle2.copyWith(color: textColor),
+                style: context.fillsaTypo.subtitle2.copyWith(color: textColor),
               ),
               const SizedBox(height: 8),
               GestureDetector(
