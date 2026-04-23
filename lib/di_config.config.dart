@@ -24,6 +24,7 @@ import 'data/repository/list_repository_impl.dart' as _i13;
 import 'data/repository/local_repository_impl.dart' as _i239;
 import 'data/repository/login_repository_impl.dart' as _i371;
 import 'data/repository/mypage_repository_impl.dart' as _i865;
+import 'data/repository/streak_repository_impl.dart' as _i622;
 import 'data/util/auth_interceptor.dart' as _i472;
 import 'data/util/token_interceptor.dart' as _i672;
 import 'domain/model/response/DailyQuoteDto.dart' as _i460;
@@ -33,7 +34,9 @@ import 'domain/repository/list_repository.dart' as _i994;
 import 'domain/repository/local_repository.dart' as _i279;
 import 'domain/repository/login_repository.dart' as _i373;
 import 'domain/repository/mypage_repository.dart' as _i735;
+import 'domain/repository/streak_repository.dart' as _i479;
 import 'domain/usecase/add_local_quote_usecase.dart' as _i359;
+import 'domain/usecase/check_yesterday_streak_usecase.dart' as _i612;
 import 'domain/usecase/clear_all_data_usecase.dart' as _i601;
 import 'domain/usecase/delete_quote_by_seq_usecase.dart' as _i457;
 import 'domain/usecase/delete_upload_image_usecase.dart' as _i546;
@@ -51,6 +54,7 @@ import 'domain/usecase/get_monthly_quotes_usecase.dart' as _i762;
 import 'domain/usecase/get_notice_usecase.dart' as _i316;
 import 'domain/usecase/get_quotes_list_usecase.dart' as _i300;
 import 'domain/usecase/get_refresh_token_usecase.dart' as _i51;
+import 'domain/usecase/get_streak_info_usecase.dart' as _i700;
 import 'domain/usecase/get_theme_mode_usecase.dart' as _i655;
 import 'domain/usecase/get_token_expired_usecase.dart' as _i751;
 import 'domain/usecase/get_typing_usecase.dart' as _i102;
@@ -74,6 +78,7 @@ import 'domain/usecase/update_local_quote_like_usecase.dart' as _i177;
 import 'domain/usecase/update_local_quote_memo_usecase.dart' as _i729;
 import 'domain/usecase/update_memo_usecase.dart' as _i521;
 import 'domain/usecase/update_quote_usecase.dart' as _i658;
+import 'domain/usecase/update_today_streak_usecase.dart' as _i566;
 import 'domain/usecase/withdraw_usecase.dart' as _i885;
 import 'presentation/viewmodels/calendar_viewmodel.dart' as _i772;
 import 'presentation/viewmodels/home_viewmodel.dart' as _i199;
@@ -118,14 +123,29 @@ _i174.GetIt init(
       authorUrl: gh<String>(),
     ),
   );
+  gh.lazySingleton<_i1067.GetAlarmUseCase>(
+    () => _i1067.GetAlarmUseCase(gh<_i279.LocalRepository>()),
+  );
   gh.lazySingleton<_i751.GetTokenExpiredUseCase>(
     () => _i751.GetTokenExpiredUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i580.SetUserNameUseCase>(
+    () => _i580.SetUserNameUseCase(gh<_i279.LocalRepository>()),
   );
   gh.lazySingleton<_i601.ClearAllDataUseCase>(
     () => _i601.ClearAllDataUseCase(gh<_i279.LocalRepository>()),
   );
+  gh.lazySingleton<_i563.SetAlarmUseCase>(
+    () => _i563.SetAlarmUseCase(gh<_i279.LocalRepository>()),
+  );
   gh.lazySingleton<_i177.UpdateLocalQuoteLikeUseCase>(
     () => _i177.UpdateLocalQuoteLikeUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i238.GetUserNameUseCase>(
+    () => _i238.GetUserNameUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i684.LogoutUseCase>(
+    () => _i684.LogoutUseCase(gh<_i279.LocalRepository>()),
   );
   gh.lazySingleton<_i1000.SetImageUriUseCase>(
     () => _i1000.SetImageUriUseCase(gh<_i279.LocalRepository>()),
@@ -133,8 +153,14 @@ _i174.GetIt init(
   gh.lazySingleton<_i504.SetFirstOpenUseCase>(
     () => _i504.SetFirstOpenUseCase(gh<_i279.LocalRepository>()),
   );
+  gh.lazySingleton<_i655.GetThemeModeUseCase>(
+    () => _i655.GetThemeModeUseCase(gh<_i279.LocalRepository>()),
+  );
   gh.lazySingleton<_i300.GetImageUriUseCase>(
     () => _i300.GetImageUriUseCase(gh<_i279.LocalRepository>()),
+  );
+  gh.lazySingleton<_i561.SetThemeModeUseCase>(
+    () => _i561.SetThemeModeUseCase(gh<_i279.LocalRepository>()),
   );
   gh.lazySingleton<_i193.GetAccessTokenUseCase>(
     () => _i193.GetAccessTokenUseCase(gh<_i279.LocalRepository>()),
@@ -157,6 +183,9 @@ _i174.GetIt init(
   gh.lazySingleton<_i729.FindLocalQuoteByIdUseCase>(
     () => _i729.FindLocalQuoteByIdUseCase(gh<_i279.LocalRepository>()),
   );
+  gh.lazySingleton<_i521.UpdateLocalQuoteMemoUseCase>(
+    () => _i521.UpdateLocalQuoteMemoUseCase(gh<_i279.LocalRepository>()),
+  );
   gh.lazySingleton<_i1037.GetLocalQuotesUseCase>(
     () => _i1037.GetLocalQuotesUseCase(gh<_i279.LocalRepository>()),
   );
@@ -171,30 +200,6 @@ _i174.GetIt init(
   );
   gh.lazySingleton<_i904.SetRefreshTokenUseCase>(
     () => _i904.SetRefreshTokenUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i521.UpdateLocalQuoteMemoUseCase>(
-    () => _i521.UpdateLocalQuoteMemoUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i1067.GetAlarmUseCase>(
-    () => _i1067.GetAlarmUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i563.SetAlarmUseCase>(
-    () => _i563.SetAlarmUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i238.GetUserNameUseCase>(
-    () => _i238.GetUserNameUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i580.SetUserNameUseCase>(
-    () => _i580.SetUserNameUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i655.GetThemeModeUseCase>(
-    () => _i655.GetThemeModeUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i561.SetThemeModeUseCase>(
-    () => _i561.SetThemeModeUseCase(gh<_i279.LocalRepository>()),
-  );
-  gh.lazySingleton<_i684.LogoutUseCase>(
-    () => _i684.LogoutUseCase(gh<_i279.LocalRepository>()),
   );
   gh.factory<_i672.TokenInterceptor>(
     () => _i672.TokenInterceptor(gh<_i193.GetAccessTokenUseCase>()),
@@ -217,6 +222,13 @@ _i174.GetIt init(
       gh<_i704.FillsaNoTokenApi>(),
     ),
   );
+  gh.lazySingleton<_i479.StreakRepository>(
+    () => _i622.StreakRepositoryImpl(
+      gh<_i183.FillsaApi>(),
+      gh<_i17.LocalDatabase>(),
+      gh<_i279.LocalRepository>(),
+    ),
+  );
   gh.lazySingleton<_i783.PostLikeUseCase>(
     () => _i783.PostLikeUseCase(gh<_i405.HomeRepository>()),
   );
@@ -231,20 +243,6 @@ _i174.GetIt init(
   );
   gh.lazySingleton<_i426.PostUploadImageUseCase>(
     () => _i426.PostUploadImageUseCase(gh<_i405.HomeRepository>()),
-  );
-  gh.factory<_i199.HomeViewModel>(
-    () => _i199.HomeViewModel(
-      gh<_i580.GetDailyNonMemberUseCase>(),
-      gh<_i383.GetLoginStatusUseCase>(),
-      gh<_i783.PostLikeUseCase>(),
-      gh<_i531.FindLocalQuoteByIdUseCase>(),
-      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
-      gh<_i359.AddLocalQuoteUseCase>(),
-      gh<_i12.GetDailyQuoteUseCase>(),
-      gh<_i1037.GetLocalQuotesUseCase>(),
-      gh<_i426.PostUploadImageUseCase>(),
-      gh<_i546.DeleteUploadImageUseCase>(),
-    ),
   );
   gh.lazySingleton<_i994.ListRepository>(
     () => _i13.ListRepositoryImpl(gh<_i183.FillsaApi>()),
@@ -264,11 +262,20 @@ _i174.GetIt init(
   gh.lazySingleton<_i373.LoginRepository>(
     () => _i371.LoginRepositoryImpl(api: gh<_i704.FillsaNoTokenApi>()),
   );
-  gh.lazySingleton<_i329.PostTypingUseCase>(
-    () => _i329.PostTypingUseCase(gh<_i405.HomeRepository>()),
+  gh.lazySingleton<_i700.GetStreakInfoUseCase>(
+    () => _i700.GetStreakInfoUseCase(gh<_i479.StreakRepository>()),
+  );
+  gh.lazySingleton<_i612.CheckYesterdayStreakUseCase>(
+    () => _i612.CheckYesterdayStreakUseCase(gh<_i479.StreakRepository>()),
+  );
+  gh.lazySingleton<_i566.UpdateTodayStreakUseCase>(
+    () => _i566.UpdateTodayStreakUseCase(gh<_i479.StreakRepository>()),
   );
   gh.lazySingleton<_i102.GetTypingUseCase>(
     () => _i102.GetTypingUseCase(gh<_i405.HomeRepository>()),
+  );
+  gh.lazySingleton<_i329.PostTypingUseCase>(
+    () => _i329.PostTypingUseCase(gh<_i405.HomeRepository>()),
   );
   gh.lazySingleton<_i735.MyPageRepository>(
     () => _i865.MyPageRepositoryImpl(
@@ -289,6 +296,9 @@ _i174.GetIt init(
       gh<_i359.AddLocalQuoteUseCase>(),
       gh<_i102.GetTypingUseCase>(),
       gh<_i531.FindLocalQuoteByIdUseCase>(),
+      gh<_i566.UpdateTodayStreakUseCase>(),
+      gh<_i700.GetStreakInfoUseCase>(),
+      gh<_i457.DeleteQuoteBySeqUseCase>(),
     ),
   );
   gh.factory<_i804.ListViewModel>(
@@ -322,6 +332,22 @@ _i174.GetIt init(
     () => _i378.GetMonthlyQuotesNonMemberUseCase(
       gh<_i718.CalendarRepository>(),
       gh<_i279.LocalRepository>(),
+    ),
+  );
+  gh.factory<_i199.HomeViewModel>(
+    () => _i199.HomeViewModel(
+      gh<_i580.GetDailyNonMemberUseCase>(),
+      gh<_i383.GetLoginStatusUseCase>(),
+      gh<_i783.PostLikeUseCase>(),
+      gh<_i531.FindLocalQuoteByIdUseCase>(),
+      gh<_i177.UpdateLocalQuoteLikeUseCase>(),
+      gh<_i359.AddLocalQuoteUseCase>(),
+      gh<_i12.GetDailyQuoteUseCase>(),
+      gh<_i1037.GetLocalQuotesUseCase>(),
+      gh<_i426.PostUploadImageUseCase>(),
+      gh<_i546.DeleteUploadImageUseCase>(),
+      gh<_i700.GetStreakInfoUseCase>(),
+      gh<_i612.CheckYesterdayStreakUseCase>(),
     ),
   );
   gh.lazySingleton<_i316.GetNoticeUseCase>(

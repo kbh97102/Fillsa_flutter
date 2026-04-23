@@ -1,3 +1,5 @@
+enum StreakPopupType { none, completed, consecutive }
+
 class TypingState {
   final bool isSaving;
   final bool isLoading;
@@ -6,6 +8,7 @@ class TypingState {
   final String savedKorTyping;
   final String savedEngTyping;
   final bool isLiked;
+  final StreakPopupType streakPopupType;
 
   const TypingState({
     this.isSaving = false,
@@ -15,6 +18,7 @@ class TypingState {
     this.savedKorTyping = '',
     this.savedEngTyping = '',
     this.isLiked = false,
+    this.streakPopupType = StreakPopupType.none,
   });
 
   TypingState copyWith({
@@ -26,6 +30,7 @@ class TypingState {
     String? savedKorTyping,
     String? savedEngTyping,
     bool? isLiked,
+    StreakPopupType? streakPopupType,
   }) {
     return TypingState(
       isSaving: isSaving ?? this.isSaving,
@@ -35,6 +40,7 @@ class TypingState {
       savedKorTyping: savedKorTyping ?? this.savedKorTyping,
       savedEngTyping: savedEngTyping ?? this.savedEngTyping,
       isLiked: isLiked ?? this.isLiked,
+      streakPopupType: streakPopupType ?? this.streakPopupType,
     );
   }
 }

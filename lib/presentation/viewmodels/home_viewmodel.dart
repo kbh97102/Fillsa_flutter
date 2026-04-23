@@ -24,8 +24,10 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../domain/model/request/post_like_params.dart';
 import '../../domain/model/response/DailyQuotaNoToken.dart';
+import '../../domain/usecase/check_yesterday_streak_usecase.dart';
 import '../../domain/usecase/get_daily_quote_non_member_usecase.dart';
 import '../../domain/usecase/get_local_quotes_usecase.dart';
+import '../../domain/usecase/get_streak_info_usecase.dart';
 import '../util/LocaleOption.dart';
 
 @injectable
@@ -40,6 +42,8 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
   final GetLocalQuotesUseCase _getLocalQuotesUseCase;
   final PostUploadImageUseCase _postUploadImageUseCase;
   final DeleteUploadImageUseCase _deleteUploadImageUseCase;
+  final GetStreakInfoUseCase _getStreakInfoUseCase;
+  final CheckYesterdayStreakUseCase _checkYesterdayStreakUseCase;
 
   StreamSubscription<bool?>? _loginStatusSubscription;
   bool _disposed = false;
@@ -57,6 +61,8 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     this._getLocalQuotesUseCase,
     this._postUploadImageUseCase,
     this._deleteUploadImageUseCase,
+    this._getStreakInfoUseCase,
+    this._checkYesterdayStreakUseCase,
   );
 
   @override
@@ -74,8 +80,14 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       initialIsLogged = await _getLoginStatusUseCase().first == true;
     } catch (_) {}
 
-    // 2. 확정된 로그인 상태를 넘겨 올바른 API(회원/비회원) 호출
+    // 2. 어제 미완료 체크 (비회원 로컬 streak 자정 초기화)
+    try {
+      await _checkYesterdayStreakUseCase();
+    } catch (_) {}
+
+    // 3. 확정된 로그인 상태를 넘겨 올바른 API(회원/비회원) 호출
     final data = await getData(isLoggedOverride: initialIsLogged);
+    final streakInfo = await _loadStreakInfo();
 
     if (_disposed) return HomeState.initial();
 
@@ -92,6 +104,7 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       isLogged: initialIsLogged,
       data: data ?? DailyQuoteDto.empty,
       isLiked: data?.likeYn == YN.Y.name,
+      streakInfo: streakInfo,
     );
   }
 
@@ -180,14 +193,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     if (target.isBefore(DateCondition.startDay)) return;
 
     state = AsyncValue.data(state.requireValue.copyWith(targetDate: target));
-    state = await AsyncValue.guard(() async {
-      final data = await getData();
-      if (data == null) throw Exception("Data is Null");
-      return state.requireValue.copyWith(
-        data: data,
-        isLiked: data.likeYn == YN.Y.name,
-      );
-    });
+    final data = await getData();
+    if (_disposed || !state.hasValue || data == null) return;
+    state = AsyncValue.data(
+      state.requireValue.copyWith(data: data, isLiked: data.likeYn == YN.Y.name),
+    );
   }
 
   Future<void> afterOnClick() async {
@@ -199,14 +209,11 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
     if (target.isAfter(DateTime.now())) return;
 
     state = AsyncValue.data(state.requireValue.copyWith(targetDate: target));
-    state = await AsyncValue.guard(() async {
-      final data = await getData();
-      if (data == null) throw Exception("Data is Null");
-      return state.requireValue.copyWith(
-        data: data,
-        isLiked: data.likeYn == YN.Y.name,
-      );
-    });
+    final data = await getData();
+    if (_disposed || !state.hasValue || data == null) return;
+    state = AsyncValue.data(
+      state.requireValue.copyWith(data: data, isLiked: data.likeYn == YN.Y.name),
+    );
   }
 
   void updateLocale(LocaleOption selected) {
@@ -242,6 +249,21 @@ class HomeViewModel extends AsyncNotifier<HomeState> with BaseViewModel {
       }
     } catch (e) {
       emitError(e.toString());
+    }
+  }
+
+  Future<void> refreshStreakInfo() async {
+    final streakInfo = await _loadStreakInfo();
+    if (!_disposed && state.hasValue) {
+      state = AsyncValue.data(state.requireValue.copyWith(streakInfo: streakInfo));
+    }
+  }
+
+  Future<dynamic> _loadStreakInfo() async {
+    try {
+      return await _getStreakInfoUseCase();
+    } catch (_) {
+      return null;
     }
   }
 

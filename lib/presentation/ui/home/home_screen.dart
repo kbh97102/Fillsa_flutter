@@ -25,137 +25,142 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final _viewModel = ref.watch(homeViewModelProvider);
+    final asyncState = ref.watch(homeViewModelProvider);
+    final state = asyncState.value;
+    final isLoading = !asyncState.hasValue;
 
-    return _viewModel.when(
-      data: (state) {
-        final String _selectedQuote = switch (state.currentLocale) {
-          LocaleOption.KR => state.data.korQuote ?? "",
-          LocaleOption.EN => state.data.engQuote ?? "",
-        };
+    if (asyncState.hasError && !asyncState.hasValue) {
+      return Container(color: FillsaColorScheme.of(context).background);
+    }
 
-        final String _selectedAuthor = switch (state.currentLocale) {
-          LocaleOption.KR => state.data.korAuthor ?? "",
-          LocaleOption.EN => state.data.engAuthor ?? "",
-        };
+    final selectedQuote = switch (state?.currentLocale ?? LocaleOption.KR) {
+      LocaleOption.KR => state?.data.korQuote ?? "",
+      LocaleOption.EN => state?.data.engQuote ?? "",
+    };
 
-        final colorScheme = FillsaColorScheme.of(context);
-        return Container(
-          color: colorScheme.background,
-          child: SafeArea(
-            child: MyDeferredPointerHandler(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  HomeAppBar(streakDays: 0),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: CalendarSection(
-                                  date: state.targetDate ?? DateTime.now(),
-                                  onTap: () =>
-                                      CalendarRoute().go(context),
-                                ),
-                              ),
-                              const SizedBox(width: 20),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    _imageOnClick(
-                                      context: context,
-                                      ref: ref,
-                                      quote: state.data.korQuote ?? "",
-                                      author: state.data.korAuthor ?? "",
-                                      isLogged: state.isLogged,
-                                    );
-                                  },
-                                  child: ImageSection(
-                                    isLogin: state.isLogged,
-                                    imagePath: state.data.imagePath,
-                                  ),
-                                ),
-                              ),
-                            ],
+    final selectedAuthor = switch (state?.currentLocale ?? LocaleOption.KR) {
+      LocaleOption.KR => state?.data.korAuthor ?? "",
+      LocaleOption.EN => state?.data.engAuthor ?? "",
+    };
+
+    final colorScheme = FillsaColorScheme.of(context);
+    return Container(
+      color: colorScheme.background,
+      child: SafeArea(
+        child: MyDeferredPointerHandler(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              HomeAppBar(
+                streakDays: state?.streakInfo?.currentStreak ?? 0,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: CalendarSection(
+                              date: state?.targetDate ?? DateTime.now(),
+                              onTap: () => CalendarRoute().go(context),
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: state == null
+                                  ? null
+                                  : () {
+                                      _imageOnClick(
+                                        context: context,
+                                        ref: ref,
+                                        quote: state.data.korQuote ?? "",
+                                        author: state.data.korAuthor ?? "",
+                                        isLogged: state.isLogged,
+                                      );
+                                    },
+                              child: ImageSection(
+                                isLogin: state?.isLogged ?? false,
+                                imagePath: state?.data.imagePath,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
-                        Padding(
-                          padding: const EdgeInsets.only(top: 20),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: KoreanEnglishSwitch(
-                              selected: state.currentLocale,
-                              onClick: (selected) {
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: KoreanEnglishSwitch(
+                          selected: state?.currentLocale ?? LocaleOption.KR,
+                          onClick: (selected) {
+                            ref
+                                .read(homeViewModelProvider.notifier)
+                                .updateLocale(selected);
+                          },
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 22),
+                      child: isLoading
+                          ? _QuoteSectionSkeleton(colorScheme: colorScheme)
+                          : QuoteSection(
+                              quote: selectedQuote,
+                              author: selectedAuthor,
+                              beforeOnClick: () {
                                 ref
                                     .read(homeViewModelProvider.notifier)
-                                    .updateLocale(selected);
+                                    .beforeOnClick();
                               },
+                              afterOnClick: () {
+                                ref
+                                    .read(homeViewModelProvider.notifier)
+                                    .afterOnClick();
+                              },
+                              today: state?.targetDate ?? DateTime.now(),
+                              onQuoteTap: state == null
+                                  ? null
+                                  : () => TypingRoute($extra: state.data)
+                                      .push(context),
+                              onAuthorTap: () => _openAuthorUrl(
+                                context,
+                                state?.data.authorUrl,
+                              ),
                             ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 22),
-                          child: QuoteSection(
-                            quote: _selectedQuote,
-                            author: _selectedAuthor,
-                            beforeOnClick: () {
-                              ref
-                                  .read(homeViewModelProvider.notifier)
-                                  .beforeOnClick();
-                            },
-                            afterOnClick: () {
-                              ref
-                                  .read(homeViewModelProvider.notifier)
-                                  .afterOnClick();
-                            },
-                            today: state.targetDate ?? DateTime.now(),
-                            onQuoteTap: () =>
-                                TypingRoute($extra: state.data).push(context),
-                            onAuthorTap: () => _openAuthorUrl(
-                              context,
-                              state.data.authorUrl,
-                            ),
-                          ),
-                        ),
-
-                        Padding(
-                          padding: const EdgeInsets.only(top: 28, bottom: 20),
-                          child: InteractionButtonSection(
-                            isLiked: state.isLiked,
-                            onCopy: () => _copyQuote(
-                              context,
-                              _selectedQuote,
-                              _selectedAuthor,
-                            ),
-                            onShare: () => ShareRoute().push(context),
-                            setIsLiked: (liked) {
-                              ref
-                                  .read(homeViewModelProvider.notifier)
-                                  .postLike(liked);
-                            },
-                          ),
-                        ),
-                      ],
                     ),
-                  ),
-                ],
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 28, bottom: 20),
+                      child: InteractionButtonSection(
+                        isLiked: state?.isLiked ?? false,
+                        onCopy: () => _copyQuote(
+                          context,
+                          selectedQuote,
+                          selectedAuthor,
+                        ),
+                        onShare: () => ShareRoute().push(context),
+                        setIsLiked: (liked) {
+                          ref
+                              .read(homeViewModelProvider.notifier)
+                              .postLike(liked);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      },
-      error: (err, stack) {
-        return Container();
-      },
-      loading: () => Container(),
+        ),
+      ),
     );
   }
 
@@ -190,9 +195,9 @@ class HomeScreen extends ConsumerWidget {
       cancelButtonText: "취소",
       okButtonOnClick: () async {
         if (!context.mounted) return;
-        Navigator.pop(context); // 삭제 확인 다이얼로그
+        Navigator.pop(context);
         if (!context.mounted) return;
-        Navigator.pop(context); // 이미지 다이얼로그
+        Navigator.pop(context);
         await ref.read(homeViewModelProvider.notifier).deleteImage();
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -232,8 +237,7 @@ class HomeScreen extends ConsumerWidget {
       deleteOnClick: () {
         showDialog(
           context: context,
-          builder: (ctx) =>
-              _getDeleteDialog(context: ctx, ref: ref),
+          builder: (ctx) => _getDeleteDialog(context: ctx, ref: ref),
         );
       },
     );
@@ -270,5 +274,80 @@ class HomeScreen extends ConsumerWidget {
         ),
       );
     }
+  }
+}
+
+class _QuoteSectionSkeleton extends StatelessWidget {
+  final FillsaColorScheme colorScheme;
+
+  const _QuoteSectionSkeleton({required this.colorScheme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.backgroundContainer,
+        boxShadow: [
+          const BoxShadow(
+            color: Color(0xB3CBC0A8),
+            offset: Offset(0, 0),
+            blurRadius: 16,
+            spreadRadius: -3,
+          ),
+        ],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: AspectRatio(
+        aspectRatio: 320 / 250.0,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _SkeletonLine(
+                  width: double.infinity,
+                  height: 14,
+                  colorScheme: colorScheme),
+              const SizedBox(height: 10),
+              _SkeletonLine(
+                  width: double.infinity,
+                  height: 14,
+                  colorScheme: colorScheme),
+              const SizedBox(height: 10),
+              _SkeletonLine(
+                  width: 180, height: 14, colorScheme: colorScheme),
+              const SizedBox(height: 24),
+              _SkeletonLine(
+                  width: 80, height: 12, colorScheme: colorScheme),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _SkeletonLine extends StatelessWidget {
+  final double width;
+  final double height;
+  final FillsaColorScheme colorScheme;
+
+  const _SkeletonLine({
+    required this.width,
+    required this.height,
+    required this.colorScheme,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: colorScheme.outlineVariant,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
   }
 }

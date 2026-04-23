@@ -36,17 +36,18 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
       );
     }
 
-    final state = asyncState.valueOrNull;
+    final state = asyncState.value;
     final isLoading = !asyncState.hasValue;
     final summary = state?.monthlyData?.monthlySummary;
     final selectedDay = state?.selectedDay ?? DateTime.now();
-
     return Container(
       color: FillsaColorScheme.of(context).background,
       child: SafeArea(
         child: Column(
           children: [
-            HomeAppBar(streakDays: summary?.streakCount ?? 0),
+            HomeAppBar(
+              streakDays: summary?.streakCount ?? 0,
+            ),
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),

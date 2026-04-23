@@ -6,6 +6,7 @@ import '../../../domain/model/response/MemberQuotesData.dart';
 import '../../theme/fillsa_color_scheme.dart';
 import '../../util/DateCondition.dart';
 import '../../util/extensions.dart';
+import '../guide/custom_svg.dart';
 
 class CalendarSection extends StatelessWidget {
   final List<MemberQuotesData> memberQuotes;
@@ -152,16 +153,35 @@ class _DayCell extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 2),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Text(
-                  quoteData?.completed == true ? '📓' : '',
-                  style: const TextStyle(fontSize: 9),
+                // 1행: 필사완료(📓) + 좋아요(❤️)
+                SizedBox(
+                  height: 12,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Opacity(
+                        opacity: quoteData?.completed == true ? 1.0 : 0.0,
+                        child: const Text('📓', style: TextStyle(fontSize: 9)),
+                      ),
+                      const SizedBox(width: 1),
+                      Opacity(
+                        opacity: quoteData?.isLiked == true ? 1.0 : 0.0,
+                        child: const CustomSvg(svgName: 'icn_heart_fill', width: 10, height: 10),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  quoteData?.isLiked == true ? '❤️' : '',
-                  style: const TextStyle(fontSize: 9),
+                const SizedBox(height: 1),
+                // 2행: 연속 필사 불꽃
+                SizedBox(
+                  height: 12,
+                  child: Opacity(
+                    opacity: quoteData?.completed == true ? 1.0 : 0.0,
+                    child: const CustomSvg(svgName: 'icn_today_complete', width: 12, height: 12),
+                  ),
                 ),
               ],
             ),

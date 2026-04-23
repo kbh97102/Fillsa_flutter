@@ -23,4 +23,5 @@ class ApiEndPoints {
   static const String getTyping =
       "/api/v1/member-quotes/{dailyQuoteSeq}/typing";
   static const String getMonthlyQuotes = "/api/v1/quotes/monthly";
+  static const String getMemberStreaks = "/api/v1/member-streaks";
 }

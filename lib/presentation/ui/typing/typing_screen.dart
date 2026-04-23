@@ -1,11 +1,14 @@
 import 'package:fillsa_flutter/domain/model/response/DailyQuoteDto.dart';
+import 'package:fillsa_flutter/presentation/state/TypingState.dart';
 import 'package:fillsa_flutter/presentation/theme/fillsa_color_scheme.dart';
+import 'package:fillsa_flutter/presentation/ui/common/dialog_with_image.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_action_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_app_bar.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_provider.dart';
 import 'package:fillsa_flutter/presentation/ui/typing/typing_text_display.dart';
 import 'package:fillsa_flutter/presentation/util/LocaleOption.dart';
 import 'package:fillsa_flutter/presentation/util/extensions.dart';
+import 'package:fillsa_flutter/presentation/ui/home/home_provider.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -87,14 +90,56 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
       return;
     }
     try {
+      final targetDate = ref.read(homeViewModelProvider).value?.targetDate
+          ?? DateTime.now();
       ref.read(typingViewModelProvider.notifier).save(
         dailyQuote: dto,
         korTyping: _locale == LocaleOption.KR ? _committedText : '',
         engTyping: _locale == LocaleOption.EN ? _committedText : '',
         isLiked: _isLiked,
+        targetDate: targetDate,
       );
     } catch (e) {
       _showToast('저장 중 오류가 발생했습니다.');
+    }
+  }
+
+  void _showStreakPopup(BuildContext context, TypingState state) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    switch (state.streakPopupType) {
+      case StreakPopupType.consecutive:
+        showDialog(
+          context: context,
+          builder: (_) => DialogWithImage(
+            svgName: 'icn_today_complete',
+            iconSize: 54,
+            title: '연속 필사 완료!',
+            okText: '확인',
+          ),
+        );
+      case StreakPopupType.completed:
+        showDialog(
+          context: context,
+          builder: (_) => DialogWithImage(
+            svgName: 'icn_thumb_up',
+            iconSize: 54,
+            title: '필사 완료!',
+            okText: '확인',
+          ),
+        );
+      case StreakPopupType.none:
+        showDialog(
+          context: context,
+          builder: (_) => DialogWithImage(
+            svgName: isDark ? 'icn_today_not_complete_night' : 'icn_today_not_complete',
+            iconSize: 54,
+            title: '필사가 완료되지 않았어요 :(',
+            okText: '필사하기',
+            cancelText: '닫기',
+            onOk: () {},
+          ),
+        );
     }
   }
 
@@ -149,7 +194,7 @@ class _TypingScreenState extends ConsumerState<TypingScreen> {
         }
       }
       if ((prev?.saveCount ?? 0) != next.saveCount) {
-        _showToast('저장되었습니다.');
+        _showStreakPopup(context, next);
       } else if (next.errorMessage != null &&
           prev?.errorMessage != next.errorMessage) {
         _showToast('저장 중 오류가 발생했습니다.');

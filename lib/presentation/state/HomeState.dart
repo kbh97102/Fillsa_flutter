@@ -2,6 +2,7 @@ import 'package:fillsa_flutter/presentation/util/LocaleOption.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../domain/model/response/DailyQuoteDto.dart';
+import '../../domain/model/streak_info.dart';
 
 part 'HomeState.freezed.dart';
 
@@ -16,6 +17,7 @@ abstract class HomeState with _$HomeState {
     required DateTime? targetDate,
     @Default(LocaleOption.KR) LocaleOption currentLocale,
     @Default(false) bool isLiked,
+    StreakInfo? streakInfo,
   }) = _HomeState;
 
   factory HomeState.initial() =>

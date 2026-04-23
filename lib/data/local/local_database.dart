@@ -9,16 +9,26 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../domain/model/local_quote_info.dart';
 import 'local_quote_info_entity.dart';
+import 'streak_info_entity.dart';
 
 part 'local_database.g.dart';
 
 @injectable
-@DriftDatabase(tables: [LocalQuoteInfoEntity])
+@DriftDatabase(tables: [LocalQuoteInfoEntity, StreakInfoEntity])
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(streakInfoEntity);
+      }
+    },
+  );
 
   // 모든 반환 타입을 Model(LocalQuoteInfoEntity)로 변환
   Future<List<LocalQuoteInfoEntityData>> getAllQuotes() =>
@@ -96,6 +106,14 @@ class LocalDatabase extends _$LocalDatabase {
 
   Future<void> clear() async {
     await delete(localQuoteInfoEntity).go();
+  }
+
+  Future<StreakInfoEntityData?> getStreakByDate(String date) =>
+      (select(streakInfoEntity)..where((t) => t.date.equals(date)))
+          .getSingleOrNull();
+
+  Future<void> insertOrReplaceStreak(StreakInfoEntityCompanion streak) async {
+    await into(streakInfoEntity).insert(streak, mode: InsertMode.replace);
   }
 }
 

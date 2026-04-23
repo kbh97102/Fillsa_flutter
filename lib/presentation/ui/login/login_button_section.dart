@@ -1,10 +1,12 @@
 import 'package:fillsa_flutter/presentation/util/colors.dart';
+import 'package:fillsa_flutter/presentation/util/login_status_provider.dart';
 import 'package:fillsa_flutter/presentation/util/routes.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'login_button.dart';
 
-class LoginButtonSection extends StatelessWidget {
+class LoginButtonSection extends ConsumerWidget {
   final VoidCallback doGoogleLogin;
   final VoidCallback doKakaoLogin;
 
@@ -15,7 +17,7 @@ class LoginButtonSection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       spacing: 16,
       children: [
@@ -40,7 +42,10 @@ class LoginButtonSection extends StatelessWidget {
           svgPath: "assets/images/icn_non_member.svg",
           backgroundColor: white,
           textColor: kakaoTextColor,
-          onPressed: () => HomeRoute().go(context),
+          onPressed: () {
+            ref.read(loginStatusNotifierProvider).setGuestMode();
+            HomeRoute().go(context);
+          },
         ),
       ],
     );

@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 
+import 'data/worker/streak_worker.dart';
 import 'di_config.dart';
 import 'firebase_options.dart';
 
@@ -24,6 +25,8 @@ void main() async {
   await dotenv.load(fileName: "local_properties.env");
   KakaoSdk.init(nativeAppKey: dotenv.maybeGet("KAKAO_KEY") ?? "");
   await initializeDateFormatting("ko_KR", null);
+  await StreakWorker.initialize();
+  await StreakWorker.registerPeriodicTask();
 
   final getLoginStatus = GetIt.instance<GetLoginStatusUseCase>();
   final initialLoginStatus = await getLoginStatus.call().first;
@@ -52,7 +55,7 @@ GoRouter _buildRouter(LoginStatusNotifier loginStatusNotifier) {
       final isLoggedIn = loginStatusNotifier.isLoggedIn;
       final isLoginRoute = state.matchedLocation == LoginRoute().location;
       if (isLoggedIn && isLoginRoute) return HomeRoute().location;
-      if (!isLoggedIn && !isLoginRoute) return LoginRoute().location;
+      if (!isLoggedIn && !loginStatusNotifier.isGuestMode && !isLoginRoute) return LoginRoute().location;
       return null;
     },
   );

@@ -13,6 +13,7 @@ import '../../domain/model/response/MemberMonthlyQuoteResponse.dart';
 import '../../domain/model/response/MemberTypingQuoteResponse.dart';
 import '../../domain/model/response/PageResponseMemberQuotesResponse.dart';
 import '../../domain/model/response/SimpleIntResponse.dart';
+import '../../domain/model/response/member_streak_response.dart';
 import '../util/api_end_point.dart';
 
 part 'fillsa_api.g.dart';
@@ -74,4 +75,7 @@ abstract class FillsaApi {
   Future<MemberTypingQuoteResponse> getTyping(
     @Path("dailyQuoteSeq") int dailyQuoteSeq,
   );
+
+  @GET(ApiEndPoints.getMemberStreaks)
+  Future<HttpResponse<MemberStreakResponse>> getMemberStreaks();
 }

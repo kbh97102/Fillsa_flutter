@@ -653,16 +653,317 @@ class LocalQuoteInfoEntityCompanion
   }
 }
 
+class $StreakInfoEntityTable extends StreakInfoEntity
+    with TableInfo<$StreakInfoEntityTable, StreakInfoEntityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $StreakInfoEntityTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<String> date = GeneratedColumn<String>(
+    'date',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _streakDateCountMeta = const VerificationMeta(
+    'streakDateCount',
+  );
+  @override
+  late final GeneratedColumn<int> streakDateCount = GeneratedColumn<int>(
+    'streak_date_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isDailyWritingCompletedMeta =
+      const VerificationMeta('isDailyWritingCompleted');
+  @override
+  late final GeneratedColumn<bool> isDailyWritingCompleted =
+      GeneratedColumn<bool>(
+        'is_daily_writing_completed',
+        aliasedName,
+        false,
+        type: DriftSqlType.bool,
+        requiredDuringInsert: true,
+        defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("is_daily_writing_completed" IN (0, 1))',
+        ),
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    date,
+    streakDateCount,
+    isDailyWritingCompleted,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'streak_info';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<StreakInfoEntityData> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('date')) {
+      context.handle(
+        _dateMeta,
+        date.isAcceptableOrUnknown(data['date']!, _dateMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    if (data.containsKey('streak_date_count')) {
+      context.handle(
+        _streakDateCountMeta,
+        streakDateCount.isAcceptableOrUnknown(
+          data['streak_date_count']!,
+          _streakDateCountMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_streakDateCountMeta);
+    }
+    if (data.containsKey('is_daily_writing_completed')) {
+      context.handle(
+        _isDailyWritingCompletedMeta,
+        isDailyWritingCompleted.isAcceptableOrUnknown(
+          data['is_daily_writing_completed']!,
+          _isDailyWritingCompletedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_isDailyWritingCompletedMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {date};
+  @override
+  StreakInfoEntityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return StreakInfoEntityData(
+      date: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}date'],
+      )!,
+      streakDateCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}streak_date_count'],
+      )!,
+      isDailyWritingCompleted: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_daily_writing_completed'],
+      )!,
+    );
+  }
+
+  @override
+  $StreakInfoEntityTable createAlias(String alias) {
+    return $StreakInfoEntityTable(attachedDatabase, alias);
+  }
+}
+
+class StreakInfoEntityData extends DataClass
+    implements Insertable<StreakInfoEntityData> {
+  final String date;
+  final int streakDateCount;
+  final bool isDailyWritingCompleted;
+  const StreakInfoEntityData({
+    required this.date,
+    required this.streakDateCount,
+    required this.isDailyWritingCompleted,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['date'] = Variable<String>(date);
+    map['streak_date_count'] = Variable<int>(streakDateCount);
+    map['is_daily_writing_completed'] = Variable<bool>(isDailyWritingCompleted);
+    return map;
+  }
+
+  StreakInfoEntityCompanion toCompanion(bool nullToAbsent) {
+    return StreakInfoEntityCompanion(
+      date: Value(date),
+      streakDateCount: Value(streakDateCount),
+      isDailyWritingCompleted: Value(isDailyWritingCompleted),
+    );
+  }
+
+  factory StreakInfoEntityData.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return StreakInfoEntityData(
+      date: serializer.fromJson<String>(json['date']),
+      streakDateCount: serializer.fromJson<int>(json['streakDateCount']),
+      isDailyWritingCompleted: serializer.fromJson<bool>(
+        json['isDailyWritingCompleted'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'date': serializer.toJson<String>(date),
+      'streakDateCount': serializer.toJson<int>(streakDateCount),
+      'isDailyWritingCompleted': serializer.toJson<bool>(
+        isDailyWritingCompleted,
+      ),
+    };
+  }
+
+  StreakInfoEntityData copyWith({
+    String? date,
+    int? streakDateCount,
+    bool? isDailyWritingCompleted,
+  }) => StreakInfoEntityData(
+    date: date ?? this.date,
+    streakDateCount: streakDateCount ?? this.streakDateCount,
+    isDailyWritingCompleted:
+        isDailyWritingCompleted ?? this.isDailyWritingCompleted,
+  );
+  StreakInfoEntityData copyWithCompanion(StreakInfoEntityCompanion data) {
+    return StreakInfoEntityData(
+      date: data.date.present ? data.date.value : this.date,
+      streakDateCount: data.streakDateCount.present
+          ? data.streakDateCount.value
+          : this.streakDateCount,
+      isDailyWritingCompleted: data.isDailyWritingCompleted.present
+          ? data.isDailyWritingCompleted.value
+          : this.isDailyWritingCompleted,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StreakInfoEntityData(')
+          ..write('date: $date, ')
+          ..write('streakDateCount: $streakDateCount, ')
+          ..write('isDailyWritingCompleted: $isDailyWritingCompleted')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(date, streakDateCount, isDailyWritingCompleted);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is StreakInfoEntityData &&
+          other.date == this.date &&
+          other.streakDateCount == this.streakDateCount &&
+          other.isDailyWritingCompleted == this.isDailyWritingCompleted);
+}
+
+class StreakInfoEntityCompanion extends UpdateCompanion<StreakInfoEntityData> {
+  final Value<String> date;
+  final Value<int> streakDateCount;
+  final Value<bool> isDailyWritingCompleted;
+  final Value<int> rowid;
+  const StreakInfoEntityCompanion({
+    this.date = const Value.absent(),
+    this.streakDateCount = const Value.absent(),
+    this.isDailyWritingCompleted = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  StreakInfoEntityCompanion.insert({
+    required String date,
+    required int streakDateCount,
+    required bool isDailyWritingCompleted,
+    this.rowid = const Value.absent(),
+  }) : date = Value(date),
+       streakDateCount = Value(streakDateCount),
+       isDailyWritingCompleted = Value(isDailyWritingCompleted);
+  static Insertable<StreakInfoEntityData> custom({
+    Expression<String>? date,
+    Expression<int>? streakDateCount,
+    Expression<bool>? isDailyWritingCompleted,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (date != null) 'date': date,
+      if (streakDateCount != null) 'streak_date_count': streakDateCount,
+      if (isDailyWritingCompleted != null)
+        'is_daily_writing_completed': isDailyWritingCompleted,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  StreakInfoEntityCompanion copyWith({
+    Value<String>? date,
+    Value<int>? streakDateCount,
+    Value<bool>? isDailyWritingCompleted,
+    Value<int>? rowid,
+  }) {
+    return StreakInfoEntityCompanion(
+      date: date ?? this.date,
+      streakDateCount: streakDateCount ?? this.streakDateCount,
+      isDailyWritingCompleted:
+          isDailyWritingCompleted ?? this.isDailyWritingCompleted,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (date.present) {
+      map['date'] = Variable<String>(date.value);
+    }
+    if (streakDateCount.present) {
+      map['streak_date_count'] = Variable<int>(streakDateCount.value);
+    }
+    if (isDailyWritingCompleted.present) {
+      map['is_daily_writing_completed'] = Variable<bool>(
+        isDailyWritingCompleted.value,
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('StreakInfoEntityCompanion(')
+          ..write('date: $date, ')
+          ..write('streakDateCount: $streakDateCount, ')
+          ..write('isDailyWritingCompleted: $isDailyWritingCompleted, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
   $LocalDatabaseManager get managers => $LocalDatabaseManager(this);
   late final $LocalQuoteInfoEntityTable localQuoteInfoEntity =
       $LocalQuoteInfoEntityTable(this);
+  late final $StreakInfoEntityTable streakInfoEntity = $StreakInfoEntityTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [localQuoteInfoEntity];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    localQuoteInfoEntity,
+    streakInfoEntity,
+  ];
 }
 
 typedef $$LocalQuoteInfoEntityTableCreateCompanionBuilder =
@@ -991,10 +1292,188 @@ typedef $$LocalQuoteInfoEntityTableProcessedTableManager =
       LocalQuoteInfoEntityData,
       PrefetchHooks Function()
     >;
+typedef $$StreakInfoEntityTableCreateCompanionBuilder =
+    StreakInfoEntityCompanion Function({
+      required String date,
+      required int streakDateCount,
+      required bool isDailyWritingCompleted,
+      Value<int> rowid,
+    });
+typedef $$StreakInfoEntityTableUpdateCompanionBuilder =
+    StreakInfoEntityCompanion Function({
+      Value<String> date,
+      Value<int> streakDateCount,
+      Value<bool> isDailyWritingCompleted,
+      Value<int> rowid,
+    });
+
+class $$StreakInfoEntityTableFilterComposer
+    extends Composer<_$LocalDatabase, $StreakInfoEntityTable> {
+  $$StreakInfoEntityTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get streakDateCount => $composableBuilder(
+    column: $table.streakDateCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isDailyWritingCompleted => $composableBuilder(
+    column: $table.isDailyWritingCompleted,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$StreakInfoEntityTableOrderingComposer
+    extends Composer<_$LocalDatabase, $StreakInfoEntityTable> {
+  $$StreakInfoEntityTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get date => $composableBuilder(
+    column: $table.date,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get streakDateCount => $composableBuilder(
+    column: $table.streakDateCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isDailyWritingCompleted => $composableBuilder(
+    column: $table.isDailyWritingCompleted,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$StreakInfoEntityTableAnnotationComposer
+    extends Composer<_$LocalDatabase, $StreakInfoEntityTable> {
+  $$StreakInfoEntityTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get date =>
+      $composableBuilder(column: $table.date, builder: (column) => column);
+
+  GeneratedColumn<int> get streakDateCount => $composableBuilder(
+    column: $table.streakDateCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isDailyWritingCompleted => $composableBuilder(
+    column: $table.isDailyWritingCompleted,
+    builder: (column) => column,
+  );
+}
+
+class $$StreakInfoEntityTableTableManager
+    extends
+        RootTableManager<
+          _$LocalDatabase,
+          $StreakInfoEntityTable,
+          StreakInfoEntityData,
+          $$StreakInfoEntityTableFilterComposer,
+          $$StreakInfoEntityTableOrderingComposer,
+          $$StreakInfoEntityTableAnnotationComposer,
+          $$StreakInfoEntityTableCreateCompanionBuilder,
+          $$StreakInfoEntityTableUpdateCompanionBuilder,
+          (
+            StreakInfoEntityData,
+            BaseReferences<
+              _$LocalDatabase,
+              $StreakInfoEntityTable,
+              StreakInfoEntityData
+            >,
+          ),
+          StreakInfoEntityData,
+          PrefetchHooks Function()
+        > {
+  $$StreakInfoEntityTableTableManager(
+    _$LocalDatabase db,
+    $StreakInfoEntityTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$StreakInfoEntityTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$StreakInfoEntityTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$StreakInfoEntityTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> date = const Value.absent(),
+                Value<int> streakDateCount = const Value.absent(),
+                Value<bool> isDailyWritingCompleted = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => StreakInfoEntityCompanion(
+                date: date,
+                streakDateCount: streakDateCount,
+                isDailyWritingCompleted: isDailyWritingCompleted,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String date,
+                required int streakDateCount,
+                required bool isDailyWritingCompleted,
+                Value<int> rowid = const Value.absent(),
+              }) => StreakInfoEntityCompanion.insert(
+                date: date,
+                streakDateCount: streakDateCount,
+                isDailyWritingCompleted: isDailyWritingCompleted,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$StreakInfoEntityTableProcessedTableManager =
+    ProcessedTableManager<
+      _$LocalDatabase,
+      $StreakInfoEntityTable,
+      StreakInfoEntityData,
+      $$StreakInfoEntityTableFilterComposer,
+      $$StreakInfoEntityTableOrderingComposer,
+      $$StreakInfoEntityTableAnnotationComposer,
+      $$StreakInfoEntityTableCreateCompanionBuilder,
+      $$StreakInfoEntityTableUpdateCompanionBuilder,
+      (
+        StreakInfoEntityData,
+        BaseReferences<
+          _$LocalDatabase,
+          $StreakInfoEntityTable,
+          StreakInfoEntityData
+        >,
+      ),
+      StreakInfoEntityData,
+      PrefetchHooks Function()
+    >;
 
 class $LocalDatabaseManager {
   final _$LocalDatabase _db;
   $LocalDatabaseManager(this._db);
   $$LocalQuoteInfoEntityTableTableManager get localQuoteInfoEntity =>
       $$LocalQuoteInfoEntityTableTableManager(_db, _db.localQuoteInfoEntity);
+  $$StreakInfoEntityTableTableManager get streakInfoEntity =>
+      $$StreakInfoEntityTableTableManager(_db, _db.streakInfoEntity);
 }
