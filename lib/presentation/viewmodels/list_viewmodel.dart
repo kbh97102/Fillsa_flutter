@@ -162,6 +162,18 @@ class ListViewModel extends AsyncNotifier<QuoteListState> with BaseViewModel {
         likeYN: isLiked ? YN.Y : YN.N,
         seq: localQuote.dailyQuoteSeq,
       ));
+      // 좋아요 해제 + 필사 기록 없음 → DB에서도 삭제되므로 목록에서 제거
+      final shouldRemove = !isLiked &&
+          localQuote.korTyping.isEmpty &&
+          localQuote.engTyping.isEmpty;
+      // likeFilter ON 상태에서 좋아요 해제 시에도 목록에서 제거
+      if (shouldRemove || (current.likeFilter && !isLiked)) {
+        final removed = current.localQuotes
+            .where((q) => q.dailyQuoteSeq != localQuote.dailyQuoteSeq)
+            .toList();
+        state = AsyncValue.data(current.copyWith(localQuotes: removed));
+        return;
+      }
       final updated = current.localQuotes.map((q) {
         if (q.dailyQuoteSeq == localQuote.dailyQuoteSeq) {
           return LocalQuoteInfo(

@@ -69,6 +69,10 @@ class _DateRangePickerOverlayState extends State<DateRangePickerOverlay> {
     });
   }
 
+  bool get _isRangeExceeded =>
+      _selectedEnd != null &&
+      _selectedEnd!.difference(_selectedStart).inDays > 365;
+
   bool _isInRange(DateTime date) {
     if (_selectedEnd == null) return false;
     return date.isAfter(_selectedStart) && date.isBefore(_selectedEnd!);
@@ -236,24 +240,38 @@ class _DateRangePickerOverlayState extends State<DateRangePickerOverlay> {
   }
 
   Widget _buildConfirmButton() {
+    final disabled = _selectedEnd == null || _isRangeExceeded;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: _selectedEnd == null
-              ? null
-              : () => widget.onConfirm(_selectedStart, _selectedEnd!),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: purple01,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          if (_isRangeExceeded)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Text(
+                '최대 1년까지 선택할 수 있어요',
+                style: context.fillsaTypo.body4.copyWith(color: Colors.redAccent),
+              ),
             ),
-            padding: const EdgeInsets.symmetric(vertical: 16),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: disabled
+                  ? null
+                  : () => widget.onConfirm(_selectedStart, _selectedEnd!),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: purple01,
+                foregroundColor: Colors.white,
+                disabledBackgroundColor: grey300,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 16),
+              ),
+              child: Text('확인', style: context.fillsaTypo.buttonMediumBold.copyWith(color: Colors.white)),
+            ),
           ),
-          child: Text('확인', style: context.fillsaTypo.buttonMediumBold.copyWith(color: Colors.white)),
-        ),
+        ],
       ),
     );
   }

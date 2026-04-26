@@ -41,10 +41,7 @@ class QuoteListScreen extends ConsumerWidget {
                     hasMemo: q.memoYnString == 'Y',
                     isLiked: q.likeYnString == 'Y',
                     imagePath: q.imagePath,
-                    onLikeTap: () => viewModel.updateLike(
-                      isLiked: q.likeYnString != 'Y',
-                      memberQuote: q,
-                    ),
+                    onLikeTap: null,
                     onMemoTap: () => _showMemoSheet(
                       context,
                       viewModel,
@@ -297,7 +294,7 @@ class _QuoteItemData {
   final bool hasMemo;
   final bool isLiked;
   final String? imagePath;
-  final VoidCallback onLikeTap;
+  final VoidCallback? onLikeTap;
   final VoidCallback onMemoTap;
 
   _QuoteItemData({
@@ -308,7 +305,7 @@ class _QuoteItemData {
     required this.hasMemo,
     required this.isLiked,
     this.imagePath,
-    required this.onLikeTap,
+    this.onLikeTap,
     required this.onMemoTap,
   });
 }

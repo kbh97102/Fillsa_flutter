@@ -85,9 +85,20 @@ class LocalRepositoryImpl extends LocalRepository {
     required String endDate,
     required int page,
     required int size,
-  }) {
-    // TODO: implement getLocalQuotesPaging
-    throw UnimplementedError();
+  }) async {
+    final offset = page * size;
+    final List<LocalQuoteInfoEntityData> entities;
+    if (likeYN == YN.Y) {
+      entities = await localQuoteInfoDao.getPagingListWithLike(
+        offset,
+        likeYN.name,
+        startDate,
+        endDate,
+      );
+    } else {
+      entities = await localQuoteInfoDao.getPagingList(offset, startDate, endDate);
+    }
+    return entities.map((e) => e.toModel()).toList();
   }
 
   Future<void> _updateLoginStatus() async {
