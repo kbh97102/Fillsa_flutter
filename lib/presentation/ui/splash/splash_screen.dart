@@ -88,37 +88,44 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       backgroundColor: colors.background,
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(flex: 3),
             // 로고
-            ScaleTransition(
-              scale: _logoScale,
-              child: FadeTransition(
-                opacity: _logoFade,
-                child: CustomSvg(svgName: 'img_logo', height: 52),
+            Center(
+              child: ScaleTransition(
+                scale: _logoScale,
+                child: FadeTransition(
+                  opacity: _logoFade,
+                  child: CustomSvg(svgName: 'img_logo', height: 52),
+                ),
               ),
             ),
             const SizedBox(height: 20),
             // 서브타이틀
-            FadeTransition(
-              opacity: _textFade,
-              child: Text(
-                '오늘의 필사',
-                style: context.fillsaTypo.body3.copyWith(
-                  color: colors.onBackground1,
-                  letterSpacing: 3,
+            Center(
+              child: FadeTransition(
+                opacity: _textFade,
+                child: Text(
+                  '오늘의 필사',
+                  style: context.fillsaTypo.body3.copyWith(
+                    color: colors.onBackground1,
+                    letterSpacing: 3,
+                  ),
                 ),
               ),
             ),
             const Spacer(flex: 3),
             // 바운싱 점 로딩 인디케이터
-            FadeTransition(
-              opacity: _textFade,
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 52),
-                child: _BouncingDots(
-                  controller: _dotsController,
-                  color: colors.onBackground2,
+            Center(
+              child: FadeTransition(
+                opacity: _textFade,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 52),
+                  child: _BouncingDots(
+                    controller: _dotsController,
+                    color: colors.onBackground2,
+                  ),
                 ),
               ),
             ),
