@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../theme/fillsa_color_scheme.dart';
 import '../../util/extensions.dart';
+import '../guide/custom_svg.dart';
 
 class CalendarCountSection extends StatelessWidget {
   final int typingCount;
@@ -31,11 +32,11 @@ class CalendarCountSection extends StatelessWidget {
             : Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _CountItem(icon: '📓', count: typingCount, context: context),
+                  _CountItem(svgName: 'icn_note_stack', count: typingCount, context: context),
                   const SizedBox(width: 16),
-                  _CountItem(icon: '❤️', count: likeCount, context: context),
+                  _CountItem(svgName: 'icn_heart_fill', count: likeCount, context: context),
                   const SizedBox(width: 16),
-                  _CountItem(icon: '🔥', count: streakCount, context: context),
+                  _CountItem(svgName: 'icn_today_complete', count: streakCount, context: context),
                 ],
               ),
       ),
@@ -67,12 +68,12 @@ class _SkeletonRow extends StatelessWidget {
 }
 
 class _CountItem extends StatelessWidget {
-  final String icon;
+  final String svgName;
   final int count;
   final BuildContext context;
 
   const _CountItem({
-    required this.icon,
+    required this.svgName,
     required this.count,
     required this.context,
   });
@@ -82,7 +83,7 @@ class _CountItem extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(icon, style: const TextStyle(fontSize: 16)),
+        CustomSvg(svgName: svgName, width: 16, height: 16),
         const SizedBox(width: 4),
         Text(
           '$count',
